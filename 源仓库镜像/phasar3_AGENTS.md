@@ -1,0 +1,115 @@
+# Agent 工作说明
+
+本文件是协作入口，只保留高频硬规则和阅读路由。详细执行协议见 `docs/workflow/agent-protocol.md`，项目路线见 `TASK_OUTLINE.md`。
+
+## 必须遵守
+
+1. 需要安装复杂软件时，直接结束任务，让用户手工完成。复杂软件指需要从 GitHub 下载的软件；普通 `npm` 命令可以运行。
+2. 不要修改、删除或重新生成 `local-resources/regima/legacy-extraction/` 中的原始提取结果，除非用户明确要求重新提取。
+3. RegiMA 恢复语料库位于 Git 忽略的 `local-resources/regima/`。视觉资源、SymbolClass、MovieClip 和原始命名 SWF 必须优先从 `local-resources/regima/source/restored-swfs/` 窄查；`local-resources/regima/legacy-extraction/` 只作为旧 AS3、旧提取结果和历史对照，不能再作为视觉资源是否缺失的最终依据。
+4. 现代实现只追求外观、玩法、数值、手感和流程尽量接近原版；AS3 源码是行为参考，不是现代架构模板。逆向必须遵循 `docs/workflow/reverse-engineering-protocol.md` 的六段证据链；适用的 UI/视觉/空间事实还必须按 Schema 生成原版机器真值 JSON，由实现和测试直接消费。证据缺环时标记推断/未知，禁止自行补成原版事实。
+5. 不要一次性重构大量系统。每次任务选择一个清晰子系统或一个可玩的纵向切片。
+6. 默认不启动 `npm run dev`；修改代码后优先运行可自动结束的检查命令。需要用内置浏览器做视觉验收时，可直接启动 `npm run preview`：它固定监听 `0.0.0.0:4174`，这是用户长期批准的项目级视觉验收入口；服务可在验收后保持运行，只有端口冲突、用户要求或确有必要时才停止。
+7. 在现有文件中新增逻辑前，先运行 `npm run check:structure`；若目标文件触发 error，必须先拆分。若目标文件仅触发 warning，优先拆分；轻量小修可写明理由后局部修改。无关文件的 warning 不阻塞当前任务。
+8. 涉及 UI、HUD、菜单、页面或按钮的逆向/实现，必须按 `docs/workflow/reverse-engineering-protocol.md` 建立显示列表清单、`verified` 原版机器真值 JSON、原版视觉基准、允许的现代视觉例外和逐状态差异证据。整页真背景、业务测试、路由可用或零 console error 不能单独证明 UI 原生化；未经用户批准不得用现代可见层替代原版已有视觉。
+
+## 读取约束
+
+- 用户长期授权：轻微像素不对齐、抗锯齿或颜色舍入差异可直接修正，或记录为允许的现代视觉例外后继续，无需逐次请示；如实保留差异，不宣称像素完全一致。本授权不改变碰撞、伤害、时序等玩法合同，也不授权替换原版已有视觉。
+- Git 交付以拉取后安装依赖即可构建、运行游戏为底线。`docs/tasks/evidence/` 的截图、trace、报告和中间产物仅本地保留；当前源码直接消费的必需 JSON 由 `.gitignore` 精确白名单保留。超过常规 Git 托管限制且不参与运行的完整真值 manifest 也仅本地保留，文档可保留其本地路径和生成入口。以后运行必需数据应放入正式源码/资源目录，不得依赖被忽略的证据文件。逆向复验仍可依赖本地语料，不能承诺仅拉取仓库即可完成全部源级复验。
+
+模型与委派按 `docs/workflow/agent-protocol.md` 的准入表执行：整项输入/范围/验收明确且可独立验证的任务可用 Luna 主 agent；复杂任务优先 GPT-6 主 agent，简单独立包优先 Luna 子 agent，边界不清先 Luna 有界调查再由主 agent 决定。仅在可独立返回且主 agent 可同时推进其他工作时委派；本阶段只采用默认模型配置与文字规则，不增加运行记录校验或上下文管理门禁。
+
+- 优先用 `rg -n`、`Select-Object -First/-Skip/-Last` 或精确路径读取相关片段；不要为了找一条记录全文读入大型 Markdown、AS3 或历史文档。
+- 用 `rg` 搜中文、代码或含引号内容时，优先 `rg -n -F '稳定关键词' path` 后按行号窄读；避免宽关键词、复杂 alternation 和海量输出。
+- `task-history.md`、大型 reverse-engineering 文档和 AS3 文件默认先关键词定位，再读取命中的小范围上下文。
+- 治理目标是减少无关输出、重复输出和多个大型全文聚合，不是减少命令次数；不要为了少调用工具而在一次命令中合并多个大型文件全文。
+- 当前对话中已经读取且未修改的文件不重复全文读取；compact 后复核关键合同、精确实现证据或文件发生变化时，只重新窄读需要的片段。
+- TypeScript 定义、引用、符号和诊断在 LSP 可用时优先用 LSP 定位，结果不足或 LSP 不可用时再用 `rg`；修改前仍须读取目标实现和必要消费者，LSP 不能代替精确源码阅读。
+
+## 默认入口
+
+先使用当前已经生效的项目指令判定任务类型，再按下方分流读取最小必读集。若客户端已经注入 `AGENTS.md`，视为已读，不再通过 shell 全文读取；未注入时才读取本文件。
+
+`TASK_OUTLINE.md` 只在正式游戏 task、`/goal`、新增/拆分/重排游戏任务或项目路线判断时读取。轻量请求、局部评审、局部排错和脚手架局部讨论默认不读。
+
+## 任务分级
+
+### 轻量请求
+
+适用：解释问题、查配置、typo、注释、单个常量、明显小修、单文件局部问题、用户只问“为什么/是否/怎么做”。
+
+规则：只读直接相关文件；不进完整游戏 task 流程；不更新 task-board；不归档 task-history；不推荐新开对话。修改 workflow/task/domain 文档时仍运行 `npm run check:workflow`。
+
+### 工程评审
+
+适用：用户要求评审代码、阶段性实现、任务结果或 `docs/评审/` 中的评审文档。
+
+规则：按 `docs/workflow/review-protocol.md` 输出可比较、可执行的评审结论；评审本身不等于完成整改，若结论需要新增游戏复现工作，再按任务生成规则进入 task-board。
+
+### 问题治理
+
+适用：用户或评审提出系统性工程问题，例如跨文件重复、模块耦合、边界漂移、测试盲区、数据源分裂或生命周期规则不统一。
+
+规则：按 `docs/workflow/problem-governance.md` 先确认问题定义、证据、解决方案、测试方案、测试结果、关闭标准和适用触发/反馈记录；局部小修不升级为问题治理，只有会持续伤害系统演进能力的结构性缺口才进入该流程。代码、架构、游戏 task 或工作流变更收尾前，按 `docs/workflow/problem-audit.md` 运行 `npm run audit:problems`，只扫描活跃问题索引中 `PG-*` 的触发条件；归档问题不参与常规扫描，仅在硬回归信号下按 ID 重开。正常样本集中记录一次，复发或方案不充分时回写 PG 并转入复盘；通过样本满足全部关闭条件时同次归档。
+
+### 方法观测
+
+适用：人或 AI 提出可重复的协作、逆向、实现、评审或验证改进方法，收益尚未被充分证明，需要以真实工作样本决定采纳、修订或停止。
+
+规则：按 `docs/workflow/method-observation.md` 建立 `MO-*`；它不替代问题定义与关闭合同、不进入游戏看板或执行队列。只有当前工作明确关联方法或命中其精确采样触发时才读取对应记录并回写样本，不扫描全部方法；治理型 MO 可以按试验设计扫描活跃 PG，并让同一份证据同时成为 MO 样本与 PG 关闭样本。达到样本量、截止点或停止条件时必须裁决。
+
+### 具体系统设计与设计模式
+
+适用：仅当用户明确要求为关卡、宠物等具体系统进行设计模式设计、类化或重新设计时。不得根据重复代码、大文件、多个消费者或架构判断自行触发。
+
+规则：按 `docs/workflow/system-design-protocol.md` 先核定现有完成度，再只产出一套当前设计，在 `docs/architecture/system-designs/<system>.md` 冻结模式角色、源码映射、调用入口、扩展点、消费者、禁止路径和验收合同，并按实际代码把验收状态设为 `未开始` 或 `实施中`。不实现多套模式或无模式对照；人工可随时直接替换当前方案。
+
+### 具体系统设计验收
+
+适用：当前实现或评审 task 明确链接某份 `docs/architecture/system-designs/<system>.md`，且其尚未 `已完成/已退出`；或用户明确要求验收代码是否遵守该设计。不得扫描全部设计文档自行猜测关联；已退出设计不再适用。
+
+规则：按 `docs/workflow/system-design-acceptance-protocol.md` 对当前批次重复验收，并执行 task 声明的 `npm run check:system-design -- <system> <gate>`。退出码非 `0` 必须判本批不通过，不得用文档、人工评审、编译或普通测试覆盖。所有消费者、旧路径和证据清零且 `all` gate 为 `0` 后，同批标记 `已完成/已退出`。退出后普通任务不再读取设计验收机制、不再运行设计模式专项检查，也不得自动重开；只有用户明确要求时才重设计或重开验收。
+
+### 正式游戏 task
+
+适用：用户指定 task id、要求执行 task、玩法逆向、修改 `src/` 实现玩法、生成/拆分/重排游戏任务、完成一个可交接切片。
+
+规则：按阅读分流补齐必读文档；执行请求先检查 `docs/tasks/execution-queue.md`。存在 `Ready` 或 `Blocked` 治理执行项时只处理该项，不进入游戏 task；队列无可执行治理项时，普通执行和 `/goal` 才处理 `docs/tasks/task-board.md` 中唯一 `Ready` 游戏 task。执行游戏 task 时只读取该 task 在 `docs/tasks/task-definitions/` 下的独立定义，不全文读取其他未完成 task。新 task 默认预计 0 次上下文压缩；执行前必须核对主工作包、验收批次和拆分触发，超限先拆分。存在可独立返回的有界调查/验证工作包，且主 agent 可同时推进其他工作、运行环境允许时，默认按 `agent-protocol.md` 在单 task 内使用 subagent，简单有界工作优先显式指定 `gpt-5.6-luna`；唯一 Ready、工作包预算、主 agent 单写与归并责任不变。功能线仍保持唯一 `Active` 并跨 task 连续；任务完成必须留下可交接产物，并更新功能线、覆盖台账和 task 状态。详细流程见 `docs/workflow/agent-protocol.md`。
+
+用户使用 `/goal` 时，先读取 `execution-queue.md`：治理 `Ready`/`Blocked` 存在时只执行或治理该项，完成后结束本次 `/goal`；队列无可执行治理项时，才恢复唯一 `Active` 功能线并执行唯一 `Ready` 游戏 task。游戏 task 完成后激活同线下一 task 并结束当次 `/goal`，不在同一次请求中连续跨 task；遇到阻塞仍只治理当前调度范围内的阻塞，不隐式切换。compact 次数不作为停止、拆分或新开对话条件；恢复后窄读当前合同、改动和必要证据，继续原 task，不借此扩张范围。仅在存在尚未保存且影响恢复的信息或需要实际交接时更新简短检查点；已有记录足够时直接复用，不重复计数、落盘或运行无变化的检查。收尾必须明确给出下一执行项、Git 提交/上传建议和对话管理建议。
+
+### 脚手架维护
+
+适用：修改 AI 工作流、任务体系、文档职责、AGENTS/CLAUDE 入口、校验脚本或治理规则。
+
+规则：读 `docs/workflow/README.md`、`docs/workflow/document-map.md` 和相关 workflow 文档；更新 `docs/workflow/governance-log.md`；运行 `npm run check:workflow`；不新增 `TASK-DOCS-*` 到游戏任务看板。
+
+## 冷启动阅读分流
+
+| 任务类型 | 额外必读文档 |
+| --- | --- |
+| 轻量请求：解释、typo、注释、单个常量、明显配置、小范围排错 | 无。只在改动涉及具体系统时再读相关文件。 |
+| 游戏任务执行：用户指定 task 或使用 `/goal` | 先读 `docs/tasks/execution-queue.md`；只有无可执行治理项时再读 `TASK_OUTLINE.md`、`docs/workflow/agent-protocol.md`、`docs/tasks/feature-lines.md`、当前线覆盖台账、`docs/tasks/task-board.md`、当前 `docs/tasks/task-definitions/TASK-*.md`、`docs/reverse-engineering/mechanics-index.md`、`docs/tasks/vertical-slices.md` |
+| 代码逆向：AS3、调用链、行为合同 | 游戏任务执行必读集 + `docs/workflow/reverse-engineering-protocol.md` + `local-resources/regima/legacy-extraction/README_extract.md` + 当前 task 指定的局部/共享 AS3 与消费者；沿用既有流程，不新增任务协议/方案文档，不从 PG 恢复步骤 |
+| 视觉真值逆向：symbol、位图、时间轴、UI/动画/空间真值 | 游戏任务执行必读集 + `docs/workflow/reverse-engineering-task-protocol.md` + 当前 task definition 唯一链接的 `逆向方案` + `docs/reverse-engineering/evb-extraction-report.md` + `docs/reverse-engineering/asset-annotation/workflow.md` + `local-resources/regima/source/restored-swfs/` 中的目标源包；旧视觉 task 轮到执行时才补子类型/方案，不扫描其他方案，旧 `local-resources/regima/legacy-extraction/` 仅作交叉对照 |
+| 代码实现：修改 `src/` | 游戏任务执行必读集 + `docs/architecture/src-boundaries.md` + 对应 `src/` 文件 |
+| 工程评审：评审代码、阶段成果或评审文档 | `docs/workflow/review-protocol.md`，涉及代码质量再读 `docs/workflow/code-quality-gates.md`，涉及 `src/` 边界再读 `docs/architecture/src-boundaries.md` |
+| 问题治理：确认或治理系统性工程问题 | `docs/workflow/problem-governance.md`、`docs/workflow/problem-audit.md`；若问题来自评审，再读 `docs/workflow/review-protocol.md`；若涉及代码质量，再读 `docs/workflow/code-quality-gates.md` |
+| 方法观测：提出、试验、复核或裁决改进方法 | `docs/workflow/method-observation.md` + 当前 `docs/workflow/methods/MO-*.md`；不读取其他方法记录 |
+| 用户明确要求具体系统设计/设计模式 | `docs/workflow/system-design-protocol.md`、`docs/architecture/src-boundaries.md`、目标 `docs/architecture/system-designs/<system>.md`；未被用户触发时不读取 |
+| 关联具体系统设计的实现/评审验收 | `docs/workflow/system-design-acceptance-protocol.md` + 当前 task 明确链接且尚未 `已完成/已退出` 的具体设计；每批重复读取，不扫描其他设计；已退出后不再读取 |
+| 新增核心领域命名、系统、实体、类型或数据模型 | `docs/domain/glossary.md`、`docs/domain/ubiquitous-language-process.md` |
+| 新增/拆分/重排游戏任务 | `TASK_OUTLINE.md`、`docs/workflow/task-generation.md`、`docs/tasks/feature-lines.md`、当前线覆盖台账、`docs/tasks/task-board.md`、涉及的 `docs/tasks/task-definitions/TASK-*.md`、`docs/reverse-engineering/mechanics-index.md`、`docs/tasks/vertical-slices.md` |
+| AI 工作流、任务体系、文档职责或脚手架维护 | `docs/workflow/README.md`、`docs/workflow/document-map.md`、`docs/workflow/governance-log.md` |
+| 追溯历史、修改已完成任务、处理历史依赖 | `docs/tasks/task-history.md` |
+
+默认不要读取 `docs/tasks/task-history.md`。只有用户要求追溯历史、当前任务需要修改已完成任务、或需要确认历史决策时才读取。
+
+## 对话收束
+
+- 轻量请求完成后直接给结果，不建议新开对话。
+- 同一个正式游戏 task 未完成时默认继续当前对话；compact 次数不作为停止、拆分或新开对话条件；恢复后窄读当前合同、改动和必要证据，继续原 task，不借此扩张范围。仅在存在尚未保存且影响恢复的信息或需要实际交接时更新简短检查点；已有记录足够时直接复用，不重复计数、落盘或运行无变化的检查。检查点格式见 [compact 安全检查点](docs/workflow/agent-protocol.md#compact-安全检查点)。
+- 不要因为只完成少量工作、仍在同一 task 的验证/修 bug/补文档阶段，就建议新开对话。
+- 只有完成 task、切换明显不同机制/切片/子系统，或已阅读大量 AS3/逆向/历史资料时，才在文档收尾后温和建议新开对话。
+- 正式 task 或 `/goal` 收尾时必须明确告诉用户：是否建议继续当前对话、compact 或新开对话；是否建议 commit；已提交后是否建议 push。Git 操作只有用户明确要求时才执行。
