@@ -1,0 +1,89 @@
+package com.greensock.plugins
+{
+   import com.greensock.TweenLite;
+   
+   public class EndArrayPlugin extends TweenPlugin
+   {
+      
+      public static const API:Number = 1;
+       
+      
+      protected var _a:Array;
+      
+      protected var _info:Array;
+      
+      public function EndArrayPlugin()
+      {
+         super();
+         _info = [];
+         this.propName = "endArray";
+         this.overwriteProps = ["endArray"];
+      }
+      
+      public function init(param1:Array, param2:Array) : void
+      {
+         _a = param1;
+         var _loc_3:* = param2.length;
+         while(_loc_3--)
+         {
+            if(param1[_loc_3] != param2[_loc_3] && param1[_loc_3] != null)
+            {
+               _info[_info.length] = new ArrayTweenInfo(_loc_3,_a[_loc_3],param2[_loc_3] - _a[_loc_3]);
+            }
+         }
+      }
+      
+      override public function onInitTween(param1:Object, param2:*, param3:TweenLite) : Boolean
+      {
+         if(!(param1 is Array) || !(param2 is Array))
+         {
+            return false;
+         }
+         init(param1 as Array,param2);
+         return true;
+      }
+      
+      override public function set changeFactor(param1:Number) : void
+      {
+         var _loc_3:ArrayTweenInfo = null;
+         var _loc_4:Number = NaN;
+         var _loc_2:* = _info.length;
+         if(this.round)
+         {
+            while(_loc_2--)
+            {
+               _loc_3 = _info[_loc_2];
+               _loc_4 = _loc_3.start + _loc_3.change * param1;
+               _a[_loc_3.index] = _loc_4 > 0 ? int(_loc_4 + 0.5) : int(_loc_4 - 0.5);
+            }
+         }
+         else
+         {
+            while(_loc_2--)
+            {
+               _loc_3 = _info[_loc_2];
+               _a[_loc_3.index] = _loc_3.start + _loc_3.change * param1;
+            }
+         }
+      }
+   }
+}
+
+class ArrayTweenInfo
+{
+    
+   
+   public var change:Number;
+   
+   public var start:Number;
+   
+   public var index:uint;
+   
+   function ArrayTweenInfo(param1:uint, param2:Number, param3:Number)
+   {
+      super();
+      this.index = param1;
+      this.start = param2;
+      this.change = param3;
+   }
+}
