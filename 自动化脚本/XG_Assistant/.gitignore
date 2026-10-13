@@ -1,0 +1,11 @@
+dataset/
+__pycache__/
+debug_frames/
+logs/
+model/dataset1/
+model/dataset2/
+model/runs/
+runs/
+log.txt
+bot_env/
+.vscode/

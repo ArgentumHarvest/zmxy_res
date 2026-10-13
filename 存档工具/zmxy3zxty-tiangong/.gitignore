@@ -1,0 +1,23 @@
+# 构建产物
+dist/
+build/
+*.exe
+*.spec.bak
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.env
+
+# 前端依赖（如有）
+node_modules/
+
+# 工具链 / IDE
+.workbuddy/
+.idea/
+.vscode/
+
+# 操作系统
+.DS_Store
+Thumbs.db

@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+build/
+dist/
+*.spec
+*.exe
+*.zip
+.env
+.env.*
+启动错误.txt
+最近一次异常/
+.idea/
+.vscode/

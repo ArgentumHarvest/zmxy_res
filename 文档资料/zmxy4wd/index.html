@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>丹药五毒材料计算器</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    h2 { margin-top: 40px; }
+    h3 { margin-top: 20px; }
+    table { border-collapse: collapse; width: 100%; margin-bottom: 20px; }
+    th, td { border: 1px solid #ccc; padding: 6px 8px; text-align: center; }
+    th { background: #f0f0f0; }
+    .section { margin-bottom: 40px; }
+    .tier-box { border: 1px solid #ddd; margin-bottom: 20px; padding: 10px; }
+    .done-row { background: #e8ffe8; }
+    input[type=number] { width: 80px; }
+  </style>
+</head>
+<body>
+
+<h1>丹药制作进度</h1>
+
+<!-- ================= 丹药完成状态 ================= -->
+<div class="section">
+  <h2>一～五阶丹药完成状态</h2>
+  <div id="pillArea"></div>
+</div>
+
+<!-- ================= 五毒材料输入 ================= -->
+<div class="section">
+  <h2>当前拥有的五毒材料数量</h2>
+  <table>
+    <tr><th>阶数</th><th>蟾</th><th>蛛</th><th>蝎</th><th>蛇</th><th>蜈蚣</th></tr>
+    <tbody id="materialInput"></tbody>
+  </table>
+</div>
+
+<!-- ================= 计算结果 ================= -->
+<div class="section">
+  <h2>还需要的五毒材料数量</h2>
+  <table>
+    <tr><th>阶数</th><th>蟾</th><th>蛛</th><th>蝎</th><th>蛇</th><th>蜈蚣</th></tr>
+    <tbody id="resultTable"></tbody>
+  </table>
+</div>
+
+<!-- ================= 配方汇总 ================= -->
+<div class="section">
+  <h2>丹药配方汇总（不参与计算）</h2>
+  <table>
+    <tr><th>阶数</th><th>丹药</th><th>五毒材料</th><th>基础材料汇总</th></tr>
+    <tbody id="recipeTable"></tbody>
+  </table>
+</div>
+
+<script>
+const tiers = [1,2,3,4,5];
+const poisons = ['蟾','蛛','蝎','蛇','蜈蚣'];
+const pillNames = ['热血丹','魔泉丹','狂暴丹','永恒丹','辉煌丹'];
+const needPerTier = {1:15,2:23,3:30,4:38,5:45};
+
+const baseSummary = {
+  1:'黄磷沙252 / 金蚕丝252 / 棕椰木252',
+  2:'雾水岩384 / 落青藤384 / 素纤麻384',
+  3:'朱砂石501 / 墨谷棉501 / 绿针藓501',
+  4:'冰凝缎636 / 绿磷矿636 / 雪莲花636',
+  5:'青铜石753 / 镜魂丝752 / 缠星藻753'
+};
+
+function init(){
+  initPills();
+  initInputs();
+  initRecipes();
+  calculate();
+}
+
+// ---------- 丹药完成状态（按阶分组） ----------
+function initPills(){
+  const area = document.getElementById('pillArea');
+  area.innerHTML = '';
+  tiers.forEach(t=>{
+    const box = document.createElement('div');
+    box.className = 'tier-box';
+    box.innerHTML = `<h3>${t}阶丹药</h3>`;
+    const table = document.createElement('table');
+    table.innerHTML = '<tr><th>丹药</th><th>五毒</th><th>是否完成</th></tr>';
+    poisons.forEach((p,i)=>{
+      const key = `pill_${t}_${p}`;
+      const checked = localStorage.getItem(key)==='1';
+      const tr = document.createElement('tr');
+      if(checked) tr.className='done-row';
+      tr.innerHTML = `<td>${t}阶${pillNames[i]}</td><td>${p}</td><td><input type="checkbox" ${checked?'checked':''}></td>`;
+      tr.querySelector('input').onchange = e=>{
+        localStorage.setItem(key,e.target.checked?'1':'0');
+        calculate();
+        initPills();
+      };
+      table.appendChild(tr);
+    });
+    box.appendChild(table);
+    area.appendChild(box);
+  });
+}
+
+// ---------- 五毒材料输入 ----------
+function initInputs(){
+  const tbody = document.getElementById('materialInput');
+  tbody.innerHTML='';
+  tiers.forEach(t=>{
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${t}阶</td>` + poisons.map(p=>{
+      const key = `mat_${t}_${p}`;
+      const val = localStorage.getItem(key)||0;
+      return `<td><input type="number" min="0" value="${val}" data-key="${key}"></td>`;
+    }).join('');
+    tr.querySelectorAll('input').forEach(inp=>{
+      inp.oninput = e=>{ localStorage.setItem(e.target.dataset.key,e.target.value); calculate(); };
+    });
+    tbody.appendChild(tr);
+  });
+}
+
+// ---------- 配方汇总 ----------
+function initRecipes(){
+  const tbody = document.getElementById('recipeTable');
+  tbody.innerHTML='';
+  tiers.forEach(t=>{
+    poisons.forEach((p,i)=>{
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${t}阶</td><td>${t}阶${pillNames[i]}</td><td>${p} ${needPerTier[t]}</td><td>${baseSummary[t]}</td>`;
+      tbody.appendChild(tr);
+    });
+  });
+}
+
+// ---------- 计算逻辑 ----------
+function calculate(){
+  const result = {};
+  tiers.forEach(t=> poisons.forEach(p=> result[`${t}_${p}`]=0 ));
+
+  const owned = {};
+  tiers.forEach(t=>{
+    poisons.forEach(p=>{
+      owned[`${t}_${p}`] = parseInt(localStorage.getItem(`mat_${t}_${p}`)||0);
+    });
+  });
+
+  poisons.forEach(p=>{
+    let pool = {};
+    tiers.forEach(t=> pool[t]=owned[`${t}_${p}`]);
+
+    tiers.forEach(t=>{
+      if(localStorage.getItem(`pill_${t}_${p}`)==='1'){
+        const up = Math.floor(pool[t]/5);
+        pool[t]=0;
+        if(t<5) pool[t+1]+=up;
+      }
+    });
+
+    let target = tiers.find(t=> localStorage.getItem(`pill_${t}_${p}`)!=='1');
+    if(!target){ return; }
+
+    let total = 0;
+    tiers.forEach(t=>{
+      if(t<target) total += Math.floor(pool[t]/Math.pow(5,target-t));
+      if(t===target) total += pool[t];
+    });
+
+    result[`${target}_${p}`] = Math.max(0, needPerTier[target]-total);
+  });
+
+  const tbody = document.getElementById('resultTable');
+  tbody.innerHTML='';
+  tiers.forEach(t=>{
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${t}阶</td>` + poisons.map(p=> `<td>${result[`${t}_${p}`]}</td>`).join('');
+    tbody.appendChild(tr);
+  });
+}
+
+init();
+</script>
+
+</body>
+</html>

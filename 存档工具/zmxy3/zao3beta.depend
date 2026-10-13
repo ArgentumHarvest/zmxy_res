@@ -1,0 +1,32 @@
+# depslib dependency file v1.0
+1630949048 source:f:\codeblocks\zao3beta\amf3.cpp
+	"amf3.h"
+	<cstring>
+	<iostream>
+
+1630949048 f:\codeblocks\zao3beta\amf3.h
+	<sstream>
+	<map>
+	<vector>
+	<memory>
+	<memory.h>
+
+1746753180 source:f:\codeblocks\zao3beta\main.cpp
+	<iostream>
+	<fstream>
+	<zlib.h>
+	"amf3.h"
+
+1694164064 f:\zlib2023\include\zlib.h
+	"zconf.h"
+
+1694164064 f:\zlib2023\include\zconf.h
+	<stddef.h>
+	<windows.h>
+	<limits.h>
+	<sys/types.h>
+	<stdarg.h>
+	<stddef.h>
+	<unistd.h>
+	<unixio.h>
+

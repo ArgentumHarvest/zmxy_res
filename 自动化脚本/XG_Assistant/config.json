@@ -1,0 +1,44 @@
+{
+    "MODELS": {
+        "player": "model/best_player.pt",
+        "captcha": "model/best_puzzle.pt"
+    },
+    "ASSETS": {
+        "captcha_slider": "assets/btn_slider.png",
+        "settlement": "assets/img_settlement_mark.png",
+        "btn_attack": "assets/btn_attack.png",
+        "btn_restart": "assets/btn_restart.png",
+        "btn_go": "assets/btn_go.png",
+        "btn_confirm": "assets/btn_confirm.png",
+        "btn_network_confirm": "assets/btn_confirm_2.0.png"
+    },
+    "COORDS": {
+        "joystick_right": [430, 920],
+        "joystick_left": [130, 920],
+        "skills": [
+            [1440, 990],
+            [1500, 830],
+            [1670, 770],
+            [1850, 770]
+        ],
+        "attack_btn": [1820, 965],
+        "captcha_slider_start": [650, 713]
+    },
+    "VISION": {
+        "captcha_roi": [620, 800, 560, 1360],
+        "puzzle_spawn_roi": [550, 330, 627, 646],
+        "player_inference_roi": [500, 1000, 1400, 1920],
+        "screen_borders": [34, 2, 2, 38],
+        "match_threshold": 0.8,
+        "captcha_threshold": 0.7, 
+        "captcha_yolo_conf": 0.6,
+        "player_yolo_conf": 0.25
+    },
+    "TIMEOUTS": {
+        "dungeon_stuck": 180,
+        "settlement_stuck": 30,
+        "unknown_stuck": 30,
+        "captcha_fatal": 20,
+        "network_retry": 30
+    }
+}

@@ -1,0 +1,12 @@
+# --- 核心深度学习框架 (建议手动安装 CPU 版本防止包体过大) ---
+ultralytics
+
+# --- 图像处理与矩阵计算 ---
+opencv-python
+numpy
+
+# --- Windows 系统交互 (窗口捕捉、控制器) ---
+pywin32
+
+# --- 打包工具 (如果别人也想打包的话) ---
+pyinstaller
