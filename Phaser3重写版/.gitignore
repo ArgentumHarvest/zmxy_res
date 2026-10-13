@@ -1,0 +1,58 @@
+node_modules/
+dist/
+.tmp/
+local-resources/
+
+# Local verification images: retain for reruns without adding thousands of files.
+# Collision contracts, runtime mask data and verification reports remain tracked.
+/docs/tasks/evidence/TASK-SETTINGS-219/**/*.png
+/docs/tasks/evidence/TASK-SLICE-214D/**/*.png
+
+# Compressed original collision samples retained locally for verification.
+/docs/tasks/evidence/**/*.deflate
+
+# Local reverse-engineering corpora. They may live inside the workspace for
+# stable discovery, but remain outside Git unless curated explicitly.
+/再续天庭1.1.exe
+
+# Large reverse-engineering manifests are local verification inputs. They are
+# not required to build or run the game and exceed normal Git hosting limits.
+/docs/reverse-engineering/ground-truth/manifests/task-settings-222-pet-turtle-family.json
+/docs/reverse-engineering/ground-truth/manifests/task-settings-222a-pet-turtle-visual.json
+
+*.log
+*.err.log
+
+.DS_Store
+Thumbs.db
+
+# Regenerable verification projections and historical diagnostic composites.
+/docs/tasks/evidence/TASK-SLICE-*/projections/
+/docs/tasks/evidence/TASK-SLICE-*/*overlay*.png
+/docs/tasks/evidence/TASK-SLICE-*/*side-by-side*.png
+/docs/tasks/evidence/TASK-SLICE-*/*region-diff*.png
+/docs/tasks/evidence/TASK-SLICE-*/pre-fix-*.png
+
+# Local task evidence; retain only data imported by the runnable game.
+/docs/tasks/evidence/*
+!/docs/tasks/evidence/TASK-SETTINGS-217/
+/docs/tasks/evidence/TASK-SETTINGS-217/*
+!/docs/tasks/evidence/TASK-SETTINGS-218/
+/docs/tasks/evidence/TASK-SETTINGS-218/*
+!/docs/tasks/evidence/TASK-SETTINGS-219/
+/docs/tasks/evidence/TASK-SETTINGS-219/*
+!/docs/tasks/evidence/TASK-SETTINGS-220/
+/docs/tasks/evidence/TASK-SETTINGS-220/*
+!/docs/tasks/evidence/TASK-SETTINGS-217/environment-properties.json
+!/docs/tasks/evidence/TASK-SETTINGS-217/source-contract.json
+!/docs/tasks/evidence/TASK-SETTINGS-218/collision-contract.json
+!/docs/tasks/evidence/TASK-SETTINGS-219/collision-contract.json
+!/docs/tasks/evidence/TASK-SETTINGS-219/runtime-mask-pack.json
+!/docs/tasks/evidence/TASK-SETTINGS-220/collision-contract.json
+!/docs/tasks/evidence/TASK-SETTINGS-220/runtime-mask-pack.json
+
+# 244: complete large native truth; regenerated locally, not a game runtime input.
+/docs/reverse-engineering/ground-truth/manifests/task-settings-244-pet-passive-effects.json
+/docs/reverse-engineering/ground-truth/manifests/task-settings-246-pet-passive-projection.json
+/tools/pet-passive-assets/__pycache__/
+/tools/pet-passive-visual/__pycache__/
