@@ -1,0 +1,148 @@
+import type { PetBehaviorContext, PetBehaviorEvent, PetBehaviorSkillRequest } from './PetBehavior';
+import type { PetCombatEntitySession } from './PetCombatEntitySession';
+import type {
+  PetCombatEntitySnapshot, PetCombatFrame, PetCombatReleaseReason,
+  PetCombatSummonHandle, PetCombatSummonRequest,
+} from './PetCombatTypes';
+import type { PetOwnerSnapshot, PetSkillTarget } from './PetTypes';
+import { requestPetMonkeyBasicAttack } from './PetMonkeyCombatSystem';
+import { requestPetHorseBasicAttack } from './PetHorseCombatSystem';
+import { DefaultGlobalSettings } from './GlobalSettingsSystem';
+import { createPetSkillState } from './PetSkillStateSystem';
+
+type ContextPorts = Readonly<{
+  spawnSummon: (request: PetCombatSummonRequest, owner: Readonly<PetOwnerSnapshot>) => PetCombatSummonHandle;
+  releaseSummon: (handle: PetCombatSummonHandle, reason: PetCombatReleaseReason) => void;
+  summonSnapshots: () => readonly PetCombatEntitySnapshot[];
+  emit: (event: PetBehaviorEvent) => void;
+}>;
+
+export function createPetCombatContext(
+  session: PetCombatEntitySession,
+  frame: PetCombatFrame,
+  targets: readonly Readonly<PetSkillTarget>[],
+  ports: ContextPorts,
+): PetBehaviorContext {
+  const requireLiveSession = (): void => {
+    if (session.released) throw new Error(`Pet combat context is released: ${session.runtimeKey}`);
+  };
+  const requireProjectiles = () => {
+    requireLiveSession();
+    if (!frame.projectiles) {
+      throw new Error(`Pet behavior ${session.pet.species}:${session.pet.form} requires projectiles.`);
+    }
+    return frame.projectiles;
+  };
+  const roster = session.parentRuntimeKey
+    ? { pets: [session.pet], selectedIndex: 0, message: '' }
+    : frame.roster;
+  const source = frame.incomingFeedback && session.attackTarget(frame.incomingFeedback.ownerSlot);
+  const stampProjectiles = <T>(cast: () => T): T => {
+    const model = requireProjectiles(), before = new Set(model.projectiles);
+    const result = cast();
+    for (const projectile of model.projectiles) {
+      if (!before.has(projectile)) projectile.experienceSource = source;
+    }
+    return result;
+  };
+  const castAt = (request: PetBehaviorSkillRequest, selected: readonly Readonly<PetSkillTarget>[]) => (
+    stampProjectiles(() => request({
+      roster, runtime: session.runtime, targets: selected, projectiles: requireProjectiles(),
+      random: frame.random, actionToken: session.actionToken,
+    }))
+  );
+  return Object.freeze({
+    pet: session.pet,
+    get passiveBonuses() { return session.passive?.bonuses(); },
+    owner: Object.freeze({ ...frame.owner }),
+    runtime: Object.freeze({ ...session.runtime }),
+    targets: Object.freeze([...targets]), target: session.target,
+    selectTarget: target => { requireLiveSession(); session.target = Object.freeze({ ...target }); },
+    actionToken: session.actionToken,
+    parentRuntimeKey: session.parentRuntimeKey, sourcePetId: session.sourcePetId,
+    deltaMs: frame.deltaMs, random: frame.random ?? Math.random,
+    hostFps: frame.hostFps ?? DefaultGlobalSettings.frameRate,
+    hostTick: session.hostTick,
+    targetAcquiredThisFrame: session.targetAcquiredThisFrame,
+    isLocalOwner: frame.isLocalOwner !== false,
+    animation: session.animationSnapshot(),
+    grounded: session.snapshot().groundMotion?.standingOn !== undefined,
+    projectileCombat: frame.projectileCombat && { ...frame.projectileCombat,
+      hit: (projectile, targetId, cache) => {
+        return frame.projectileCombat!.hit({ ...projectile, experienceSource: projectile.experienceSource ?? source }, targetId, cache);
+      },
+    },
+    get isGxp() { return session.currentGxp(frame); },
+    face: (direction) => { requireLiveSession(); session.face(direction); },
+    setRootScaleX: (sign) => {
+      requireLiveSession();
+      if (sign !== -1 && sign !== 1) throw new Error('Invalid pet root scale');
+      session.runtime.rootScaleX = sign;
+    },
+    protectFromHits: (sourceCount) => { requireLiveSession(); session.protectFromHits(sourceCount); },
+    healSelf: (hp, mp = 0) => {
+      requireLiveSession();
+      if (!Number.isFinite(hp) || !Number.isFinite(mp) || hp < 0 || mp < 0) throw new Error('Invalid pet healing');
+      if (session.pet.hp <= 0) return;
+      session.pet.hp = Math.min(session.pet.maxHp, session.pet.hp + (hp | 0));
+      session.pet.mp = Math.min(session.pet.maxMp, session.pet.mp + (mp | 0));
+    },
+    linkOwner: (value, durationTicks) => {
+      requireLiveSession(); session.linkOwner(frame, value, durationTicks);
+    },
+    healLinkedOwner: (hp, notification) => {
+      requireLiveSession(); session.healLinkedOwner(frame, hp, notification);
+    },
+    spendMp: (amount) => {
+      requireLiveSession();
+      if (!Number.isFinite(amount) || amount < 0) throw new Error('Invalid pet MP cost');
+      if (session.pet.hp <= 0 || session.pet.mp < amount) return false;
+      session.pet.mp -= amount;
+      return true;
+    },
+    setSkillCooldown: (skill, milliseconds) => {
+      requireLiveSession();
+      if (!Number.isFinite(milliseconds) || milliseconds < 0) throw new Error('Invalid pet cooldown');
+      session.pet.skillState ??= createPetSkillState();
+      session.pet.skillState[skill].cooldownMs = milliseconds;
+    },
+    releaseSelf: (reason) => { requireLiveSession(); session.release(reason); },
+    playAnimation: (action) => {
+      requireLiveSession();
+      session.playAnimation(action);
+    },
+    restartAnimationCell: () => { requireLiveSession(); session.restartAnimationCell(); },
+    castSkill: (request) => castAt(request, targets),
+    castSkillAt: (request, target) => castAt(request, [target]),
+    castBasicAttack: (target = session.target) => {
+      const projectiles = requireProjectiles();
+      if (!target) throw new Error('Pet behavior basic attack requires an active runtime and target.');
+      const params = {
+        roster, runtime: session.runtime, target,
+        actionToken: session.actionToken, projectiles, random: frame.random,
+      };
+      return stampProjectiles(() => session.pet.species === 'horse'
+        ? requestPetHorseBasicAttack(params)
+        : requestPetMonkeyBasicAttack(params));
+    },
+    relocate: (x, y) => {
+      requireLiveSession();
+      if (!Number.isFinite(x) || !Number.isFinite(y)) {
+        throw new Error('Pet behavior relocation requires a finite active runtime point.');
+      }
+      session.runtime.x = x;
+      session.runtime.y = y;
+    },
+    spawnSummon: (request) => {
+      requireLiveSession();
+      if (session.phase !== 'alive') throw new Error('A dead-playing pet cannot summon.');
+      return ports.spawnSummon(request, frame.owner);
+    },
+    releaseSummon: (handle, reason = 'dismissed') => ports.releaseSummon(handle, reason),
+    summonSnapshots: () => session.released ? Object.freeze([]) : ports.summonSnapshots(),
+    emit: (event) => {
+      requireLiveSession();
+      ports.emit(Object.freeze({ ...event }));
+    },
+  });
+}

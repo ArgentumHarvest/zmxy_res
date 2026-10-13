@@ -1,0 +1,326 @@
+import Phaser from 'phaser';
+import { saveSlotAssets } from '../assets/AssetManifest';
+import { createSavePartyCreationView } from './save-slot/SavePartyCreationView';
+import { createPetVisualQaEntry } from './save-slot/PetVisualQaEntry';
+import {
+  createPartySaveSlot,
+  deleteSaveSlot,
+  getSaveSlotDisplayName,
+  listSaveSlots,
+  selectSaveSlot,
+  type SaveSlotId,
+  type SaveSlotSnapshot,
+} from '../systems/SaveSlotSystem';
+import type { SaveStorage } from '../systems/SaveSystem';
+import {
+  chooseDraftHero,
+  chooseDraftPlayerCount,
+  createSaveProfileDraft,
+  type SaveProfileDraft,
+} from '../systems/SaveProfileDraftSystem';
+import {
+  ensureSceneAssetBundle,
+  startSceneWithBundle,
+} from './SceneAssetBundleBridge';
+
+const SlotPositions = [
+  { x: 338.5, y: 267 }, { x: 594.5, y: 267 },
+  { x: 338.5, y: 346 }, { x: 594.5, y: 346 },
+  { x: 338.5, y: 424 }, { x: 594.5, y: 424 },
+] as const;
+
+// boundary: owns save-slot selection and native party creation only; it does
+// not own bundle loading or cross-scene transition policy.
+export class SaveSlotScene extends Phaser.Scene {
+  public slotSnapshots: SaveSlotSnapshot[] = [];
+
+  private storage?: SaveStorage;
+  private menuLayer?: Phaser.GameObjects.Container;
+  private slotPanelImage?: Phaser.GameObjects.Image;
+  private slotCloseZone?: Phaser.GameObjects.Zone;
+  private slotLayer?: Phaser.GameObjects.Container;
+  private dialogLayer?: Phaser.GameObjects.Container;
+  private createLayer?: Phaser.GameObjects.Container;
+  private createDraft?: SaveProfileDraft;
+  private createAssetsLoading = false;
+  private createSubmitting = false;
+  private slotPanelOpen = true;
+  private feedbackText?: Phaser.GameObjects.Text;
+
+  public constructor() {
+    super('SaveSlotScene');
+  }
+
+  public create(): void {
+    this.cameras.main.setBackgroundColor('#08090c');
+    this.add.image(0, 0, saveSlotAssets.startMenu.key).setOrigin(0).setDisplaySize(940, 590);
+    this.createMainMenuInteractions();
+    this.slotPanelImage = this.add.image(0, 0, saveSlotAssets.slotPanel.key)
+      .setOrigin(0).setDisplaySize(940, 590).setDepth(10);
+    this.slotCloseZone = this.add.zone(718.45, 111.05, 40, 42)
+      .setOrigin(0).setInteractive({ useHandCursor: true }).setDepth(40);
+    this.slotCloseZone.on('pointerdown', () => this.closeSlotPanel());
+    this.feedbackText = this.add.text(470, 526, '', {
+      color: '#f6d36d', fontFamily: 'Arial, sans-serif', fontSize: '16px',
+      backgroundColor: '#151515', padding: { x: 10, y: 5 },
+    }).setOrigin(0.5).setDepth(30);
+
+    this.storage = getBrowserStorage();
+    if (!this.storage) {
+      this.feedbackText.setText('浏览器存储不可用，无法进入正式存档流程');
+      return;
+    }
+
+    this.feedbackText.setText('选择空槽新建，或读取当前版本存档；旧版/损坏存档需删除后重建');
+    this.refreshSlots();
+    this.bindKeyboardShortcuts();
+    this.setSlotPanelOpen(true);
+    this.events.once('shutdown', createPetVisualQaEntry(this.storage, () => this.refreshSlots()));
+  }
+
+  private createMainMenuInteractions(): void {
+    const newGame = this.add.zone(751.15, 150.65, 188.85, 45.85)
+      .setOrigin(0).setInteractive({ useHandCursor: true });
+    const continueGame = this.add.zone(751.15, 198, 188.85, 45.95)
+      .setOrigin(0).setInteractive({ useHandCursor: true });
+    newGame.on('pointerdown', () => this.openSlotPanel());
+    continueGame.on('pointerdown', () => this.openSlotPanel());
+    this.menuLayer = this.add.container(0, 0, [newGame, continueGame]).setDepth(5);
+  }
+
+  private openSlotPanel(): void {
+    this.setSlotPanelOpen(true);
+    this.refreshSlots();
+  }
+
+  private closeSlotPanel(): void {
+    this.closeCreateFlow();
+    this.closeDialog();
+    this.slotLayer?.destroy(true);
+    this.slotLayer = undefined;
+    this.setSlotPanelOpen(false);
+  }
+
+  private setSlotPanelOpen(open: boolean): void {
+    this.slotPanelOpen = open;
+    this.menuLayer?.setVisible(!open);
+    this.slotPanelImage?.setVisible(open);
+    this.slotLayer?.setVisible(open);
+    this.feedbackText?.setVisible(open);
+    this.slotCloseZone?.setVisible(open);
+    if (open) this.slotCloseZone?.setInteractive({ useHandCursor: true });
+    else this.slotCloseZone?.disableInteractive();
+  }
+
+  private refreshSlots(): void {
+    if (!this.storage) return;
+    this.slotLayer?.destroy(true);
+    this.slotLayer = this.add.container(0, 0).setDepth(20);
+    this.slotSnapshots = listSaveSlots(this.storage);
+    for (const snapshot of this.slotSnapshots) this.createSlotView(snapshot);
+  }
+
+  private createSlotView(snapshot: SaveSlotSnapshot): void {
+    if (!this.slotLayer) return;
+    const position = SlotPositions[snapshot.id];
+    const hitArea = this.add.rectangle(position.x, position.y, 242, 64, 0x000000, 0.001)
+      .setInteractive({ useHandCursor: true });
+    const color = snapshot.status === 'corrupt' ? '#ff7777' : snapshot.status === 'valid' ? '#f7e2a2' : '#c4c8cf';
+    const title = this.add.text(position.x - 77, position.y - 12, getSaveSlotDisplayName(snapshot), {
+      color, fontFamily: 'Arial, sans-serif', fontSize: '17px', fontStyle: 'bold',
+    });
+    const detail = this.add.text(position.x - 77, position.y + 12, getSlotDetail(snapshot), {
+      color: snapshot.status === 'corrupt' ? '#ffaaaa' : '#929aa8',
+      fontFamily: 'Arial, sans-serif', fontSize: '12px',
+    });
+    hitArea.on('pointerover', () => hitArea.setFillStyle(0xe8853b, 0.16));
+    hitArea.on('pointerout', () => hitArea.setFillStyle(0x000000, 0.001));
+    hitArea.on('pointerdown', () => this.activateSlot(snapshot.id));
+    this.slotLayer.add([hitArea, title, detail]);
+
+    if (snapshot.status !== 'empty') {
+      const deleteButton = this.add.text(position.x + 75, position.y + 9, '删除', {
+        color: '#ff9a72', fontFamily: 'Arial, sans-serif', fontSize: '13px',
+        backgroundColor: '#31130e', padding: { x: 5, y: 3 },
+      }).setInteractive({ useHandCursor: true });
+      deleteButton.on('pointerdown', (_pointer: Phaser.Input.Pointer, _localX: number, _localY: number, event: Phaser.Types.Input.EventData) => {
+        event.stopPropagation();
+        this.openDeleteConfirmation(snapshot.id);
+      });
+      this.slotLayer.add(deleteButton);
+    }
+  }
+
+  private activateSlot(slotId: SaveSlotId): void {
+    if (!this.storage || this.dialogLayer || this.createLayer) return;
+    const snapshot = this.slotSnapshots[slotId];
+    if (snapshot.status === 'corrupt') {
+      this.feedbackText?.setText(`存档 ${slotId + 1} 已损坏，无法读取；请先确认删除`);
+      return;
+    }
+    if (snapshot.status === 'empty') {
+      this.openCreateFlow(slotId);
+      return;
+    } else if (!selectSaveSlot(this.storage, slotId)) {
+      this.feedbackText?.setText(`存档 ${slotId + 1} 读取失败，未修改原数据`);
+      this.refreshSlots();
+      return;
+    }
+    void this.openHeavenMap();
+  }
+
+  private openCreateFlow(slotId: SaveSlotId): void {
+    if (this.createAssetsLoading) return;
+    this.createAssetsLoading = true;
+    void ensureSceneAssetBundle(this, 'save-party', (status) => {
+      if (status === 'loading') this.feedbackText?.setText('正在载入新建存档界面…');
+      if (status === 'failed') this.feedbackText?.setText('新建存档界面载入失败，请重试');
+    })
+      .then(() => {
+        this.createAssetsLoading = false;
+        if (!this.scene.isActive() || !this.slotPanelOpen) return;
+        this.beginCreateFlow(slotId);
+      })
+      .catch(() => {
+        this.createAssetsLoading = false;
+      });
+  }
+
+  private beginCreateFlow(slotId: SaveSlotId): void {
+    this.createDraft = createSaveProfileDraft(slotId);
+    this.createSubmitting = false;
+    this.renderCreateFlow();
+  }
+
+  private renderCreateFlow(): void {
+    if (!this.createDraft) return;
+    this.createLayer?.destroy(true);
+    this.createLayer = createSavePartyCreationView(this, this.createDraft, {
+      onSelectPlayerCount: (playerCount) => {
+        if (!this.createDraft || this.createSubmitting) return;
+        this.createDraft = chooseDraftPlayerCount(this.createDraft, playerCount);
+        this.renderCreateFlow();
+      },
+      onSelectHero: (heroId) => this.selectCreateHero(heroId),
+      onCancel: () => this.closeCreateFlow(),
+    });
+  }
+
+  private selectCreateHero(heroId: 1 | 2 | 3 | 4 | 5): void {
+    if (!this.storage || !this.createDraft || this.createSubmitting) return;
+    const result = chooseDraftHero(this.createDraft, heroId);
+    if (result.status === 'rejected') return;
+    this.createDraft = result.draft;
+    if (result.status === 'awaiting-p2') {
+      this.renderCreateFlow();
+      return;
+    }
+    this.createSubmitting = true;
+    const party = result.party;
+    const created = createPartySaveSlot(
+      this.storage,
+      result.draft.slotId,
+      party.playerCount,
+      party.members.p1.heroId,
+      party.playerCount === 2 ? party.members.p2.heroId : undefined,
+    );
+    if (!created) {
+      const slotNumber = result.draft.slotId + 1;
+      this.closeCreateFlow();
+      this.refreshSlots();
+      this.feedbackText?.setText(`存档 ${slotNumber} 新建失败，原槽未修改`);
+      return;
+    }
+    this.closeCreateFlow();
+    this.refreshSlots();
+    void this.openHeavenMap();
+  }
+
+  private async openHeavenMap(): Promise<void> {
+    const started = await startSceneWithBundle(this, 'HeavenMapScene', undefined, (status) => {
+      if (status === 'loading') this.feedbackText?.setText('正在载入天庭地图…');
+      if (status === 'failed') this.feedbackText?.setText('天庭地图载入失败，请再次点击存档重试');
+    });
+    if (!started && this.scene.isActive()) this.createSubmitting = false;
+  }
+
+  private closeCreateFlow(): void {
+    this.createLayer?.destroy(true);
+    this.createLayer = undefined;
+    this.createDraft = undefined;
+    this.createSubmitting = false;
+  }
+
+  private openDeleteConfirmation(slotId: SaveSlotId): void {
+    if (!this.storage || this.dialogLayer) return;
+    this.dialogLayer = this.add.container(0, 0).setDepth(100);
+    const blocker = this.add.rectangle(470, 295, 940, 590, 0x000000, 0.45).setInteractive();
+    const sourceFrame = this.add.image(0, 0, saveSlotAssets.confirmDialog.key).setOrigin(0).setDisplaySize(940, 590);
+    const cover = this.add.rectangle(484, 303, 306, 96, 0x070707, 1).setStrokeStyle(1, 0x8d8d8d);
+    const prompt = this.add.text(484, 283, `确定删除存档 ${slotId + 1}？`, {
+      color: '#ffffff', fontFamily: 'Arial, sans-serif', fontSize: '20px', fontStyle: 'bold',
+    }).setOrigin(0.5);
+    const warning = this.add.text(484, 306, '此操作不可撤销', {
+      color: '#ff9a72', fontFamily: 'Arial, sans-serif', fontSize: '13px',
+    }).setOrigin(0.5);
+    const confirm = createDialogButton(this, 430, 333, '确定', () => {
+      deleteSaveSlot(this.storage!, slotId);
+      this.closeDialog();
+      this.feedbackText?.setText(`存档 ${slotId + 1} 已删除`);
+      this.refreshSlots();
+    });
+    const cancel = createDialogButton(this, 540, 333, '取消', () => this.closeDialog());
+    this.dialogLayer.add([blocker, sourceFrame, cover, prompt, warning, confirm, cancel]);
+  }
+
+  private closeDialog(): void {
+    this.dialogLayer?.destroy(true);
+    this.dialogLayer = undefined;
+  }
+
+  private bindKeyboardShortcuts(): void {
+    const keys = ['ONE', 'TWO', 'THREE', 'FOUR', 'FIVE', 'SIX'] as const;
+    keys.forEach((key, index) => {
+      this.input.keyboard?.on(`keydown-${key}`, () => {
+        if (this.slotPanelOpen) this.activateSlot(index as SaveSlotId);
+      });
+    });
+    this.input.keyboard?.on('keydown-ESC', () => {
+      if (this.createLayer) this.closeCreateFlow();
+      else if (this.dialogLayer) this.closeDialog();
+      else if (this.slotPanelOpen) this.closeSlotPanel();
+    });
+  }
+}
+
+function createDialogButton(
+  scene: Phaser.Scene,
+  x: number,
+  y: number,
+  label: string,
+  onClick: () => void,
+): Phaser.GameObjects.Text {
+  const button = scene.add.text(x, y, label, {
+    color: '#1a1200', backgroundColor: '#ffd51e',
+    fontFamily: 'Arial, sans-serif', fontSize: '15px', fontStyle: 'bold',
+    padding: { x: 13, y: 4 },
+  }).setOrigin(0.5).setInteractive({ useHandCursor: true });
+  button.on('pointerdown', onClick);
+  return button;
+}
+
+function getSlotDetail(snapshot: SaveSlotSnapshot): string {
+  if (snapshot.status === 'empty') return '点击新建';
+  if (snapshot.status === 'corrupt' || !snapshot.save) return '读取被拒绝 · 可确认删除';
+  const date = new Date(snapshot.save.savedAt);
+  const savedAt = Number.isNaN(date.getTime()) ? '时间未知' : date.toLocaleString('zh-CN', { hour12: false });
+  return `${snapshot.save.party.playerCount}P · ${savedAt}`;
+}
+
+function getBrowserStorage(): SaveStorage | undefined {
+  try {
+    return typeof localStorage === 'undefined' ? undefined : localStorage;
+  } catch {
+    return undefined;
+  }
+}

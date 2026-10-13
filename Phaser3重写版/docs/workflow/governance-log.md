@@ -1,0 +1,2836 @@
+# 工作流治理日志
+
+2026-10-05 / 260A/260B及父260有限Monster2合同完成，262成为同线唯一Ready；验收、覆盖台账和集中PG反馈同步更新，Active线及204/all/194/VS-067保持未完成。Luna执行有界重复验证，主agent复核真实HP/ID及门禁，不宣称成本收益已量测。未新增工作流规则；check:workflow、audit:problems及diff检查通过。
+
+2026-10-04 / 用户授权治理259暴露的检查过量：code-quality-gates补风险分层、跨命令去重、第二次同类失败转最小诊断及验收工具维修边界，agent-protocol增加唯一路由；PG-019 V3扩充原问题并保持复盘中。保留硬门禁/合同/视觉要求，不增加缓存、模板或MO采样，不改游戏队列。验证采用check:workflow、audit:problems与diff检查，结果见同日集中审计。
+
+2026-10-04 / 259公共同步退休完成归档，260完整Monster2有界联合合同激活为唯一Ready；双owner/实际Scene证据及PG-017 V2.7有限整改回填。未改工作流规则，不关闭204/VS-067/功能线或PG。
+
+2026-10-04 / 258原接收合同归档：原真实HP/销毁有限域通过，双owner现代同步清宠反例回写PG-017 V2.7并交唯一Ready259；不关闭整线或PG。未修改流程规则、src/public或旧原语料。首次harness旧推荐链接及workflow的CRLF标题失败已修复，完整失败日志保留于258证据。
+
+2026-10-03 / 251接收补证完成：16,960原方法接收case、64世界序列、九编译源变异和重复/十损坏反证通过；原HP、保护、闪避、盾/转移、ID/随机及原SWF returnvoid已形成有限verified reference。251定义归档、249恢复唯一Ready，所有247/248/250及249生产合同保留；未新增流程规则、未改src/public/原语料，不执行249实现。
+
+2026-10-03 / 249实际承伤输入预检：自然选择补证250保持有效；6组生产观察确认当前接收入口未消费闪避/魔防且拒绝前登记ID。按既有输入缺口规则将249设Blocked、251设唯一Ready，保留249全合同，不执行新补证项或改变流程规则。源静态分支与受控生产观察分级记录；未改src/public、原真值或原语料。
+
+2026-10-02 / 249预检与MO-004到点裁决：249保留全合同并Blocked，250唯一Ready补自然选择输入。附带第三批校验样本仍无可靠全批B/I，按原停止条件归档MO-004，停止V1量化采样；PG-019方案不充分转复盘并登记V2边界，不宣称关闭或token节省。移除试验自动采样路由，保留日志完整性、必要诊断与同批复用质量规则。
+
+2026-10-02 / 登记PG-019与MO-004：只治理校验阶段模型读取/重复分析成本，试行通过读摘要、失败窄诊断、同批结果复用。以输入字符代理量与质量护栏观察后续三批，最迟2026-10-16起首次相关工作裁决；分项token未知，不宣称已节省。不删断言、不改Canvas/WebGL、不新增游戏任务或抢占执行队列；入口在code-quality-gates及README，样本集中problem-audit。
+
+2026-10-02 / TASK-SLICE-245B及父245完成：六原效果181正式PNG/2720原生pose及显示树/矩阵/滤镜元数据已接入既有数值owner与共享显示路径；Canvas/WebGL各65,280态通过，最大可见通道差2.266667/2.301961，保留≤3颜色舍入及域外≤0.5px/轴对齐例外。五关双owner完整旅程、首次/暂停及青龙玄龟补充共248层原PNG零差，11生产反证、原1717数值、五项pet gate、核心/build和工程检查通过。B与父245归档，TASK-SETTINGS-247唯一Ready补Monster3身体/两攻击生命周期；不外推其他类型/人偶、204/all/194/VS-067或整线完成。见 `docs/reverse-engineering/pet-passive-display-acceptance.md`。
+
+2026-10-02 / 245B末轮门禁支架修复：旧玄龟11,572态支架在10,200态后Image.decode报EncodingError，未记为验收通过；参考文件全在且PNG头完整。改fetch/createImageBitmap并在drawImage后close，截图读取复用同入口；增加HTTP/URL诊断，原字节hash、逐态真实像素和11,572覆盖断言不变。重新运行完整五gate，不以先前部分样本替代。
+
+2026-10-02 / 245B验收增量：P1GS登记原生资源/显示树直接消费，原主人owner静态门禁改查Scene适配器→原数值owner，原1717与其余家族断言保持；闭包fixture补显示端口，Dragon场景替身补真实容器事件，ground环境只查询一次。新增实际双后端/正式五关及11生产变异工具，不改变门禁种类。旧玄龟浏览器被扩展欢迎页抢前台后原样恢复，并明确选择about:blank、bringToFront和禁后台节流；不降低像素断言。详细失败及现代例外见pet-passive-display-acceptance.md。
+
+2026-10-02 / 245A归档：全部声明验收通过，独立定义移入task-history，245B成为同线唯一Ready，父245完整六效果/五关合同继续保留。未关闭设计all或功能线；preview缺失造成的等待和恢复记入本地交接。
+
+2026-10-02 / 245A验收增量：既有pet P1GS纳入公共附属显示的5,408原生状态对账与7生产变异，组合P1R/P1H/P1G/P1T仍保持全部既有合同，不新增门禁种类。实际Canvas/WebGL及Scene重启独立验收由`tools/pet-attached-browser.mjs`提供；支架使用postBoot、限定about:blank、像素循环让出浏览器事件队列和原PNG SHA检查。先前支架失败不计通过，有限轻微颜色舍入与完整六效果尚待边界详见`../reverse-engineering/pet-attached-display-acceptance.md`。
+
+2026-10-01 / TASK-SLICE-242B及父242完成：235原720+243原997由公共生产数值owner消费，24双owner会话/保存往返、四家族8消费者、猴马4真实增益技能命中、14变异、五关940×590 HUD/暂停休息/重试返回通过。P1GS/P1G/P1T、核心系统、build及工程检查通过；B/父242归档，244唯一Ready补六效果视觉真值。数值完成不代表六特效、原84其余责任或完整家族/204/all/194/VS-067关闭，功能线保持Active。详见 `docs/reverse-engineering/pet-passive-runtime-acceptance.md`。
+
+2026-10-01 / 242B验收增量：公共gate登记原生数值消费、真实会话/保存、真实技能命中及14内存生产变异；未增加新门禁类型。两处旧奥义fixture用有效MP上限/零回复匹配原body probe边界，保留既有断言；浏览器按真实loader等待、唯一fixture身份和MP镜像纠正就绪/前态，未改生产UI或生命周期。六特效视觉按现有规则生成同线244，B完整gate通过前保持Planned。
+
+2026-10-01 / 242A共享验收支架修复：青龙consumer复用238已有经验依赖绑定；两处私有/玄龟清弹变异迁至当前runtimeKey谓词，玄龟旧accepts/activeAttackfixture迁至240独立攻击及241原生命中输入，并更新本地输入清单。浏览器重启队列/ready用既有手动Game时钟推进，零delta刷新真实场景操作；代表截图改为实际940×590 Game Canvas，保留全部独立源像素、pointerup重试/返回、对象/纹理释放与重载断言。此前缺preview、RAF队列和CDP捕获失败保留于242A；没有降低原视觉、数值或设计完成合同。
+
+2026-10-01 / 242A设计gate增量：公共P1GS/P1G/P1T纳入主人属性真实消费与生产变异，不新增工作流门禁；P1TA旧玄龟静态读取已因240迁移失效，改查当前resolvePetEnemyAttack和正式adapter，同时保留行为回归。冰冻变异首次两次漏检：240后Monster30绕过旧view算法，补仍使用该分支的Monster3及逐步独立攻击时钟比较，四既有变异全部拒绝。原失败记录保留于242A交接，不减少任何原合同或取消故障注入。完整结果见本批验收与task-history。
+
+2026-10-01 / TASK-SETTINGS-235完成：720公共被动/六增益原生expected、10编译源变异/4损坏报告及重复一致已交接，235归档、同线TASK-SLICE-242唯一Ready；数值消费/六特效视觉与原84其余责任仍待。集中PG审计见problem-audit.md，本次未修改工作流规则；调度与验收入口沿用现有协议。
+
+2026-09-28 / 240归档：12实际场景组合、六正式地图返回重入、核心与受影响25组、build、真值Schema及七生产变异通过；240完整定义移入历史，233恢复唯一Ready。Monster30范围之外的责任和视觉/碰撞残差边界继续保留，无跨入233实施。
+
+2026-09-28 / 240消费验收：按用户授权完成241后继续既有240范围。身体/独立攻击/HP/只读显示进入两owner；首轮资源空filter、116px反向注册点、暂停入口相位及观察trace回写时间错误均按独立原生/真实场景反证修复并保留边界。新增七生产变异与core+受影响专项，241精确碰撞批准清单不扩大；无新PG/MO或设计模式流程，收尾状态由看板与240验收合同记录。
+
+2026-09-27 / TASK-SETTINGS-241完成：Monster30Bullet1的10帧双向、4个真实colipse profile/40构造、20态显示树、93920原生命中与324相位观察已verified。8查询变异被拒绝，重复生成一致；用户仅批准379例382像素精确残差，命中布尔零差异。TASK-SLICE-240恢复唯一Ready，并按用户“授权继续241并恢复240”继续本目标；真实HP/双owner实现尚待240，其他11类型、原84其余责任、整族/all/VS-067不关闭。详见monster30-attack-collision-contract.md。 未改工作流规则；用户授权覆盖单次调度交接限制。原生与查表差异没有套视觉容差；省略粗筛属已证明等价变异并如实记录。
+
+2026-09-27 / 240输入预检：按现行显式拆分条件保留TASK-SLICE-240完整合同并Blocked，TASK-SETTINGS-241唯一Ready补Monster30Bullet1与实际英雄/宠物colipse命中输入。集中PG审计已记录；未改工作流规则、src/public或既有真值。首次check:workflow拒绝缺少阻塞原因字段及逆向协议引用，已补齐；任务调度、覆盖台账和推荐同批同步，不执行下一任务，不新增PG/MO。
+
+2026-09-26 / TASK-SETTINGS-231完成：公共怪物死亡经验XP-01..08已补证，264原包AIR样本、六源变异/四字段损坏拒绝、12实际类型继承与五关/TestScene消费者矩阵通过；P1宠火焰致死仍给P2的现代反例保留。英雄无宠100%、带宠各60%、宠物指定petInfo100%，效果/AI/目标清理相位和换宠对象分别核定。231归档，TASK-SLICE-238唯一Ready实施公共归属，232..235保持Planned；PG-006方案不充分转V2复盘中。未改src/public，不提升M-030/032/040或VS-067现代完成度，原84及整线仍未关闭。合同见 `docs/reverse-engineering/monster-death-experience-contract.md`。
+
+2026-09-26 / TASK-SLICE-236完成：公共击退已接入五关/TestScene真实owner，保留早晚结算相位、原host单位、Tween覆盖与边缘旧Tween。124650原生轨迹态、5184真实hit/physics态、432原方向、8生产变异及五关9201显示同步态/537旧Boss态通过；真实重试返回全部释放。237探针完成Tween反复force写末值的反例同次纠正并新增第8源变异。236归档，TASK-SETTINGS-231唯一Ready；仅核销公共击退责任，原84其余责任、身体/死亡、完整家族/all/VS-067与整线不关闭。合同与本地证据见 monster-pet-knockback-contract.md、TASK-SLICE-236/scene-verification.json。 未新增调度规则或PG，源探针反例回写PG-017；未执行Git操作。
+
+2026-09-26 / 237补证收尾：实际构造和运动覆盖完成原生验证与七源变异拒绝，Schema/重复生成通过；保留230原共享合同，新增独立237 sidecar。237归档、236唯一Ready，231..235不变；PG-017 V2.6新增原生适用性证据但现代消费/全面性仍待。未改src/public、原语料，未提交Git。
+
+2026-09-26 / 236输入适用性预检：独立核对230通用壳与218实际构造空间，确认11类宽度遗漏父scale、Monster30重力0未进入壳。236完整合同保留并Blocked，新增同线代码补证237唯一Ready；231..235顺序不变。通用230源重放/5变异通过不能代替实际profile覆盖，PG-017 V2.6记录选案与反例。未改src/public、原语料或既有真值，未实施Git提交。
+
+2026-09-26 / 按用户要求减少重复测试：日常 `test:systems` 从88组改为14组核心，保留基础战斗/成长、启动、存档/双人隔离、关卡终态、结算与共享生命周期；其余74组按影响触发，`--full`仍保留原88组。`--core <专项>`合并去重，`--list`只展示计划；`check:code`日常不全扫真值，`check:all`明确走`check:code:full`且harness拒绝暗降级。正式设计门禁的显式测试清单不变。同批输入不变成功结果复用，不新建缓存/检查台账。本次9项工具测试及workflow通过，游戏src/public和测试断言未改，复用上轮全系统/build/源专项成功结果，不重复运行游戏全量。范围与触发详见code-quality-gates.md，未关闭PG或推进游戏task。
+
+2026-09-26 / 评审整改：5 个 Planned 定义不再复制唯一 Ready 编号，统一回查看板；真值校验按 Schema 分派并固定默认 Git 在册范围，39 份 tracked / 41 份含本地数据通过；击退核心 Schema、432 方向记录定位/哈希及源复验入口补齐，排序生成消除 AIR 字段顺序假失败；玄龟生命周期进入默认系统回归，其余本地验收集中登记输入与缺失退出语义。完整系统测试及构建通过；专项源复验和最终 workflow 结果统一见 docs/评审/评审-2026-09-26.md 的整改复核。无 src/玩法或任务调度改动，不关闭 pet all / PG-017，不执行 Git 提交。
+
+2026-09-26 / 226最终验收：扩大P1R/P1H/P1G/P1T=0，新增正式目标投影后的P1R/P1H=0；1404原生联动组、1596现代组/165264态、24猴四实际伤害链及36马多目标组通过。原41/43合同逐项承接，230..235公共责任仍open，本地整改归档、230唯一Ready，完整家族/all/204/194/VS-067不关闭。build与默认全系统分段覆盖通过；失败OOM保留。
+
+2026-09-26 / 226公共边界与原合同承接：按用户授权及原拆分触发，230..235保留独立公共交付；新增原41/43逐项证据/后续矩阵，不删除auto-buff等原责任，不因226本地整改完成而提升整族/all。猴四反击连段、马四真实三目标、实际目标投影均留在226并进入原P1R/P1H，无新增流程层级。
+
+2026-09-26 / 226联动门禁：P1R/P1H新增真实ground Runtime，普攻检查转为共享Session的192相位/条件随机例；猴四旧flat body/target入口由同一1500组原生联动检查承接，保留7个实际源码变异入口，门禁去除重复注册。独立原AIR观测实际Sprite赋值而非raw Point，严格坐标比较通过；无新增审批、任务层级或Runtime。完整联合待终态。
+
+2026-09-25 / 226死亡调度合同补强：独立原AIR调度288态反证原设计全部dead冻结CD描述，192实际Runtime失败后沿用Session步骤/两族声明修正，P1R/P1H加入pet-monkey-horse-dead-step-tests；此为源行为纠错，无新模式、owner或其他家族默认行为改变，完整联合待终态。
+
+2026-09-25 / 226原生资源URL与运动数据准备：扩大联合门禁在正式嵌套browser入口捕获192图/文档的相对URL错误（HTTP200 HTML，非导航取消），规范运行时image URL并补根/嵌套路径检查，保留源JSON。ground-definition消费原生flags/初始速度并通过25920物理态，但两族ground正式接线仍待；P1R/P1H新增此检查，完整联合待修复后复验，不用静态资源hash或窄检查关闭226。
+
+2026-09-25 / 226公共被动缺口登记：真实party双slot96例证实受控就绪自动增益未触发。原BasePet/PetInfo共享周期、多项触发及效果生命周期缺独立动态合同，按226公共机制拆分触发新增Planned TASK-SETTINGS-235；226仍唯一Ready，原84合同和回填责任保留。没有执行235，也不将源sink或诊断exit0当功能通过。
+
+## 2026-09-25：226原生地面计算门禁
+
+P1R/P1H增加`pet-monkey-horse-ground-motion-tests`，原生25,920态直接比对生产共享helper，明确拒绝探针末坐标后处理开关，校验源方法/恢复SWF/原manifest哈希；family/AI/Session映射仍单列未完成。共享坐标修改扩验P1G/P1T，旧地面、青龙与玄龟party fixture补当前readyRoster接口，未删既有断言；build及单项地面/青龙/玄龟检查通过，完整联合重跑待终态。原反例聚合日志保留，探针后续输出改用current路径避免覆盖旧观察。
+
+## 2026-09-25：226真实受击分支门禁
+
+P1R/P1H加入`pet-monkey-horse-incoming-tests`，对账独立原reduceHp/PetInfo的576 AIR分支输入，并经真实Session/身体回调验证无目标反击发射，覆盖先前helper测试漏掉的生产入口。移动96例和被动party96例诊断保留为反例采集，不注册为验收通过；跟随/warp/passive仍由226补证修复。未调整Ready范围或删除原84合同，PG-017反馈已回写。build/全系统/P1R/P1H=0，日志`.tmp/pet226-incoming-design.log`。
+
+## 2026-09-25：226实际画布与生命周期门禁补强
+
+实际WebGL850态发现旧马资源302态不符，原生投影接线后零残差；Canvas共享取整654态差异列同线Planned233，未抢占226。只读Luna审计发现旧coverage生命周期名称仅验证ID完整性，新增正式party函数体与两族生产Runtime/port的24例同时P1/P2，实际拒绝缺失寿命扣减。修复沿用已有Session钩子，检查加入P1R/P1H；原84合同继续保留，未以测试数量或此前绿色关闭任务。
+
+## 2026-09-25：226暂停出生验收与变异写回统一
+
+原生60延迟回调补证反证“模型出生即已显示”和timer/display注册先后；真实shared view及port函数消费后2388态、19马变异、build与完整P1R/P1H通过，未外推全Scene/GPU。猴首次联合遇冰冻变异Windows写回失败，两个源文件均与上次成功哈希一致；四变异重跑通过后，226五个生产变异入口统一原子替换及字节备份，完整retry通过。失败日志保留，PG-017/226仍未关闭。
+
+## 2026-09-25：226普通暂停与实际渲染注册点
+
+两族有限源显示列表模型经原递归碰撞相位与world暂停原生状态交叉核对，复用既有自然时钟port与私有弹体owner；不把暂停显示帧混入逻辑TTL。马注册点修正通过实际Phaser顶点、build和P1R/P1H；猴384私有效果及107520 EXIT显示态通过，build=0，联合门禁待终态。猴原采集的ENTER/EXIT同键在生成草稿被pending子节点断言拒绝，现分开采集后再生成324态Schema真值/59原PNG；失败草稿不晋升。PG-017保留替身flip标志漏掉163坐标偏移的反例，GPU/全Scene与余下合同继续开放。
+
+## 2026-09-25：226落雷自然相位消费
+
+共享horse view的8帧夹紧由实测0..320子相位表替代，使用229 verified原生PNG及逐帧注册点；未凭根帧数推断无限循环。1926显示态/build/联合门禁通过，暂停和画布边界保留；另采13种构造方式普通world暂停原资料，不将源探针当正式实现。
+
+## 2026-09-25：226奥义暂停消费与变异恢复
+
+AoyiBuff自然相位经正式world bridge/port进入私有owner，view只读；1536原生暂停恢复态、build和联合P1R/P1H最终通过。马变异脚本复现Windows OSError22恢复失败，按既有SHA256精确恢复PetCombatContext，改为完整临时文件原子替换、有限重试及本地字节备份；12变异重新拒绝且完整恢复，初次失败不抹除。其余私有动画/画布合同继续保留。
+
+## 2026-09-25：226暂停恢复调用链补证
+
+复用原BaseBullet/Follow准备产物，在独立226目录按已核定world调用者跳过暂停step2；1536enter态覆盖双owner/三fps/四暂停长度与自然对照，证明恢复清理依实际显示帧。旧身体发射fixture的任意弹体计数改为分别断言释放前置和身体伤害回调，90例通过；原命中时点/MP合同未放宽。
+
+## 2026-09-25：226禁用效果负例与暂停调用者边界
+
+disabled-attacks生产变异在跳过碰撞采样后使fixture缺少selected，旧用例抛TypeError而非语义断言。补明确“禁用效果不能无碰撞相位进入目标查询”断言，8个变异重新拒绝。暂停核查沿MainGame→PhysicsWorld→BaseHero→BasePet补调用者边界，区分暂停标志局部探针与停止world的真实入口；原生私有AoyiBuff帧继续，不宣称其终止/恢复已验收。
+
+## 2026-09-25：猴奥义变异源码恢复修复
+
+联合门禁遇Windows写回OSError22，finally同样失败，inclusive-edges变异残留。按上次aoyi-mutations.json源SHA256精确恢复原文件并确认哈希；脚本改用同目录完整临时文件原子替换与有界重试，另留本地原始字节备份，避免先截断生产文件。7变异重跑全部拒绝且精确恢复通过；初次非零门禁保留，不算游戏正确性通过。
+
+## 2026-09-25：226马奥义前置接线
+
+原releSkill4创建点早于身体hit回调，前置交既有私有owner推进、共享视图消费。新增12实际Runtime出生/零伤害/MP/原结束边界用例；旧目标引用fixture由等待任意弹体改为指定落雷，防止真实前置提前终止等待。保留暂停/受伤/源销毁/画布未验证边界，不降低原合同。
+
+## 2026-09-25：226冰火附属身份与层级
+
+原生四show/hide方法的8态动态证据确认同render重建不能压成最终visible boolean；目标状态增加显示创建序号，view复用已有身份/层级消费，实际consumer逐态对照加入P1R。保持混合像素/正式场景边界，不以对象测试代替画布。
+
+## 2026-09-25：226火焰view接线
+
+既有五关视图接MonsterPetFireView，独立自然clip播放遵守原生普通暂停反例；目标状态仍独占伤害与寿命。P1R增加42原生帧对照及刷新/目标wrapper/清理检查。实际画布、混合叠层及同render取消重加明确未覆盖，不能将替身检查当视觉闭合。
+
+## 2026-09-25：226火焰资源与原生暂停反证
+
+P1R新增20帧FireBuff资源hash/尺寸/正式bundle检查，联合P1R/P1H通过。原MainGame暂停/恢复和递归方法配原生FireBuff的42态样本推翻“暂停和恢复对称、目标火焰随效果时钟停”的假设；保留受控世界/键盘/Tween边界，不冒充整场景。火焰view尚未接入，不提升家族完成状态。
+
+## 2026-09-25：226公共怪物攻击顺序缺口分流
+
+火焰致死诊断继续核对实际伤害consumer，发现显示回调与activeAttack分离；仅提前绘图不能覆盖独立弹体生命周期。依据既有公共机制拆分规则登记同线Planned232补源合同并生成公共消费实现，226仍唯一Ready、原84与组合合同保留。未新增流程或治理抢占项。
+
+## 2026-09-25：226身体冻结计数与实际视图回归
+
+P1H增加五类实际MonsterVisualBridge的35个首冻结/到期/恢复/分帧/批步合同与生产变异检查，验证身体tick一次消费且已发射攻击独立推进。预期来自源body先于effects的顺序，沿用原有目标host时钟；明确完整callback顺序、火焰致死同帧及画布未因此关闭，不以新的局部门禁替代226原84合同。
+
+## 2026-09-25：226冰效资源与目标视图检查
+
+P1H新增原生冰PNG完整性、12912附着矩阵与公共目标view生命周期检查；五关消费同一显示helper，运行必需投影与PNG进入正式资源目录。明确headless检查和build不能替代Phaser组合画布/冻结动画验收，226未完成，未扩大允许的视觉例外。
+
+同批浏览器反证未配置启动fps导致猴一phase122越界，main复用持久全局设置初始化，实际GameConfig执行检查加入默认清单/P1R/P1H；新构建入口观察未复发，最终联合门禁退出0。PG-017保留反例与方法不足，不扩碰撞profile以绕过真实入口错误。
+
+## 2026-09-25：226旧总测试按源合同迁移
+
+旧猴facade“出生直接覆盖目标”、单个LJ效果、错误释放旗标和伪奥义弹体断言按228原AS3修正，资格/MP/CD与原84合同保留；真正碰撞及时序仍由native Runtime验收负责。总回归揭示龙消费者测试替身缺少readyRoster，补入口时限制为dragon，避免绕过猴马资源就绪检查。226仍Ready，不据测试迁移关闭画布/冻结/生命周期。
+
+## 2026-09-25：226 TestScene效果消费与共享归属交接
+
+P1R/P1H增加TestScene/1-1真实adapter/Monster30持久效果与无hurt扣血检查；明确实际身体冻结、画布、奖励路由仍未关闭。动态反例P1命中/P2领奖与原英雄/宠物经验分支触发独立公共补证边界，新增同线Planned TASK-SETTINGS-231，226仍唯一Ready。M-040回到部分复现，未撤销已证普通成长公式或删减226原84合同。
+
+## 2026-09-25：226冰火正式消费增量
+
+P1R新增正式port/Registry目标时钟、命中拒绝、刷新与最后攻击者/死亡合同；两族实际Runtime技能与Horse4奥义测试增加目标效果payload及落点断言。源release不移除目标效果。保留原生模型对账与原84合同，明确画布/动画冻结/TestScene和清理尚未完成，不把新增状态字段当作完整复现证明。
+
+## 2026-09-25：226目标冰火状态机对账
+
+P1R/P1H分别新增5950火焰、17904冰冻原生状态对账，沿用228/229既有测量。检查明确限定目标效果模型与show/hide调用，不以受控sink证明正式怪物推进、伤害归属、动画冻结或原生画布完成；未删原合同，226保持Ready。
+
+## 2026-09-24：226奥义与原生回调门禁迁移
+
+P1H新增96三目标native出生、384原EnemyMove运动、168实际Runtime/绝对时间队列、240原hit5Hit回调、十真实变异及world timer检查。旧monkey family全部责任保留并复用较强native Runtime检查，原41/43集合不删；range verifier由错误的动作生弹同帧要求改为跨帧token关联，真实末帧清理取代命中即宣称清理，补错token/漏清理反例。独立delay只消费Game现有绝对时间，无新Scene时钟；完整84/画布/暂停尚待，门禁绿色也不能据此归档226。
+
+## 2026-09-24：226马技能及长寿命门禁增量
+
+P1H增加马108实际Runtime、324原生follow对账和六实际源码变异；两族复用测试fixture保留各自native expected。发现目标tick9死亡fixture不能推出持续活目标寿命上界，226新增原方法长寿命原生证据和320帧native碰撞投影，保持229原测量不变、禁止未知帧静默循环。完整门禁退出1及原84合同保留，无调度或完成标准调整。
+
+## 2026-09-24：226猴技能主弹体门禁增量
+
+P1R增加108 Runtime逐age/真实命中、144原版follow/hurt/清理及8实际生产源码变异；未删除原41合同或旧family测试。奥义目标fixture原doHit为stub，现按独立callback源记录补每个活动弹体两次cache随机读取，禁用前置不计；672目标分支仍通过。P1/P1B隔离fixture显式提供无目标碰撞port，正式资源缺失继续失败。完整P1R/P1H退出1按合同保留。
+
+## 2026-09-24：226伤害源对账与击退后续
+
+P1R/P1H增加2784组原AS3伤害算术对账，normal消费生成数据；测试不把纯公式等价当技能命中/完整状态通过。动态确认共享怪物击退消费缺口后，按226公共机制拆分触发新增同线Planned TASK-SETTINGS-230；226仍唯一Ready，完整84合同和未完成结论保留。
+## 2026-09-24：226普攻真实命中检查
+
+P1R/P1H加入96组两族普攻正式port/原joint逐age检查及六个真实源码变异。原41/43仍保留，完整gate当前退出1，不借局部新增检查削减技能、画布或生命周期责任。无调度规则调整。
+
+## 2026-09-24：226奥义与碰撞采样检查增量
+
+P1R加入真实Runtime奥义身体/目标分支与7项源码变异；P1R/P1H加入两族原生与正式怪物缩放的TypeScript采样复验。局部通过不替代正式resolver、生命周期或画布验收；原84合同保留，226仍未完成。无调度或验收降级。
+
+## 2026-09-24：226身体与释放检查增量
+
+P1R/P1H新增原生身体逻辑计数/回调、真实Runtime目标序及技能释放检查。227 AI隔离fixture与228/229身体busy/emit记录组合期望，马二20fps跨周期忙碌不得以旧sink预期否定。原84合同和完整门禁保持，当前仍退出1；不以新增局部通过代替碰撞、奥义或实际画布验收。无调度规则变更。
+
+## 2026-09-24：226增量门禁
+
+P1R新增原227资格矩阵与Runtime相位检查，P1H共享相位检查，保留原全家族测试。更新旧公共合同中的零时间执行假设；完整gate仍失败，不缩减旧41/43验收。无调度规则修改，226仍唯一Ready。
+
+## 2026-09-24：229源补证归档与226恢复
+
+不改执行规则。马43合同与递归mask/UI、冰效、原生延迟/清理、独立碰撞完成源输入验收；229移入历史，226恢复唯一Ready。PG-004/017本输入样本通过但关闭条件未齐，集中记录见problem-audit。源事实不冒充现代整改，MH-01..07与完整两族验收保留。
+
+2026-09-24：229马系有界补证的PG样本集中记录于problem-audit，区分真实renderer变异、字段变异、反事实投影与负例覆盖；保留冰效/延迟爆炸/完整真值待办。未修改工作流规则、任务排期或正式运行时；229仍Ready、226仍Blocked。
+
+2026-09-21迭代检查减负：明确11,572为资源视觉状态、31,704为世界碰撞案例、host phase与像素为不同计数单位。宠物gate新增显式--iteration模式，玄龟延后六个具名全集/oracle生成/浏览器/变异组，保留行为/碰撞与未知新测试；默认完整gate不变，all拒绝iteration，输出不得记为验收通过。局部修改仍优先更小专项，不要求每次跑整个迭代集合。226增加一次两族四形态source→消费者有界缺口核查，不能把已发现的时序问题当成全部问题；无新游戏task、无新增运行时修改。
+
+验证：design self-test、all --iteration拒绝、真实P1TB开发22组、workflow及diff通过；结构9个既有warning保留。默认完整gate未因本次工具修改重跑，其测试集合保留由选择器自检证明；开发通过不记作P1TB新验收。集中PG反馈见problem-audit。
+
+2026-09-21猴马重做排期：用户允许后续重做，新增TASK-SLICE-226（Planned），224C之后、下一新家族之前执行；一个共同调度工作包加两族联合验收，不按技能拆分。当前完整家族结论和208A/210历史增加反证限定，PG-017记录V2.4；本次只改文档，不修正运行时、不将旧绿色伪造为已失败。
+
+## 2026-09-21：校验去重、宠物任务粒度与公共普攻组件
+
+用户授权处置流程冗余与宠物公共逻辑。文档校验与资源/关卡专项分层，完整check:all保留原覆盖；设计gate支持同批多个gate，共享依赖和测试去重且不跨进程缓存。移除质量门禁的首次compact停止旧规则，新增冲突/漏项/重复组合负例。家族默认一个实现task和内部联合验收，224C仍唯一Ready并保留32合同；不重写已完成子任务。
+
+猴/马组合PetNormalAttackDecision，共享普攻分支间隔与条件随机流程；保留概率来源、技能优先级、事件字段和销毁差异。原Runtime/Registry/时钟所有权不变，玄龟特殊效果不在本次重构范围。P1R/P1H联合10组专项、20项harness用例、design self-test、check:all及diff通过；既有9项结构warning、PlayerSlot词汇warning和大chunk提示保留。PG-018 V2同次归档，集中反馈见problem-audit。收尾仅文档更新再跑check:workflow，不重复全系统和build；未提交Git。
+## 2026-09-20：224B有界技能/受伤门禁
+
+注册P1TB，强制组合完整P1TA与玄龟SYBH/奥义/受伤结算13项，增加60组生产时钟场景、1,744原生caller入口、31,704动态世界碰撞、16类真实生产变异和双场景逐图层视觉验收。counter要求显式reactsToHit=true，A2受伤fixture补齐此输入并保留原hurt断言；不把HP-only事件当作原reduceHp(param2=true)。原生PNG位移对照显式记录捕获矩形之外的未比较像素，完整对象/状态仍由225/A1独立验收，不能把有限实战截图包装为全对象覆盖。P1TB不替代P1T/all，原批准像素/碰撞许可及A2显示取整例外不扩大；不修改任务调度或其他家族语义门禁。
+
+## 2026-09-20：224A3父A联合语义门禁
+
+注册P1TA，强制组合P1TA1/P1TA0与SLD链接治疗、TXLJ释放/盾后转嫁/双方治疗四项，共17责任。新增144原生数值与2,904原生buff态对照、9类真实源变异及双场景实际Party/敌人结算与图层对照；不替代P1TB/P1T/all。旧青龙/地面测试抽取公共updatePets闭包时补传已存在的玄龟资源适配器，保留其原行为断言；不降低猴马龙门禁。正常trace禁止被变异子进程覆盖。生产结算与显示仍由既有HeroCombat/EntitySession/Party承接，未新增运行owner或调度协议。
+
+## 2026-09-20：224A2有界语义门禁
+
+2026-09-20 TASK-SLICE-224A2完成：同一Registry/Runtime/EntitySession接四形态公共行为、真实普攻/SLD共13责任，P1TA1=0（组合P1TA0）。四形态×P1/P2、332原生caller、15,768世界碰撞、6类实现变异及正式/TestScene共304实战图层对照/重入退出通过；显示根与camera各轴各≤0.5px整数对齐按长期授权记录，原像素许可不扩大。A3链接治疗/TXLJ四项唯一Ready，父A仍Split，B/C Planned；玄龟整族/204/VS-067及pet all仍未完成，功能线Active。交接见 `docs/tasks/evidence/TASK-SLICE-224A2/handoff.md`。
+
+注册P1TA1，组合P1TA0的完整资源/浏览器复验与A2的13责任、源调用者时序、真实碰撞/怪物HP、实战图层和实现变异。猴/马门禁只将固定无参构造断言更新为同一默认Registry的资源注入构造，行为断言不降低。变异子进程禁止写正常trace并验证字节不变。此门禁不替代父A的P1TA、整族P1T或最终all；不改变任务调度协议。
+
+## 2026-09-18：224A1生产消费闭合
+
+2026-09-18 TASK-SLICE-224A1完成：既有bundle/coordinator接入650文件与六包生产解码，11,572态只读owner/paintParts投影、61,424相位和157,704原生碰撞case通过P1TA0。原始RGBA保留28态308像素精确许可；碰撞保留20例70像素，命中布尔全同。真实Phaser WebGL逐态画布对照、9类实现变异及加载失败/退出/重入通过。224A2唯一Ready，父A的17责任及全族32合同仍待行为/正式消费者核销，224A保持Split，A3/B/C Planned；玄龟/204/VS-067未完成，功能线Active。交接见 `docs/tasks/evidence/TASK-SLICE-224A1/handoff.md`。
+
+复核补齐真实画布逐态读取及原生/批准摘要分列；本批仅增加P1TA0资源门禁，不修改调度规则或降低行为验收。
+
+## 2026-09-18：224A执行前预算核定
+
+- 生产资源消费需要独立验收，连同公共行为/真实攻击、双owner结算与联合验收超出原两批预算；224A保留全部17责任并Split，224A1唯一Ready，A2/A3/B/C Planned。
+- 不修改工作流规则，不新增平行Runtime，不以文件数或compact判超限；没有实现通过或真值降级。证据见 `docs/tasks/evidence/TASK-SLICE-224A/preflight.md`，集中PG反馈写入problem-audit。
+
+## 2026-09-17：超大逆向输入退出 Git 历史
+
+- 修正 `再续天庭1.1.exe` 的乱码忽略规则，并将该 452.11 MB 本地原始语料从未推送历史移除。
+- 玄龟两份 93.84 MB、90.02 MB 完整真值 manifest 只供逆向和后续任务本地验证，不参与游戏构建或运行，改为本地可再生产物；仓库继续保存 Schema、生成/验证工具与路径引用，无需机械拆分并上传。
+- 清理范围只包含 `origin/main` 之后的本地提交；本地文件保留，不使用 Git LFS，不影响从 Git 拉取后的游戏构建和运行。
+
+## 2026-09-17：轻微像素差异长期授权与 Git 证据边界
+
+- 用户授权轻微像素对齐、抗锯齿和颜色舍入差异直接处理并记录，无需逐次请示；入口与逆向协议同步，不改变玩法合同或伪称像素零差异。
+- evidence 默认本地保留，取消 4,764 个文件的 Git 跟踪；源码直接导入的 7 个 JSON 精确白名单保留，避免拉取后缺少运行输入。新增运行数据必须进入正式源码/资源目录。未删除本地证据，未提交或上传。
+- check:workflow、audit:problems 和 diff 空白检查通过；仅 Git 跟踪文件副本的构建结果见本地 `.tmp/evidence-ignore-build.log`。源级逆向复验仍需本地语料及证据，不承诺裸仓库完成全部复验。
+
+## 2026-09-17：225精确视觉例外许可
+
+- 用户明确回复“允许差异”，只将已展示的28状态308像素清单列为许可，保留状态/坐标/双方RGBA精确匹配及新增差异拒绝；不外推旧132效果差异或碰撞许可。
+- effects冻结源码重放与原点输入核对、全11,572态归档像素比较、完整性/21类变异与重复生成均通过；最终审计核对845张资源/组件图片及晋升前后哈希，225已verified并归档，223恢复唯一Ready。未改生产实现或旧基准，功能线仍Active；交接见225/handoff.md。
+
+## 2026-09-17：223资源消费预检与225有界补证
+
+- 223的局部RGBA候选转换在2,440效果状态中132态非零；保存独立原生基准差异，不将已批准碰撞残差外推为视觉容差，不把整fixture截图替代独立对象资源。
+- 223保留完整合同并Blocked，225视觉补证成为唯一Ready；224A/B/C仍Planned，功能线Active。本次只预检和重排，未执行新补证task、未修改生产实现或原truth；任务尚未完成。
+- 只读子agent核对源集合与字段，并复核采样边界；PG适用性集中写入problem-audit，未修改治理规则。交接见223/preflight.md。
+
+## 2026-09-15：221代码证据与视觉接续边界
+
+- 221代码行为包归档，222作为唯一Ready承接整族视觉/碰撞；保持玄龟、204、VS-067及功能线未关闭，不跨task执行。
+- 原生源码切片与独立期望分离；511状态、12语义变异，三trace来源指纹和32合同case映射验证。覆盖明示29受控执行/3静态声明，不能把支架碰撞或源声明当作现代正式消费。
+- 集中PG审计只登记当前样本；13恢复符号仅定位，不晋升视觉verified。详见221/handoff；未修改治理规则或生产实现。
+
+## 2026-09-14：214E全家族闭合与持久合同
+
+- 负向变异先写正常报告后失败的污染已复现；三个青龙runner对子进程禁写正常报告并验证前后字节不变，正常测试重新生成证据，PG-017 V2.4同批记录。
+- P1G聚合完整44合同、真实生产trace/消费者及345态投影；原父合同归档后由持久evidence镜像供handoff verifier消费。
+- corpus generator记录青龙restored-runtime并保留214A真值/资产元数据，避免重生成丢失消费状态；report写入仅对UNKNOWN/EBUSY/EACCES做有限重试，不吞断言或最终失败。
+- 214E/214B/214同次归档，215唯一Ready；系统设计与全功能线仍未退出，未跨task执行。
+
+## 2026-09-14：220奥义trigger原版输入闭合
+
+- 原版五定义/遮罩与15tile循环、48帧/96状态/384显示对象完成独立核对；11520原版HitTest例、78373320buffer像素零差异，7采样/10产物变异及480相位编码通过。没有外推219近似批准，没有新碰撞残差。
+- 仅复用既有源提取/空间产物工具的参数接缝，219默认范围与报告保留；增加220独立采样/合同门禁，src与生产资源不变。
+- 220归档，214E恢复唯一Ready，仍由其闭合完整44合同/P1G。交接见220/handoff.md；功能线和pet设计保持未完成。
+
+## 2026-09-14：214E奥义trigger输入预检与同线补证
+
+- 48帧PetDragonBullet4视觉资源完整，但218/219碰撞合同不包含该对象；219批准近似仅适用于四种旧效果。新增可重跑范围预检，未改src或生产资源。
+- 按214E第三独立逆向工作包拆分条款，将其设Blocked，新增唯一Ready220，仅补一个trigger碰撞输入，完成后恢复214E；44合同/P1G和父214/214B保持未完成。
+- PG-004/017集中审计与MO-003差异保留；不把文档检查或预检退出0当成四阶战斗验收。详见214E/preflight.md。
+
+## 2026-09-13：验证图片生命周期与历史清理
+
+- 在 agent-protocol 统一过程图片的临时目录、task 收尾与完整功能收尾清理、必要输入保留和按需复验；逆向协议引用同一规则。
+- 删除 606 张可再生投影和已完成任务诊断图片，共 21,692,854 字节（以清理清单精确值为准）；路径、哈希和原因见 [清理清单](evidence-cleanup-2026-09-13.json)。历史报告中的这些图片链接已退役，报告与原版输入保留。
+- 两个青龙验证器默认在内存中核对原版，不再要求或写出逐帧 PNG；显式 --write-images 输出到已忽略的 .tmp/verification-images。原有状态比较和负向变异检查保持。当前家族未结束，218/219 原版碰撞输入继续保留。
+
+## 2026-09-13：214D二三阶青龙语义门禁
+
+- 新增pet P1GD复用P1GC/P1GS，强制6448原版碰撞用例、二三阶真实数值/时序/分身/伤害、9实现变异、12生产消费者组与174状态/5视觉变异；加入普通systems回归。设计保持实施中，四阶/全家族仍未关闭。
+- 修正213唯一左向nine-object-wave世界偏移/插入顺序基准及214A对应投影，既有原图不变；PG-017同ID记录反证和补强。新增两个内部系统统一语言项，不增公共Runtime owner。
+- 214D完成后归档，214E为唯一Ready；验证与有限近似说明见214D/handoff.md。
+
+## 2026-09-13：214C5初阶青龙生产验收门禁
+
+- 新增pet P1GC，复用P1GS并强制青龙真实行为/实现变异、生产presenter72态原版像素对账、P1/P2生产消费者及正式旅程；不把资源查询或动画播放当伤害闭环。新测试加入普通systems集合，系统设计保持实施中，未宣称all完成。
+- 214C5与父C2/C同次归档，唯一Ready切到214D；精确验证与限制见214C5/handoff.md，未改变同线调度和其余家族合同。
+- 已归并Luna只读合同/接线审查；修正QA TestScene默认roster与Runtime不同步导致重复显示风险。structure保留9个既有warning；workflow、P1GC/P1GS、build、全系统、真值/资源及940×590浏览器通过。
+
+## 2026-09-13：明确主/子 agent 模型准入
+
+- 按用户反馈补充准入表：输入/范围/验收明确且可独立验证时优先 Luna，整项满足可由 Luna 主 agent 执行；复杂运行时、方案、证据冲突和综合判断优先 GPT-6。边界不清先由 Luna 做有界调查，主 agent 决定后续，不无限重试。
+- 保留有独立工作且主 agent 可同时推进才委派的条件；极小或强顺序工作直接完成。同步 AGENTS、任务模板和214C5分工，覆盖下方初版的最小上下文管理要求；不建立运行记录核验、启动拦截或上下文管理门禁。
+- 用户级 `C:/Users/Administrator/.codex/config.toml` 新增 `[agents].default_subagent_model = "gpt-5.6-luna"`，主模型保持原配置。本批采用单 agent 顺序修改；不改变游戏调度。
+- 验证：structure、workflow 和 diff 检查通过（仅既有结构/命名 warning）；problem audit 已执行，PG-004集中记录，其他活跃PG不适用。
+
+## 2026-09-13：加强 subagent 与 Luna 默认分工
+
+- 按用户明确偏好，有可独立返回的有界工作包且主 agent 可同时推进时默认委派；简单工作优先显式指定 `gpt-5.6-luna`，使用最小上下文和明确验收标准。
+- agent-protocol 维护模型选择、例外、失败回退和主 agent 归并责任；AGENTS 入口、task-generation 模板和当前 214C5 协作计划同步。保留唯一 Ready、工作包预算、单写和原验收标准，不启动游戏实现。
+- 本批实际派发一个 Luna 只读规则审查包，与主 agent 修改并行；已归并模型选择、回退和避免人为拆包的建议。不据此宣称成本或质量收益已验证。
+- 验证：check:structure 通过（9项既有无关 warning）；check:workflow 通过（既有 PlayerSlot 命名 warning）；audit:problems 已完成并集中记录，git diff --check 通过。
+
+## 2026-09-06：取消 compact 次数停止门禁
+
+- 按用户明确要求，取消第二次 compact 强制交接及实际次数上限；预计零次仅保留为规划目标，实际范围扩大仍按合同拆分。
+- 同步AGENTS、CLAUDE、TASK_OUTLINE、README、agent-protocol、task-generation及未完成214系列合同的拆分触发。历史检查点不删除，C4显式标记旧停止指令失效。
+- 检查点只记录尚未保存且影响恢复的信息或实际交接需要，已有记录复用；不因自动续跑重复计数、落盘或重验未变输入。
+- harness改为拒绝恢复次数停止门禁，并增加多次compact继续原task的正向用例。保留唯一Ready、原合同范围和全部验收要求；不修改游戏实现或宣称C4完成。
+- 验证：check:structure通过（9项既有warning）；check:workflow、audit:problems及diff检查结果见本批执行输出。
+
+## 2026-09-06：218原版AIR实测闭环与C4恢复
+
+- 纠正此前环境排查遗漏：unpacked已有原版AIR51.1.1.5，其DLL hash与原提取清单一致；SDK ADL通过-runtime加载，不再以新版AIR替代原版证据。工具合同补充原包优先检索和Windows stderr trace兼容。
+- 861个固定输入、1604322个buffer像素、25个940×590基准在原版/新版AIR中一致，源bitmap alpha与11张214A PNG投影一致；15类源/参考变异通过，明确不代表生产战斗通过。
+- 三Sprite/12映射/当前帧采样及中心→中心输入合同晋升verified，218归档，C4恢复唯一Ready。C4真实normal/fs/expiry-heal、P1/P2和父级验收不删减；PG-017仍等待正式消费，不归档、不计整族成功。
+
+## 2026-09-06：AIR工具接入harness按需路由
+
+- 登记已核验的SDK 51.3.4/build 3及ADL绝对路径，补充descriptor调用、舞台/非cmd限制、超时与trace/完成标记、来源和版本记录。
+- README、职责地图和逆向证据协议按触发条件路由到`air-runtime-verification.md`；普通任务零调用，按case批次运行，输入未变复用基准。未加入默认门禁或现代运行依赖。
+- 当前保留CLI入口，无需MCP；只有出现稳定跨客户端调度/结构化结果需求时再评估。未宣称AIR等价旧Flash、未执行218采样或改变游戏看板状态。
+- 验证：`check:structure`为0 error/9个既有warning；`check:workflow`通过（15个harness测试），仅既有PlayerSlot命名warning；`audit:problems`已集中记录适用性，`git diff --check`通过。调用模板尚无本批实际fixture，不以文档检查代替运行语义验收。
+
+## 2026-09-06：218碰撞补证保留运行时缺口
+
+- 三目标Sprite/12映射/11帧源几何、25源tag渲染基准及10类参考变异已落盘；218保持draft，明确区分源逻辑转录、FFDec导出和生产黑盒验证。
+- 1像素局部画布与平移留白画布出现采样差异，不能宣称Flash等价。218转Blocked，当前线不切换；C4仍Blocked。等待已有Flash/AIR运行时路径，不生成同义任务或虚报完成。
+- 交接：`docs/tasks/evidence/TASK-SETTINGS-218/handoff.md`；精确碰撞验收返回2，其他已知部分与213/214A回归通过。PG-017 V2.3继续补证，未归档。
+
+## 2026-09-05：214C2 第二次 compact 交接与构造值更正
+
+- 严格停止新增实现，C2 Split 为 A/B/C，A 唯一 Ready；原完整合同由三批连续承接，C 通过 P1GC 才能归档父级。
+- 恢复主包可执行赋值序列证明 attackRate 最终为 0.7；修正原 213 源证据/真值并增加负向变异。PG-017 同 ID 记录方案不充分和 V2.2，未宣称整族或治理关闭。
+- 原“禁止改变公共设计”确为 agent 自拟过宽限制，用户已授权必要实现修复；该授权持续有效。
+
+## 2026-09-05：214C2速度与时钟增量验证
+
+- 公共速度换算修复后增加每实体速度/20、24、30fps/主子会话验证；新增倒计时与Runtime typed事件、半帧缓存及长帧验证，纳入默认系统测试。
+- 同row独立逻辑计数遗漏由只读复核发现并修复。P1GS仍保留猴马和10类mutation；这些接缝结果不替代未完成的dragon1生产行为/P1GC/正式视觉证据。
+
+## 2026-09-05：纠正214C2自拟过宽限制
+
+- 用户明确允许修正并追问规则来源；核实“禁止改变公共设计”为agent在本轮任务拆分中自行写入。
+- 收窄为不得擅自重选设计模式/职责归属；既有职责内的速度换算、实现修复和必要窄接口不自动构成重设计。撤销因此产生的范围确认等待，不改完成标准或声称修复已通过。
+
+## 2026-09-05：214C2公共移动消费预检
+
+- 新增独立源条件与生产helper对照探针，预期失败退出1；不接入默认测试链，不声明P1GC通过。
+- PG-017记录公共移动单位/环境语义盲区及待裁决补强，214C2保留完整原任务合同与第一compact检查点。未新增或激活其他游戏task，未改冻结设计和原版资源。
+
+## 2026-09-05：214C1私有实体接缝验收门禁
+
+- 随游戏实现新增pet P1GS；P1/P1B公共步骤静态定位迁到实际EntitySession，P1R/P1H普攻端口定位迁到Context，保留全部行为/正式回归，P1R改为检查真实直接调用。
+- 新增生产私有会话测试与10类实现mutation-kill；消费者负向守卫保留未迁移TestScene单次legacy follow基线，禁止新增公共算法副本，不据此关闭all或青龙家族。
+- P1GS、P1/P1B/P1R/P1H、全系统/build通过；C2继续承担原214C完整正式验收。原有脚手架与任务规模规则未改。
+
+## 2026-09-05：收敛 harness 规则、当前快照与校验边界
+
+- 用户授权：实施当日 harness 结构评审建议。
+- 规则：结构 warning/error 决策以 AGENTS 第 7 条为准，CLAUDE 与详细协议改为引用；首次 compact 后统一安全检查点与拆分交接。
+- 状态：当前推荐由 task-board 状态表生成并精确校验；执行队列清除历史游戏 task id。原叙述保留在本节历史摘录，不改变 task 排期或完成事实。
+- 检查：新增独立 check:harness 与负向样例；check:workflow 保留旧校验器、资源标注、关卡架构检查。
+- 验证：check:harness 的 13 项测试、check:workflow、audit:problems 和 git diff --check 通过；原有 PlayerSlot warning 保留。PG-018 硬门禁闭环后同批归档，PG-004 记录一次集中反馈。
+
+### 迁入的历史叙述（仅供追溯，不参与当前调度）
+
+`TASK-SLICE-214` 是唯一 Ready 游戏 task。213 已以 `task-settings-213.pet-dragon-family` 闭合青龙 `dragon1..4` 的 44 项完整合同、11 个原版显示对象、111 个 940×590 基准、九对象 `ltwj`、gate-only MP `qlaoyi`、owner/命中治疗/P1-P2 生命周期与独立 verifier；下一步直接消费该 truth 完成正式实现。
+
+2026-09-03 用户运行反证确认角色/宠物会实际扣血但头顶没有承伤数字，且 5173 默认入口看不到现有仅由 `?qaPetSave=all` 触发的全宠物测试存档。原版数字链已定位到 `BaseHero.reduceHp()/BasePet.reduceHp() -> pnum0..9 -> ANumber`，而 211/212 只覆盖怪物作为受伤目标的 `hurtnum/bnum`。新增 `TASK-SETTINGS-215 -> TASK-SLICE-216`，排在青龙 213/214 之后：先冻结 `pnum` 真值，再闭合正式 P1/P2/TestScene 的角色/宠物承伤数字，并让 localhost 5173 全宠物 QA 存档入口可发现、可复验；不改正式存档 schema，不抢占当前唯一 Ready。
+
+`$pet-family-reverse` 第二家族正式样本已通过，MO-003 裁决“采纳”。旧 193E..R 横向批次保持撤销；213/214 只处理一个完整青龙家族，先证据、后正式实现，不能在同一次 `/goal` 跨 task。
+
+2026-08-31 用户反证“怪物不会攻击宠物”已由 210A 窄修：正式怪物 active attack 现在会按范围/防御/attack-id 去重伤害出战宠物，并由 Pet Runtime 驱动 HP/hurt/dead。5173 第 6 槽已通过 localhost-only fixture 写入 P1/P2 各 35 形态全宠物档。该回归不替代 211/212；唯一 Ready 仍为 211。
+
+2026-08-27 用户新增正式运行反证：当前出战马宠物可见攻击但怪物无可辨识受击/伤害数字，现代运行又没有连击动画。代码诊断确认正式扣血/怪物 hurt 入口不是 Role 专用，但当前只有猴系接入正式宠物伤害解析；209 现已生成 210，先由其闭合马系实际 HP decrease。各来源 `DamageEvent` 仍没有共享可见反馈，故 `TASK-SETTINGS-211 -> TASK-SLICE-212` 保持在 210 后，不抢占当前唯一 Ready。
+
+当前为空。PG-017 V2 治理项已于 2026-08-27 完成：行为语义 verifier 已接入 P1R，并生成唯一 Ready 游戏 task `TASK-SLICE-208A`；同一次 `/goal` 不继续执行该游戏 task。
+
+## 2026-09-03：登记角色/宠物承伤数字证据与实现任务
+
+- 反证：用户在 `5173` 运行中指出全宠物测试存档入口不可见，并要求核查怪物攻击角色时的数字显示；代码与原版 AS3 复核确认现代角色/宠物扣血链均未消费原版 `pnum` 承伤数字。
+- 调度：新增 `M-054`、`VS-072` 与连续任务 `TASK-SETTINGS-215` → `TASK-SLICE-216`，排在青龙 `213/214` 之后；唯一 Ready 仍为 `TASK-SETTINGS-213`，未越过 WIP=1。
+- 边界：215 只冻结角色/宠物承伤 `pnum0..9` 的 producer→view→reset、P1/P2、时序与几何真值；216 才实施正式五关/TestScene 消费，并让 210A 已有 localhost-only 全宠物 QA fixture 在 5173 验收入口可发现。回血、MP、miss、怪物侧 `hurtnum/bnum`、正式存档 schema 与非本地暴露不并入本批。
+- 验证：`npm run check:workflow`、`npm run audit:problems`、`git diff --check`。
+
+## 2026-09-02：211 冻结怪物命中反馈视觉真值
+
+- 真值：从恢复 `OtherMat1.swf` 与 AS3 producer→queue→view→reset 链生成普通/暴击数字、连击面板和五帧字形的 23 状态、53 显示对象、940×590 基准，`unresolved=[]`。
+- 防自证：生成器自测拒绝状态缺失、character 漂移、数字漏项、帧漏项和错误 0 伤害现代语义五类变异；资源标注新增 4 条 `derived-ready`。
+- 调度：归档 `TASK-SETTINGS-211`，唯一 Ready 切换为 `TASK-SLICE-212`；本轮不修改现代 `src`。
+- 治理：集中审计命中 PG-004/017；动态视觉样本通过，但 212 正式消费者、通用视觉全面性校验器与存量关闭合同仍待后续。
+- 验证：真值重复生成/语义变异/UI Schema、annotations、structure、workflow、problem audit 与 `git diff --check`。
+
+## 2026-08-27：208A 以独立语义 verifier 关闭猴系反例
+
+- 运行合同：生产 Runtime 直接消费 207 frozen `attackRange`；四形态 × P1/P2 从范围外追击入围后才普通攻击，projectile target/action token、verified hit、pet-source damage 与 cleanup 保持同链。
+- 防自证：行为 trace Schema 增加 projectile action token；正向 verifier 自测改为断言修正后真实场景通过，同时继续杀死 range、hit timing、source owner 三类变异。
+- 方法：按 `$skill-creator` 修订 `$pet-family-reverse` 的字段级覆盖、负前置场景、source-isolated trace 与 mutation-kill；MO-003 仍待马系第二家族裁决。
+- 调度：归档 208A，仅将 `TASK-SETTINGS-209` 恢复为唯一 Ready；本轮不续跑马系。
+
+## 2026-08-27：PG-017 V2 行为语义 verifier 落地
+
+- Schema/覆盖：新增黑盒 trace Schema、通用 verifier、207 的 41 项字段→场景→actual→assertion 矩阵，以及四形态 × P1/P2 受控范围链采集器；expected 直接读取冻结 manifest，actual 只来自公共 Runtime snapshot/event、Projectile 与正式伤害事件。
+- 反证：自测稳定杀死 `attackRange`、命中帧和 source owner 三类关键变异；真实入口对当前猴系 8/8 场景报告 `EARLY_ATTACK/NO_CHASE/NO_IN_RANGE`，旧专项仍绿时 `pet P1R` 已正确返回 1。
+- 调度：PG-017 V2 从全局治理执行队列移除；生成唯一 Ready `TASK-SLICE-208A` 修玩法，209 改回 Planned。同一次 `/goal` 到此结束，不续跑游戏 task。
+- 方法：MO-003 只记录 V3 修订准备样本；猴系整改达到语义 P1R=0 后才修订 `$pet-family-reverse`，再恢复马系第二家族验证。
+- 验证：`npm run test:behavior-contract-verifier=0`；`npm run test:pet-monkey-behavior-contract=1` 与 `npm run check:system-design -- pet P1R=1` 为当前存量错误的预期反证；收尾另跑 workflow/problem/build/diff 门禁。
+
+## 2026-08-26：PG-017 复盘猴系 P1R 自证循环
+
+- 反证：207 原版合同已经包含每形态 `attackRange` 与 BasePet 追击事实，但 208 Runtime 仍只跟随 owner，普攻没有范围门；测试把敌人放在 projectile 坐标并只核对合同 id，导致虚空攻击存在时专项与 `pet P1R` 仍为 0。
+- 归属：该问题不是 PG-005 的证据缺环，而是 PG-017 的同源 oracle 自证循环从视觉产物扩展到行为合同消费；PG-017 转为复盘中，原视觉全面性校验器边界不变。
+- V2：新增 `behavior-contract-runtime-verifier.md`，冻结 expected/actual 数据流隔离、合同字段覆盖矩阵、范围外负场景、追击→命中→pet-source damage 结构化 trace 和关键字段 mutation-kill；“再找一个 AI 写测试”不构成独立性。
+- 降级：保留 208 的历史执行记录，但以用户反证覆盖“完整案例/P1R=0”现行结论；P1R 降为 1。MO-003 转修订中，`$pet-family-reverse` 暂停作为马系 209 的执行路由。
+- 调度：PG-017 V2 以唯一 Ready 治理项抢占 209；治理项只落地 verifier 并生成猴系整改 task，不在脚手架任务中顺手修玩法。猴系重新达到语义 P1R=0 后才恢复第二家族验证。
+- 验证：`npm run check:workflow`、`npm run audit:problems`、`git diff --check`。
+
+## 2026-08-26：记录完整猴系首案例的证据阶段样本
+
+- 方法观测：`MO-003` 新增 `TASK-SETTINGS-207` 证据阶段样本；41 项家族合同暴露了旧横向视觉/Behavior 路线遗漏的稳定目标顺序、双随机分支、伤害特例、受击门和 jgaoyi 覆盖链。
+- 边界：该样本不计 Skill 成功，不更新 `$pet-family-reverse`，也不提前外推其他宠物族；只有 208 完成正式 P1/P2 运行后才进入完整案例复盘。
+- 调度：归档 207，仅激活 208；现有未验证 Skill 的强制消费者仍为 0。
+- 验证：family truth Schema/完整性/变异、193A 626 状态真值、corpus、annotations、workflow、problem audit 与 diff check。
+
+## 2026-08-25：完整宠物公共类前插并强制后续逆向使用 Skill
+
+- 纠错：删除未获用户要求而生成的评审文档；本次按任务重排处理，不再触发工程评审流程。
+- 调度：把 203 的 P1 骨架后续拆为 Split 父任务 `TASK-ARCH-204` 与 204A..F；204A 成为唯一 Ready，六个子任务连续闭合九物种 Behavior、35 形态 Registry、TestScene/正式五关/功能页消费者及旧入口，`pet all=0` 前不恢复宠物视觉逆向。
+- Skill：193E/G/I/K/M/O/Q 全部保持 Planned，并明确必须使用 `$pet-family-reverse` 执行真实单族逆向；planning dry-run 不得冒充执行或计入 `MO-001` 样本。
+- 边界：延续已冻结的 `PetCombatRuntime + PetBehavior + Registry` 组合设计，不另造深继承万能基类；本次不改 `src`、原版真值、Schema、生成器或资源。
+- 执行：同一次 `/goal` 完成 204A；Runtime 增加统一技能时钟与 `castSkill` 能力口，Monkey/Horse Behavior 和默认 Registry 覆盖两族 8 形态，P1/P1B 通过后归档 204A 并激活 204B。
+- 验证：`npm run check:workflow`、`npm run audit:problems` 与 `git diff --check`。
+
+## 2026-08-24：统一面试材料目录并刷新项目讲法
+
+- 目录：将原 `docs/interview/` 的 Harness、游戏、设计模式和逆向讲稿并入根级 `面试/`，保留 `面试/问题总结.md`，删除旧目录并把 `面试/README.md` 设为唯一入口。
+- 去旧：移除逆向讲稿中已经完成的工具下载、待验证假设和“最小实验”步骤，改为 206 个恢复文件、174/175 个可解析 SWF、恢复语料职责和当前真值生成链；游戏稿将 Stage 2-1/2-2、V6 存档、原生技能 UI 等状态更新到 2026-08-24。
+- 进度：补入宠物九物种/35 形态/38 技能 owner、猴/马真动画、character 657 的 35 个 HUD 头像真值纠错，以及当前 `TASK-ARCH-203` 和其余七族/角色动作/战斗技能 HUD 的未完成边界。
+- 新问题稿：新增 `面试/项目最大挑战.md`，把“从不完整遗留资料恢复可验证原版事实”作为主回答，并提供六段证据链、宠物 HUD 反例、30 秒和 STAR 版本。
+- 引用：同步架构边界、怪物架构 task/覆盖台账和 `document-map.md`，不再保留旧目录作为有效讲述入口。
+- 验证：`npm run check:workflow`、`git diff --check`。
+
+## 2026-08-24：建立宠物进化族 Luna 并行逆向薄 Skill
+
+- 背景：用户要求在后续宠物族证据任务前，把猴/马已验证的单族逆向与真值生成流程提炼为内部 Skill，并以 Luna 并行降低高阶模型上下文与串行等待。
+- Skill：创建个人 `$pet-family-reverse`（`~/.codex/skills/pet-family-reverse/`）；入口只负责任务路由、范围冻结、Luna A/B 只读工作包、主 agent 归并门、独立完整性审查和 `MO-001` 指标，详细输入/输出与 brief 按需放在两份 reference。Skill 不复制仓库协议、不改 task 状态、不把 Schema/哈希/自报集合当作 `verified`。
+- 任务：`TASK-SETTINGS-193E/193G/193I/193K/193M/193O/193Q` 补为视觉真值逆向任务并统一链接 `ground-truth-fine-grained-generation.md`；每个 task 仍保持 2 个主工作包、0 compact、2 个验收批次和串行证据→实现调度。A/B 分别调查 AS3 行为链和恢复 SWF 真值，主 agent 单写，独立 Luna 审查计入验收批次。
+- 方法观测：`MO-001` 增加宠物族 V2 试验设计；193E/193G 只作为计划样本，实际执行并取得可定位证据前不计入样本数。原始总 token 不预设必降，分别观测高阶模型 token、墙钟时间、返工和护栏。
+- 调度：`TASK-ARCH-203` 继续是唯一 Ready；Skill 与协作计划不并行七个 task，也不改变 203→193E→193F 的既有顺序。
+- 验证：`quick_validate.py`、`npm run check:workflow`、`npm run audit:problems` 与 `git diff --check` 作为本次收尾门禁。
+
+## 2026-08-24：character 657 首次实施细粒度真值方案
+
+- 背景：`TASK-SETTINGS-201` 是 PG-017 精细生成方案的首个有界视觉真值实例；用户运行反证已证明旧 191 的 Schema/哈希/测试自洽仍不能发现 character 657 动态 child 缺失。
+- 生成：新增独立 201 生成器，以 corpus + `PetInfo` AS3 映射声明 expected，以恢复 SWF XML 时间线提取 actual，并用逐帧 SVG/PNG 交叉确认 child、matrix、矢量 bounds 与 alpha edge；不研发完整 Flash VM。
+- Schema：兼容增量新增 `parentBounds/visibleBounds/clipBounds/alpha/colorTransform`，并用 `supersededBy` 让旧 manifest 精确标记局部取代关系，不批量否定静态真值。
+- 验证：201 提供缺 child、错 frame、关键 matrix 三类变异自测、字节稳定 `--check`、独立 completeness report 和逐 fixture baseline；`verified` 由声明集/提取集/递归显示列表/多源几何/负状态共同支持。
+- PG：PG-017 通过首阶段样本但不关闭；正式消费者 202、通用全面性校验器、两个后续样本与存量高风险审计仍未完成。PG-004/017 的本次结果集中记录于 `problem-audit.md`。
+- 调度：归档 201，只激活同线 `TASK-SLICE-202`；本轮不修改现代 `src` 或提前实践 HUD。
+
+## 2026-08-21：创建 character 657 首个细粒度真值执行链
+
+- 背景：用户要求在当前 193E 前先重做宠物真值并把新真值实践到 UI，再建立宠物基类。PG-017 与精细生成方案已把首个错误实例定位为战斗 HUD character 657 动态头像。
+- 任务拆分：按“视觉真值逆向不修改 `src`、UI 逆向与实现分 task”的既有门禁，将第一项拆为 `TASK-SETTINGS-201` 细粒度真值和 `TASK-SLICE-202` 正式 HUD 消费；第二项按已冻结 `system-designs/pet.md` 落为 `TASK-ARCH-203` P1 公共类。
+- 调度：唯一 Ready 从 `TASK-SETTINGS-193E` 改为 201，顺序固定为 `201 -> 202 -> 203 -> 193E`；保持唯一 Active 功能线，不新增治理执行队列项。
+- 边界：201 只处理 35 个 `gotoAndStop` 中文名 fixture、递归 child 和 P1/P2 投影；202 只实践新真值；203 只建立 `PetCombatRuntime/PetBehavior/Registry/Targeting` 并要求 pet P1 gate=0，不迁移设计 P2-P4。
+- PG：同步 PG-017 的调度事实和集中问题审计；任务尚未执行，PG-017 保持“待治理”，全面性校验器仍留在独立对话讨论。
+- 验证：`npm run check:structure` 已确认目标 `PetSystem.ts` 为既有 1267 行 warning，203 禁止继续向该文件新增基类逻辑；`npm run check:workflow`、`npm run audit:problems` 与 `git diff --check` 作为本次收尾门禁。
+
+## 2026-08-20：将真值方案收窄为视觉真值逆向子类型
+
+- 背景：用户确认机器真值提取只适用于视觉逆向；既有 AS3/调用链代码逆向表现良好，不应被迫加载真值精细生成方案或增加新的方案文档约束。
+- 子类型：独立逆向任务增加 `代码逆向` 与 `视觉真值逆向`。两类共用现有六段证据协议；代码逆向直接读取当前 task 指定的 AS3/消费者，视觉真值逆向才渐进加载 task 唯一链接的视觉方案和 ground-truth 资料。
+- 方案边界：`ground-truth-fine-grained-generation.md` 明确只适用于视觉真值逆向，代码逆向不得加载；代码逆向首次发现必须生成视觉真值时，拆成同线视觉真值逆向 task。
+- 迁移边界：旧代码逆向 task 不补建方案；旧视觉/真值 task 只在轮到执行或重新拆分时补子类型与视觉方案。不修改当前游戏执行队列。
+- 路由与门禁：同步 AGENTS、CLAUDE、TASK_OUTLINE、task/agent/reverse 协议、workflow README/document-map、PG-017 与校验器讨论稿；工作流校验改为仅要求视觉真值子类型链接唯一方案，并拒绝代码逆向加载视觉方案。
+- 验证：`node --check tools/validate-workflow.mjs`、`npm run check:workflow` 通过（7 个活跃 PG 合同，唯一推荐/执行仍为 `TASK-SETTINGS-193E`，仅保留既有 `PlayerSlot` warning）；`npm run audit:problems` 命中 PG-004/PG-017 并已集中记录；`git diff --check` 通过。
+
+## 2026-08-20：把逆向任务和精细生成方案从 PG-017 抽离
+
+- 背景：用户指出把详细生成拆解挤在 PG-017 中会使普通逆向执行无法按 task 路由读取，要求将逆向建模为独立任务，并把拆解方案作为独立输入喂给该任务。
+- 任务模型：新增 `reverse-engineering-task-protocol.md`，把逆向任务定义为一等可调度 task；新建/重拆任务显式声明 `任务模型：逆向任务` 和唯一 `逆向方案：`。现有 `TASK-SETTINGS-*` 只作为兼容 ID，不批量迁移。
+- 方案落点：将逐状态、目标帧/时间片、递归显示列表、动态时序、几何、未知项和 baseline 的详细拆解移入 `docs/reverse-engineering/plans/ground-truth-fine-grained-generation.md`。task definition 必须实例化范围、入口、fixture、源资料族和产物路径，只读其链接方案，不扫描方案目录。
+- PG 边界：PG-017 只保留问题、职责、调度边界、测试与关闭条件，并链接任务协议、生成方案和全面性校验器讨论稿；普通逆向 task 不从 PG 恢复执行步骤。
+- 路由与门禁：同步 AGENTS、CLAUDE、TASK_OUTLINE、agent/task-generation 协议、workflow README/document-map；工作流校验新增逆向任务模型、方案存在性、路由和 PG 瘦身门禁。
+- 范围：本轮不创建/激活 character 657 执行 task，不改真值、Schema、生成器、校验器或 `src`，不改变当前唯一游戏执行项。
+- 验证：`npm run check:structure` 通过（仅既有 8 个非目标大文件 warning）；`node --check tools/validate-workflow.mjs`、`npm run check:workflow` 通过（7 个活跃 PG 合同，唯一推荐/执行仍为 `TASK-SETTINGS-193E`，仅保留既有 `PlayerSlot` warning）；`npm run audit:problems` 命中 PG-004/PG-017 并已集中记录；`git diff --check` 通过。
+
+## 2026-08-20：冻结 PG-017 精细生成合同与全面性校验器边界
+
+- 背景：用户确认真值问题包含生成粒度过粗与产物全面性无法证明两部分，并明确校验器不应监督生成器是否逐步完成内部提取操作，只负责判断最终生成物是否全面；当前不用 `correct/incorrect` 单独界定校验器结果。
+- 生成合同：PG-017 将动态目标的提取单位冻结为“状态 fixture × 根 Symbol/MovieClip × 目标帧或时间片 × 递归可见显示列表”，明确 `gotoAndStop/gotoAndPlay`、动态 child、嵌套时间轴、矩阵/注册点/可见 bounds、mask/filter/文本、逐状态基准和未知能力的生成责任。简单静态对象不强制无差别拆帧，动态对象不得继续使用容器联合 bounds 代替具体状态。
+- 校验器边界：新增 `ground-truth-completeness-validator.md`，只记录“校验最终产物是否全面”的职责、不得缩小检查范围的约束和后续待决问题；不提前选择校验算法，不修改 Schema/manifest，也不建立生成流程监督器。
+- 状态：PG-017 仍为待治理，仅将状态说明更新为“生成逻辑方案已冻结；全面性校验器待独立对话讨论”。本轮不修宠物 HUD、不改生成器/校验器代码、不建立执行队列项、不批量降级存量真值。
+- 文档路由：README 与 document-map 增加全面性校验器文档的按需读取入口；普通真值生成任务不默认读取。
+- 验证：`npm run check:workflow` 通过（7 个活跃 PG 合同，唯一推荐/执行仍为 `TASK-SETTINGS-193E`，仅保留既有 `PlayerSlot` warning）；`npm run audit:problems` 命中 PG-004/PG-017 并已集中记录；`git diff --check` 通过。
+
+## 2026-08-19：冻结关卡、宠物、英雄类设计并增加验收硬退出
+
+- 背景：用户手动要求为关卡、宠物、角色三个系统生成类设计，并要求先核定老角色系统的面向对象完成度；同时明确系统完成后不应继续检测是否满足设计模式。
+- 现状结论：关卡的五关统一 Runtime 入口和 `LevelLifecycle` 已基本完成，缺公共 Runtime 类；宠物已有跟随和大量单项技能，但战斗入口仍由 TestScene 分发且正式五关未统一；英雄已有共享 Party/移动/战斗/普攻 Runtime，但五英雄技能仍含 Party 特判、TestScene 五路 pipeline 和兼容字段，公共单英雄类未完成。
+- 设计：新增 `system-designs/level.md`、`pet.md`、`hero.md`。关卡采用组合式关卡模板类并禁止万能 `BaseLevel`；宠物采用 `PetCombatRuntime + PetBehaviorRegistry`；英雄采用 `HeroRuntime` 模板基类、五具体英雄类和唯一 Factory。三者各保留一套当前方案，不生成对照实现，也不改当前唯一 Ready task。
+- 退出机制：验收新增 `验收退出：未退出/已退出`。系统级完成批次必须同批标记 `已完成/已退出`、清空剩余项并停止后续读取、批次记录、专项模式扫描和专项符合性测试；普通类型、构建、行为和回归测试仍保留。已退出设计只可由用户明确重设计或重开。
+- 硬性验证：用户指出原验收仍是人工检查表后，新增 `tools/check-system-design.mjs` 和 `npm run check:system-design -- <system> <gate>`。Level L1/L2、Pet P1-P4、Hero H1-H4 均直接检查实际源码结构/依赖/消费者/旧路径，并强制存在且运行系统专用行为合同测试；批次非零不得通过，最终 `all` 非零不得退出。该命令不进入默认 `check:all`，只在未退出的明确关联 task 中调用。
+- 当前真实基线：门禁引擎自检为 0；`level all`、`pet all`、`hero all` 均按预期返回 1，并分别报告旧工厂、缺宠物 Runtime/Registry、缺 HeroRuntime/Factory、Scene 分流、Party 特判和专用合同测试缺失，而不是读取文档状态后自报通过。
+- 语义澄清：原“规约符合性维度”容易被理解为门禁之外的人工八股验收，现改名为“门禁覆盖映射（只供 gate 作者使用）”。它只指导 LLM/设计者把自然语言规约写成静态断言和行为测试；每批不再另做人工源码核对或人工正式接入裁决，代码符合性的唯一技术结论是对应 gate/`all` 的退出码。剩余清单和文档同步仅作追溯 bookkeeping。
+- 领域与边界：词汇表新增 `HeroRuntime`、`PetCombatRuntime`、`PetBehavior`，`src-boundaries.md` 链接三份当前类设计。
+- 验证：`npm run check:workflow` 通过（7 个活跃 PG、唯一推荐/执行仍为 `TASK-SETTINGS-193E`，只保留既有 `PlayerSlot` warning）；`npm run audit:problems` 已复核并集中记录 PG-004/012/013；`git diff --check` 无错误。
+
+## 2026-08-19：撤销 PG-016 并拆分设计与重复验收机制
+
+- 背景：用户纠正 PG-016 不应是问题治理，并明确具体系统的设计通常只手动触发一次，而代码是否持续遵守该设计需要在多个实现批次反复验收，直到整个系统完成。
+- 变更：撤销 PG-016 文档及活跃索引且不移入问题归档；保留不含“分类与落盘位置”“触发条件”的 `system-design-protocol.md`，并新增独立 `system-design-acceptance-protocol.md`。设计协议只负责单方案规约与交接；验收协议维护 `未开始/实施中/已完成` 状态、逐批结论和系统级剩余清单。
+- 影响：设计仍只由用户明确触发一次；后续 task 只要明确链接尚未 `已完成` 的具体设计，就反复验收角色、入口、禁止路径、合同和正式消费者。验收不扫描全部设计，也不重选模式；偏离默认修正代码，只有用户明确要求时才重设计。PG-017 保持活跃。
+- 验证：`npm run check:workflow` 通过（7 个活跃 PG 合同，唯一推荐/执行仍为 `TASK-SETTINGS-193E`）；`npm run audit:problems` 的活跃包不再包含 PG-016；`git diff --check` 无错误。保留既有 `PlayerSlot` 命名 warning。
+
+## 2026-08-19：登记系统设计验证与真值表有效性问题
+
+- 背景：用户把关卡类化与宠物类化归纳为同一个机制缺口，并以宠物战斗 HUD 头像错位反证现有 `verified` 真值没有形成有效约束。
+- 变更：当时误将系统设计/类化登记为 PG-016；同时新增 PG-017“真值表不管用”，把形式验证完整但语义自证循环的问题与已归档 PG-005/PG-007 区分。PG-016 已在同日后续纠正中撤销；具体系统设计仅作为用户手动触发的设计模式机制保留。PG-017 保持活跃。
+- 影响：本轮不修改宠物实现、真值产物、Schema、校验器、任务看板或全局执行队列，不打断当前唯一游戏 Ready task，也不批量降级既有 `verified` manifest。
+- 验证：该次登记校验曾通过；PG-016 的分类结论随后被用户纠正，不再作为当前工作流事实。
+
+## 2026-08-18：记录 TASK-SLICE-193D 马系真动画接入审计
+
+- 背景：游戏 task 收尾命中 PG-004；新增共享正式关卡宠物视觉 bridge 与 `combat-common` 资源 owner，语义命中 PG-013。
+- 变更：在集中审计表记录 193C verified 真值直连、四本体/185 帧对象、五关共享 Runtime、P1/P2 正式运行和零 console 证据；确认未新增逐关宠物生命周期、第二业务 owner、技能数值或现代可见替代层。
+- 影响：PG-004/PG-013 均无复发但未满足归档条件；PG-001/006/011/012 语义复核不适用。唯一 Ready 已切换为同线 `TASK-SETTINGS-193E`，本次不修改问题状态或通用工作流规则。
+- 验证：马系 runtime/truth/corpus、asset bundle、全系统、build、structure、annotations、workflow、problem audit、940×590 正式双人视觉与 `git diff --check`。
+
+## 2026-08-17：按用户复验插入 Stage 2-3 前表现整改功能线
+
+- 背景：用户在执行 Stage 2-3 前指出装备悬停不显示数值、宠物缺 UI/动画、五角色动作流畅度不一和战斗技能未在 UI 显示。这些正式运行反证优先于 158/180/183 的旧单页/主体关闭措辞。
+- 变更：新建并激活 `LINE-PRE-STAGE-2-3-PRESENTATION`，将 `LINE-STAGE-2-3 / TASK-SETTINGS-064` 退回 Planned，唯一 Ready 切为 `TASK-SETTINGS-189`。四项用户目标已展开为 14 个有编号任务：189/190A/190B 装备 hover，191/192A/192B/193/194 宠物 UI 与真动画，195/196 五角色完整性/流畅度，197/198/199 战斗技能 HUD，200 最终正式旅程。
+- 规模处置：宠物不伪造一个“全量动画”大 task；193 只盘点恢复源 corpus，完成时按单一资源族生成“证据 + 实现”任务对并插入 194 前。195 不预设角色卡顿是解包不全，先对比帧时序/持帧/clock/转移/加载/投影，只为实际受影响角色生成单角色修复 task。
+- 证据边界：175A/175D 的宠物/技能功能页 verified 真值保留，但不能代替正式路由可见、宠物战斗实体动画或战斗技能 HUD。装备 tooltip 任务同时冻结 UI 原生化与有界数据投影组件合同，各页保留原 Symbol/几何/皮肤。
+- 验证：`npm run check:workflow`、`npm run audit:problems`、`git diff --check`。当前检查确认唯一 Active/Ready 为新前置线/189；不修改 `src/`、恢复 SWF 或 legacy extraction。
+
+## 2026-08-17：完成 PG-013 V2R 怪物领域与关卡资源解耦
+
+- 背景：此前把怪物资源归首次引入关卡的方案被用户反证；全局治理队列要求本次只完成 V2R，不执行游戏 Ready task。
+- 变更：新增 `MonsterDefinitionCatalog` 与 `MonsterAssetCatalog`；12 类只读战斗定义、五个怪物资源族和 424 个视觉/几何文件从关卡 owner 解耦。五关 bundle 仅声明怪物族依赖，旧 `stage-*-monsters*` bundle 与 `public/assets/stages/**/monsters/` 清零；同步机器标注、架构地图、PG-013 和集中审计。
+- 影响：V2R 已从全局执行队列移除，下一次 `/goal` 回退唯一 Active/Ready 游戏任务。PG-013 仍为复盘中；V2H..V2K Monster Runtime 消费者与后续新关卡样本未完成，不提前归档。
+- 验证：`npm run test:monster-assets`、关卡资源/asset bundle/五关视觉与资源专项、`npm run test:systems`、`npm run build`、`npm run check:structure`、`npm run check:annotations`、`npm run check:workflow`、`npm run audit:problems`、`git diff --check`。
+
+## 2026-08-17：登记 PG-013 V2R 怪物领域与关卡资源解耦
+
+- 背景：用户进一步指出怪物不能与关卡绑定；以首次引入关卡作为怪物 UI/视觉资源 owner 仍然错误，关卡只能持有出怪信息。
+- 变更：PG-013 资源方案转为不充分，新增 V2R 工作包并作为全局队列唯一 `Ready`；目标是独立 monster catalog、代码/资源/bundle owner，五关只消费 monster id 与 spawn 编排。不新增问题编号。
+- 交接：本对话已发生压缩，按规模合同仅记录安全检查点和执行队列，不继续读取新资料族或实施迁移。下一次执行只处理 V2R，完成后结束当次治理任务。
+
+## 2026-08-17：撤销独立问题编号并扩充 PG-013 资源边界
+
+- 背景：用户指出关卡类化本就应覆盖 UI/视觉资源管理，不应另建并归档一个难以跟踪的 PG；同时指出 `shared/stage-1`、`shared/stage-2` 没有可维护的领域语义。
+- 变更：撤销误建的独立问题文件、活跃/归档记录和调度叙述，把证据、解决合同、测试与触发条件并入 `PG-013`。资源树修订为 `shared/floors` 具名资源族与 `stage-N-M/{scene,objects,hazards,monsters}` 首次引入关卡 owner；Stage 1 聚合攻击几何按 Symbol 无损拆成三份并归对应 monster bundle。
+- 影响：PG-013 仍为复盘中，不因资源切片通过而关闭。历史四根继续清零；视觉文件未删除，重复哈希时间轴帧继续保留；未修改恢复 SWF 或 legacy extraction。
+- 验证：由关卡资源专项、五关资源、asset bundle、全系统、build、structure、annotations、workflow、problem audit 与 diff check 覆盖；集中审计按 PG-013 记录，不产生新的问题归档。
+
+## 2026-08-17：记录 TASK-SLICE-187 建档/选角 manifest 直连审计
+
+- 背景：游戏 task 收尾命中 PG-004；本任务修改原生按钮状态、命中和建档页面视觉 owner，语义命中 PG-011。
+- 变更：在集中审计表记录 175I manifest 直连、手写坐标/命中删除、GDI+ alpha 基准生成纠错、1P/2P/取消/原子建槽/重载和 940×590 对照证据；确认未新增共享组件、第二业务 owner、现代可见层或截图裁片。
+- 影响：PG-004/PG-011 均无复发但未满足归档条件；PG-001/006/012/013 语义复核不适用。唯一 Ready 已切换为同线 `TASK-SLICE-188`，本次不修改问题状态或通用工作流规则。
+- 验证：`npm run test:party-creation-truth`、`npm run test:systems`、`npm run build`、`npm run check:structure`、`npm run check:workflow`、`npm run check:annotations`、`npm run audit:problems`、`git diff --check`。
+
+## 2026-08-16：记录 TASK-SETTINGS-175 功能 UI 真值审计
+
+- 背景：游戏 task 收尾命中 PG-004；本任务又涉及 feature UI host、原生按钮和页面实现门禁，语义命中 PG-011。
+- 变更：在集中审计表记录九个页面/宿主证据分级、未批准现代占位、legacy manifest 迁移债务和 175A..I 单页合同；确认没有新增共享组件、第二业务 owner 或可见实现。
+- 影响：PG-004/PG-011 均无复发但未满足归档条件；其余活跃 PG 语义复核不适用。本次不修改问题状态或通用工作流规则。
+- 验证：`npm run check:workflow`、`npm run check:annotations`、`npm run audit:problems`、`git diff --check`。
+
+## 2026-08-15：记录 TASK-ARCH-174 普攻几何与结算 owner 审计
+
+- 背景：本任务收敛四个 detached 普攻的几何事实源，并修改 Role5 projectile 的碰撞与普通敌人死亡/奖励归属链，命中 PG-004/PG-006 收尾审计。
+- 变更：集中记录 verified 空间真值、视觉/碰撞共源、二维 overlap 与共享 `resolveStage1HeroHit` 结算样本；确认没有新增逐关伤害、死亡或奖励 owner。
+- 影响：PG-004/PG-006 均无复发但未满足完整归档条件；PG-001/011/012/013 经语义复核不适用。本次不改变任何 PG 状态或关闭合同。
+- 验证：空间 truth/Schema、Role5 专项、全量 systems/build/structure/workflow、940×590 单/双人零 console、`npm run audit:problems` 与 `git diff --check`。
+
+## 2026-08-15：移除 PowerShell 5.1 时代的 UTF-8 提示词补丁
+
+- 背景：当前 Codex shell 已确认为 PowerShell 7.6.4 Core，控制台输出编码为 UTF-8；原有显式 `Get-Content -Encoding UTF8` 与乱码重读规则不再值得常驻占用入口上下文。
+- 变更：从 `AGENTS.md`、`CLAUDE.md`、工作流摘要和局部资料说明中移除 UTF-8/PowerShell 专项提示，删除校验器对该提示词的强制注入。`rg` 窄查规则保留为与 shell 无关的上下文控制，并压缩表述。
+- 影响：不再为 PowerShell 编码问题反复注入专项指令；大文件窄读、减少无关输出的通用治理目标不变。
+- 验证：`node --check tools/validate-workflow.mjs`、`npm run check:workflow`、`npm run audit:problems`、`git diff --check`。
+
+## 2026-08-15：将月度评审复评确认项纳入任务流程
+
+- 背景：用户要求把 `docs/评审/评审-2026-08-13.md` 中经复评成立的 High/Medium 纳入正式调度，而不是照搬原始严重级别、重复项和误判。
+- 变更：前插 `TASK-SLICE-171B` 为唯一 Ready，关闭比例字段迁移、打造继承属性和灵魂整数三项数据风险；172 暂回 Planned。当前线另登记 173/173A、174、175；M8/M9/M10 并入既有怪物线 010A..C；H4/M16/M17 建立发布阶段 `LINE-RELEASE-RUNTIME-LOAD / 177A..B`。H3、M1/M2/M3/M12/M18 等复评否定项不入队，M11 等 Low 不抢占游戏任务。
+- 影响：更新评审处置表、功能线/覆盖台账、看板、任务定义、机制索引和纵向切片状态；保持唯一 Active `LINE-CORE-PROGRESSION-COMPLETION`、唯一 Ready `TASK-SLICE-171B`，未修改游戏代码。
+- 验证：`npm run check:workflow`、`npm run audit:problems`、`git diff --check`。
+
+## 2026-08-13：记录正式背包交互回归问题审计
+
+- 背景：用户复验发现左侧已穿装备需要点击两次卸下，右侧装备事务完成后原生三按钮操作层未收起；该变更命中 PG-004/PG-011 收尾审计。
+- 变更：集中记录 `TASK-SLICE-171` 期间的窄修样本；确认选择生命周期仍由 `FormalInventoryPageSystem` 单一持有，未新增 UI、几何或事务 owner，两项均无复发且暂不满足归档条件。
+- 影响：仅更新 `docs/workflow/problem-audit.md` 与本治理日志；不改变 PG 状态、关闭合同或通用工作流规则。
+- 验证：`npm run test:formal-inventory`、`npm run build`、940×590 浏览器点击回归、`npm run audit:problems`、`npm run check:workflow`、`git diff --check`。
+
+## 2026-08-12：记录 TASK-SLICE-170D 收尾问题审计
+
+- 背景：游戏代码、UI 与任务状态变更收尾必须运行集中 PG 审计，并将实际语义命中的活跃问题记录为单一可追溯样本。
+- 变更：为 `TASK-SLICE-170D` 增加 PG-004/PG-011 集中审计行；确认机器真值坐标、视觉目录与正式 inventory/save/transaction owner 未发生第二来源漂移，两项均无复发且暂不满足归档条件。
+- 影响：仅更新 `docs/workflow/problem-audit.md` 与本治理日志；不改变 PG 状态、关闭合同或通用工作流规则。
+- 验证：`npm run audit:problems`、`npm run check:workflow`、`git diff --check`。
+
+## 2026-08-09：任务校验器支持显式拆分 ID 的数字尾缀
+
+- 背景：`TASK-SETTINGS-170B` 的既有拆分合同明确使用 `170B1/170B2`，但 `validate-workflow.mjs` 只识别“数字 + 可选单字母”，导致合法的子任务定义、当前推荐和历史归档被误报缺失。
+- 变更：四处任务 ID 解析统一扩展为“数字 + 可选单字母 + 可选单数字”；不放宽任务前缀、文件命名或唯一 Ready/Active 规则。
+- 影响：170B1/170B2 可按原合同进入历史、task-board、独立定义和当前推荐；既有 `004A`、纯数字 ID 的含义不变。
+- 验证：`node --check tools/validate-workflow.mjs`、`npm run check:workflow`、`npm run audit:problems`、`git diff --check`。
+
+## 2026-08-09
+
+### 用首个真实机器真值 UI 任务完成 PG 集中审计裁决
+
+变更内容：
+
+- `TASK-SLICE-165D` 作为游戏代码/UI/逆向真实样本运行集中审计；单行证据语义命中 PG-002/004/005/007/008/009/011，没有向各问题复制普通成功记录。
+- 按独立关闭合同和历史样本评估后，PG-002/005/007/008/009 的存量、增量、自动门禁、样本量和重开信号全部满足，已从活跃索引移入归档索引。
+- PG-004 仍缺长期无样本主动审计，PG-011 仍缺 `TASK-ARCH-014A..F` 与完整组件线迁移；两项保留活跃，未因本次任务局部成功提前关闭。
+- MO-002 累积三个样本，覆盖脚手架、逆向/UI 工作流和游戏代码/UI；重复成功日志、漏检、误归档与反证丢失均为 0，并由同一证据促成五个 PG 及时归档，裁决为采纳并归档。
+
+影响范围：
+
+- `docs/workflow/problem-governance.md`
+- `docs/workflow/problem-audit.md`
+- `docs/workflow/problems/PG-002/005/007/008/009`
+- `docs/workflow/method-observation.md`
+- `docs/workflow/methods/MO-002-任务收尾PG集中审计.md`
+- `docs/workflow/governance-log.md`
+
+验证：
+
+- `npm run audit:problems`、`npm run check:workflow`、`git diff --check`。
+- `TASK-SLICE-165D` 专项、`npm run test:systems`、`npm run build` 与 940×590 P1/P2 零 console 共同承载真实效果样本。
+
+## 2026-08-08
+
+### 将原版机器真值 JSON 纳入逆向证据链
+
+变更内容：
+
+- 在六段证据链的 SWF 几何/坐标段与可观察行为合同之间增加原版机器真值 JSON 交接；UI、视觉和空间事实必须从一手 SWF/AS3/运行基准生成，不得以文档或 TS/CSS 手抄坐标代替。
+- 新建 `docs/reverse-engineering/ground-truth/`，定义范围冻结、源哈希/locator、原始提取、坐标归一化、状态枚举、Schema/完整性核对、交叉确认和自动回测的生成流程。
+- 新增 `ui-ground-truth.schema.json`，固定 `truthId`、`draft/blocked/verified`、来源证明、舞台、状态、显示对象、逐状态矩阵/边界、基准图和完整性/未解项结构。规范化 manifest 版本化落盘，大体积原始派生物继续留在 Git 忽略的 `local-resources/regima/task-outputs/`。
+- 逆向 task 生成、实现门禁、工程评审、Agent/Claude 入口和三个专业角色同步要求消费 `verified` 真值；位置验证必须把 DOM/Canvas 实测结果换算回原舞台坐标后自动比较。
+- 工作流校验器新增机器真值协议路由、Schema JSON 可解析性、必填顶层字段、状态语义、关键 `$defs` 与逆向/实现/评审跨文档门禁。
+
+影响范围：
+
+- `AGENTS.md`
+- `CLAUDE.md`
+- `.claude/agents/reverse-engineering-researcher.md`
+- `.claude/agents/modern-implementation-engineer.md`
+- `.claude/agents/engineering-reviewer.md`
+- `docs/reverse-engineering/ground-truth/README.md`
+- `docs/reverse-engineering/ground-truth/schema/ui-ground-truth.schema.json`
+- `docs/workflow/README.md`
+- `docs/workflow/document-map.md`
+- `docs/workflow/agent-protocol.md`
+- `docs/workflow/task-generation.md`
+- `docs/workflow/reverse-engineering-protocol.md`
+- `docs/workflow/code-quality-gates.md`
+- `docs/workflow/review-protocol.md`
+- `docs/workflow/problem-audit.md`
+- `tools/validate-workflow.mjs`
+
+验证：
+
+- `npm run check:structure` 通过；仅保留 9 个未修改旧大文件的既有 warning。
+- `node --check tools/validate-workflow.mjs` 通过。
+- `npm run check:workflow` 通过；真值 Schema/跨文档门禁、12 个未完成 task、260 个已完成 task、1080 条资源标注和可玩关卡架构校验通过；仅保留既有 `PlayerSlot` 禁止别名 warning。
+- `npm run audit:problems` 完成语义复核；命中 PG-004/005/007，通过样本集中写入 `problem-audit.md`，无复发、状态变更或可归档项。
+- `git diff --check` 通过。
+
+## 2026-08-06
+
+### 抽离 PG 收尾校验并建立 MO-002 集中审计
+
+变更内容：
+
+- 新增 `problem-audit.md` 与 `npm run audit:problems`，从单个 PG 文件抽离重复的任务收尾扫描、正常样本记录和归档评估流程；命令读取当前 diff、活跃索引与问题触发/效果合同生成窄审计包。
+- 正常通过样本改为集中记录一次；单个 PG 继续保留问题定义、方案版本、关闭标准、反证和最终归档摘要，既有反馈表作为历史证据保留而不批量迁移。
+- 新增 `MO-002` 试验集中审计的漏检、重复记录、误归档和关闭滞留；删除“PG 关闭样本不得成为 MO 样本”的绝对限制，允许同一份证据同时服务两种合同。
+- 每个通过样本立即执行 PG 归档评估；关闭标准、存量/增量证据、持久防线、样本要求和重开信号全部满足时同次归档，不能仅凭 MO 方法成功提前关闭。
+- workflow 校验器新增集中审计协议、命令入口、MO/PG 双用途证据、活跃 PG 合同和入口文档的正向门禁；反馈负向样例由“必须有逐 PG 表格”调整为“必须保留触发条件与效果检查”。
+- PG-004 升级为集中反馈 V2：正常样本转入统一审计记录，状态变化、反证和换案仍回写问题文档。
+
+影响范围：
+
+- `AGENTS.md`
+- `CLAUDE.md`
+- `package.json`
+- `tools/run-problem-audit.mjs`
+- `tools/validate-workflow.mjs`
+- `docs/workflow/README.md`
+- `docs/workflow/document-map.md`
+- `docs/workflow/agent-protocol.md`
+- `docs/workflow/code-quality-gates.md`
+- `docs/workflow/problem-governance.md`
+- `docs/workflow/problem-audit.md`
+- `docs/workflow/problems/PG-004-问题治理缺少效果反馈闭环.md`
+- `docs/workflow/method-observation.md`
+- `docs/workflow/methods/MO-002-任务收尾PG集中审计.md`
+- `docs/workflow/governance-log.md`
+
+验证：
+
+- `npm run check:workflow`（通过；保留既有 `PlayerSlot` 禁止别名 warning）
+- `npm run audit:problems`（通过；生成 11 个活跃 PG 审计包，本批语义命中 PG-004）
+- `git diff --check`（通过）
+
+### 建立单 task 多 agent 协作与方法观测闭环
+
+变更内容：
+
+- 在不改变唯一 Ready、严格单线 `WIP=1`、两主工作包、两验收批次和零 compact 的前提下，新增单 task 内 subagent 协作协议；主 agent 保留范围、单写、证据归并、状态文档和最终验收所有权。
+- task 生成模板新增可选协作计划，旧 task 不做无业务价值的批量迁移；实际启用 subagent 时必须声明工作包、写入 owner、归并检查点和可选 `MO-*`。
+- 新增 `method-observation.md` 与首个 `MO-001`，把实验性改进方法与结构性问题治理分离；方法只附着真实工作采样，不进入游戏看板或执行队列，并在样本量、截止点或停止条件触发时强制裁决。
+- 统一 Claude 固定角色与跨客户端协议：委派模式使用主 agent 的有界 brief，不重复选择 task 或调度读取；实现/工作流角色只有被指定为唯一写者时才能写入，状态文档仍由主 agent 收口。
+- workflow 校验器新增方法记录索引/状态/章节合同、入口引用、协作模板正负样例和委派合同校验。
+- 本次以只读 subagent 审查作为 `MO-001` 首个真实样本：采用条件校验、委派读取路由和单写冲突修正建议；写入冲突、范围扩张、compact 与协调返工均为 0，但单样本不宣称方法已采纳。
+- 收尾扫描活跃问题索引并回写 PG-004/008：方法观测不替代问题反馈，subagent 并行不增加 task 规模预算；其余活跃问题无本批新增适用事实。
+
+影响范围：
+
+- `AGENTS.md`
+- `CLAUDE.md`
+- `.claude/agents/`
+- `docs/workflow/README.md`
+- `docs/workflow/document-map.md`
+- `docs/workflow/agent-protocol.md`
+- `docs/workflow/task-generation.md`
+- `docs/workflow/method-observation.md`
+- `docs/workflow/methods/MO-001-单task内并行证据工作包.md`
+- `tools/validate-workflow.mjs`
+
+验证：
+
+- `npm run check:workflow`（通过；保留既有 `PlayerSlot` 禁止别名 warning）
+- `git diff --check`（通过）
+
+## 2026-08-04
+
+### TASK-SLICE-166B 正式背包动态 UI 归档
+
+变更内容：
+
+- 直接消费 165B/166A 显示合同与 61 张透明子资源，完成 304/246/628 的动态角色、等级/经验、字段、六槽/时装、精确 25 格与 358/610 原生操作层。
+- 建立只读 `InventoryItemCell / InventoryGridProjection` 试点；库存/装备 mutation 仍只在既有 systems，页面 composition 与原皮肤未进入共享 primitive。
+- 战斗入口从 HeroParty runtime scene snapshot 读取即时 HP/MP；地图回退保存成长，保持 P1/P2、431 身份、428 图标、事务与 V6 唯一 owner。
+- 浏览器捕获并修复角色图集重复 bundle owner；改由背包依赖既有五个 `combat-hero-*` owner，专项、构建和 940×590 P1/P2 零 console 通过。
+- PG-007/008/011 适用样本均通过；功能线继续 Active，唯一 Ready 切到 `TASK-SLICE-165D`，本次 `/goal` 不进入第二消费者。
+
+验证：
+
+- `npm run test:formal-inventory`
+- `npm run test:inventory-dynamic-ui`
+- `npm run test:inventory-catalog`
+- `npm run test:asset-bundles`
+- `npm run test:systems`
+- `npm run check:structure`
+- `npm run build`
+- `npm run check:annotations`
+- `npm run check:workflow`
+- `git diff --check`
+- 内置浏览器 940×590 P1/P2 与操作层，console warning/error 为 0
+
+### TASK-SETTINGS-166A 背包动态 UI 子资源归档
+
+变更内容：
+
+- 从单一恢复源包 `assets/backpack1.swf` 选择性导出 358/610 操作条、action 状态、等级数字、30 帧经验、出售白装和时装开关，61 张透明 PNG 进入正式 inventory native 目录。
+- `InventoryUiAssets` 登记 character/frame/state provenance，背包 bundle 增加 61 个唯一 key；新增尺寸、RGBA alpha、状态完整性和禁止整页裁片门禁。
+- 补齐 358/610 child/depth/矩阵、MovieClip 非 hover/pressed 反证、数字字形与运行时 TextField 裁决；棋盘格联系表确认代表性源帧/入库 PNG 零像素差。
+- 实际保持 2 工作包、2 验收批次、0 compact，未修改 `FormalInventoryPageView`、库存事务、owner/V6 或第二消费者。
+- 166A 归档，`TASK-SLICE-166B` 成为唯一 Ready；本次 `/goal` 不进入页面实现。
+
+验证：
+
+- `npm run test:inventory-dynamic-ui`
+- `npm run test:asset-bundles`
+- `npm run check:annotations`
+- `npm run build`
+- `npm run check:workflow`
+- `git diff --check`
+
+### TASK-SLICE-165C 命中资源派生门禁并拆分
+
+变更内容：
+
+- 执行前窄查确认 165B 要求的 character 358/610、等级/经验及原生状态控件尚无现代派生物，命中 165C 自身的资源派生拆分条件；未进入页面实现或炼丹炉迁移。
+- `TASK-SLICE-165C` 改为零工作包/零验收批次的 Split 父任务；新增同线串行 `TASK-SETTINGS-166A` 资源前置与 `TASK-SLICE-166B` 单页面实现，166A 成为唯一 Ready。
+- 回写 PG-007/008/011 效果样本：不以现代可见层补缺，不把资源 provenance、组件试点和第二消费者塞入同一执行项。
+
+影响范围：
+
+- `docs/tasks/task-board.md`
+- `docs/tasks/task-definitions/TASK-SLICE-165C.md`
+- `docs/tasks/task-definitions/TASK-SETTINGS-166A.md`
+- `docs/tasks/task-definitions/TASK-SLICE-166B.md`
+- `docs/tasks/feature-lines.md`
+- `docs/tasks/feature-line-coverage/LINE-PRE-STAGE-2-3-COMPLETION.md`
+- `docs/reverse-engineering/evidence/TASK-SETTINGS-165B-backpack-review.md`
+- `docs/workflow/problems/PG-007-UI原生化缺少统一门禁.md`
+- `docs/workflow/problems/PG-008-Task缺少可执行规模门禁.md`
+- `docs/workflow/problems/PG-011-共享UI组件边界与迁移门禁缺失.md`
+- `docs/workflow/governance-log.md`
+
+验证：
+
+- `npm run check:workflow`
+- `git diff --check`
+
+## 2026-08-03
+
+### 集中项目讲解材料并更新 Harness 面试稿
+
+变更内容：
+
+- 建立集中项目讲解目录（现统一为 `面试/`），集中 Harness、游戏现代化、设计模式和逆向技术四份可直接用于面试、答辩或项目介绍的讲述材料，并增加统一入口与推荐讲述顺序。
+- 将原根目录面试稿、游戏面试稿，以及原架构/逆向目录中的两个专题讲稿迁入该目录；同步修正架构合同、任务定义、功能线覆盖和专题文档的引用。
+- 更新 Harness 主稿至 2026-08-03：移除过时的持久 Goal 三层模型，补充治理优先全局执行队列、Task 零 compact 预算、活跃/归档问题反馈机制、上下文读取治理和当前门禁规模。
+- 在 `document-map.md` 增加项目讲解层，明确讲述材料不替代任务台账、架构合同或逆向证据。
+
+影响范围：
+
+- `面试/`
+- `docs/architecture/src-boundaries.md`
+- `docs/tasks/task-definitions/TASK-ARCH-010A.md`
+- `docs/tasks/task-definitions/TASK-ARCH-010B.md`
+- `docs/tasks/feature-line-coverage/LINE-MONSTER-ARCH.md`
+- `docs/workflow/document-map.md`
+- `docs/workflow/governance-log.md`
+
+验证：
+
+- `npm run check:workflow`
+- `git diff --check`
+
+### PG-013 V2G 完成并移出全局执行队列
+
+变更内容：
+
+- 建立唯一纯 `MonsterRuntimeRegistrySystem` 与共享 Phaser bridge，Stage 1-2 怪物状态、AI、物理、战斗、死亡和视图映射不再由 GameplayBridge 私有持有。
+- Stage 1-2 Encounter 只提交 spawn 命令并消费 defeated 事件；五停点、双 Boss、`fbEnter`、奖励数值和既有视觉/帧顺序保持不变。
+- 架构门禁把 Stage 1-2 Monster owner 预算收缩为零，并增加正向委托与负向回填检查；后续消费者按 V2H..V2K 保持单 owner、单批次规模。
+- V2G 按合同从 `execution-queue.md` 移除；本次 `/goal` 不继续游戏 task。
+
+验证：
+
+- `npm run test:monster-runtime`
+- `npm run test:systems`
+- `npm run build`
+- `npm run check:structure`
+- `npm run check:workflow`
+- `git diff --check`
+- 940×590 Stage 1-2 首停点生成、Monster7 AI/攻击、失败流程与零 console 观察
+
+### TASK-SLICE-164 完成并恢复 PG-013 V2G
+
+变更内容：
+
+- Role5 龙魂剑 `hit18..20` 已恢复为共享 `ProjectileSystem` 中的移动剑气：速度±8、加速度±2.4、距离700、三段真资源、实际轨迹命中与逐目标去重均闭合。
+- 正式关卡复用 `HeroPartyRuntime`，TestScene调用同一生成函数；未新增Stage Scene/Gameplay owner，PG-013触发扫描为“边界未复发”。
+- `TASK-SLICE-164` 归档，`PG-013 V2G` 恢复为执行队列唯一Ready；治理项完成前不激活 `TASK-SLICE-159`。
+
+验证：
+
+- `npm run test:remote-normal-attacks`
+- `npm run test:hero-party-runtime`
+- `npm run test:systems`
+- `npm run build`
+- 940×590 Role5单/双人入口、龙魂剑与增强普攻对象、零console观察
+
+## 2026-08-02
+
+### 远程 J 修复抢占 PG-013 V2G
+
+变更内容：
+
+- 用户明确要求把远程 J 行为修复置于 `PG-013 V2G` 之前；V2G 从 `Ready` 暂退 `Planned`，既有 V2A..V2F 产物和未提交改动均保留。
+- 当前 Active 线新增并激活 `TASK-SLICE-163`，`TASK-SLICE-159` 暂回 `Planned`；复核发现 Role5 龙魂剑移动 projectile 命中163拆分触发，故新增同线164。163→164完成后先恢复V2G，治理队列清空后才回到本地存档旅程。
+- 用户运行反证使 Role2/远程 J 的行为关闭结论降级为待复核；真视觉闭合不能替代世界命中、方向、距离和命中生命周期验证。
+
+影响范围：
+
+- `docs/tasks/execution-queue.md`
+- `docs/tasks/task-board.md`
+- `docs/tasks/task-definitions/TASK-SLICE-159.md`
+- `docs/tasks/task-definitions/TASK-SLICE-163.md`
+- `docs/tasks/feature-lines.md`
+- `docs/tasks/feature-line-coverage/LINE-PRE-STAGE-2-3-COMPLETION.md`
+- `docs/workflow/problems/PG-013-关卡运行框架按关卡复制.md`
+
+验证：
+
+- `TASK-SLICE-163` 已完成Role2/Role4弓形固定world effect命中修复；没有新增Stage Scene/Gameplay owner，PG-013方案未复发。
+- `npm run test:remote-normal-attacks`
+- `npm run test:systems`
+- `npm run build`
+- `npm run check:structure`
+- `npm run check:workflow`
+- `git diff --check`
+- 940×590 Role2正式入口固定远程命中框/真Bullet与零console观察
+
+### PG-013 V2F HeroPartyRuntime Stage 1-1/TestScene 兼容面迁移
+
+变更内容：
+
+- 新增 `TestSceneHeroPartyRuntimeBridge`，复用共享 `HeroPartyRuntime` 作为 Stage 1-1 英雄移动、战斗、普攻、技能模型与共享视觉生命周期的唯一 owner；分阶段帧入口保持原 sandbox 调度顺序。
+- `TestScene` 删除私有 `playerViews` owner，改为兼容 getter 并只委托移动、战斗状态和普攻帧；`TestSceneSetup` 只创建 Phaser marker/label，不再创建英雄运行模型。
+- 怪物、Boss、掉落、宠物、纵向平台、技能扩展、sandbox 与 QA 兼容保持原边界；静态门禁把 TestScene Hero owner 预算归零，并激活 V2G 独立 Monster Stage 1-2 试点。
+
+影响范围：
+
+- `src/systems/HeroPartyRuntimeSystem.ts`
+- `src/scenes/HeroPartyRuntimeBridge.ts`
+- `src/scenes/TestScene.ts`
+- `src/scenes/test-scene/TestSceneHeroPartyRuntimeBridge.ts`
+- `src/scenes/test-scene/TestSceneSetup.ts`
+- `src/scenes/test-scene/TestSceneStage11RuntimeAdapter.ts`
+- `tools/hero-party-runtime-tests.ts`
+- `tools/check-playable-level-architecture.mjs`
+- `docs/architecture/playable-level-runtime.md`
+- `docs/tasks/execution-queue.md`
+- `docs/workflow/problem-governance.md`
+- `docs/workflow/problems/PG-013-关卡运行框架按关卡复制.md`
+
+验证：
+
+- `npm run test:hero-party-runtime`
+- `npm run test:systems`
+- `npm run build`
+- `npm run check:all`
+- 940×590 Stage 1-1 Role1 单人、Role1+Role2 双人运行验收，console 零 warning/error
+- `git diff --check`
+
+### PG-013 V2E HeroPartyRuntime Stage 2-2 正式与 DEV 迁移
+
+变更内容：
+
+- Stage 2-2 正式删除私有 `PlayerRuntime`、movement/combat runtime、英雄 update/resolve、技能事件订阅与普攻视觉生命周期；DEV 同批删除 `DevPlayer` 与直接移动调度，统一消费共享 `HeroPartyRuntime`。
+- 正式与 DEV 只提交输入、平台/边界和火焰环境命中；Monster9/10/19、Monster16、怪物 Map/AI/物理/奖励、54 配置敌人、Boss 阶段、火焰视图/真像素采样与 DEV showcase 保持不变。
+- `check:level-architecture` 将 Stage 2-2 正式与 DEV Hero owner token 预算归零，并把正向委托/负向回填检查扩展到全部四个横向正式关卡及 Stage 2-2 DEV；PG-013 下一批切换为 V2F Stage 1-1/TestScene。
+
+影响范围：
+
+- `src/scenes/stage22/Stage22GameplayBridge.ts`
+- `src/scenes/stage22/Stage22DevGameplayBridge.ts`
+- `tools/check-playable-level-architecture.mjs`
+- `tools/hero-combat-visual-coordinate-tests.ts`
+- `tools/stage22-tests.ts`
+- `docs/architecture/playable-level-runtime.md`
+- `docs/tasks/execution-queue.md`
+- `docs/workflow/problem-governance.md`
+- `docs/workflow/problems/PG-003-关卡角色移动接入边界不统一.md`
+- `docs/workflow/problems/PG-006-怪物物理与死亡奖励按关卡漂移.md`
+- `docs/workflow/problems/PG-013-关卡运行框架按关卡复制.md`
+
+验证：
+
+- `npm run test:hero-party-runtime`、`npm run test:stage22`
+- `npm run test:systems`
+- `npm run build`
+- `npm run check:all`
+- 940×590 Stage 2-2 正式 1P/2P 与 DEV 1P/2P 火焰运行验收、console 零 warning/error
+- `git diff --check`
+
+### PG-013 V2D HeroPartyRuntime Stage 2-1 迁移
+
+变更内容：
+
+- Stage 2-1 删除私有 `PlayerRuntime`、movement/combat runtime、英雄 update/resolve、技能事件订阅与普攻视觉生命周期，改为消费共享 `HeroPartyRuntime`。
+- GameplayBridge 只提交输入、平台/边界、冰刺环境命中和怪物目标；Monster6、怪物 Map/AI/物理/奖励、五停点、冰刺视图与显式 QA 保持不变。
+- 共享 Runtime 新增窄环境命中入口，纯系统专项覆盖伤害、击退边界与 `movement-trap` 死亡。
+- `check:level-architecture` 将 Stage 2-1 Hero owner token 预算归零，并把正向委托/负向回填检查扩展到 Stage 1-2/1-3/2-1；PG-013 下一批切换为 V2E Stage 2-2 正式与 DEV。
+
+影响范围：
+
+- `src/systems/HeroPartyRuntimeSystem.ts`
+- `src/scenes/HeroPartyRuntimeBridge.ts`
+- `src/scenes/stage21/Stage21GameplayBridge.ts`
+- `tools/hero-party-runtime-tests.ts`
+- `tools/check-playable-level-architecture.mjs`
+- `tools/hero-combat-visual-coordinate-tests.ts`
+- `tools/formal-skill-tests.ts`
+- `docs/architecture/playable-level-runtime.md`
+- `docs/tasks/execution-queue.md`
+- `docs/workflow/problem-governance.md`
+- `docs/workflow/problems/PG-013-关卡运行框架按关卡复制.md`
+
+验证：
+
+- `npm run test:hero-party-runtime`、`npm run test:stage21`
+- `npm run test:systems`
+- `npm run build`
+- `npm run check:all`
+- 940×590 Stage 2-1 正式 1P/2P 与显式 QA 运行验收、console 零 warning/error
+- `git diff --check`
+
+### PG-013 V2C HeroPartyRuntime Stage 1-3 迁移
+
+变更内容：
+
+- Stage 1-3 删除私有 `PlayerRuntime`、movement/combat runtime、英雄 update/resolve、技能事件订阅与普攻视觉生命周期，改为消费共享 `HeroPartyRuntime`。
+- GameplayBridge 只提交输入、平台/边界和怪物目标；Monster5、怪物 Map/AI/物理/奖励、五停点、6/8 同屏上限与普通门流程保持不变。
+- `check:level-architecture` 将 Stage 1-3 Hero owner token 预算归零，并把正向委托/负向回填检查扩展到 Stage 1-2/1-3。
+- 旧技能与攻击视觉测试改为验证共享 Runtime 是唯一 owner；PG-013 下一执行批次切换为 V2D Stage 2-1，不进入 Monster owner 或游戏 `TASK-SLICE-159`。
+
+影响范围：
+
+- `src/scenes/stage13/Stage13GameplayBridge.ts`
+- `tools/check-playable-level-architecture.mjs`
+- `tools/formal-skill-tests.ts`
+- `tools/hero-combat-visual-coordinate-tests.ts`
+- `docs/architecture/playable-level-runtime.md`
+- `docs/tasks/execution-queue.md`
+- `docs/workflow/problem-governance.md`
+- `docs/workflow/problems/PG-003/004/006/008/012/013`
+
+验证：
+
+- `npm run test:hero-party-runtime` 与 Stage 1-3 flow/traversal/resource/monster-visual 专项
+- `npm run test:systems`
+- `npm run build`
+- `npm run check:all`
+- 940×590 Stage 1-3 正式 1P/2P 进入、移动/普攻对象与零 console
+
+### PG-013 V2B HeroPartyRuntime Stage 1-2 试点
+
+变更内容：
+
+- 新增关卡无关 `HeroPartyRuntimeSystem` 与 Phaser `HeroPartyRuntimeBridge`，统一持有活动英雄移动、战斗、普攻、技能状态、本体/攻击对象视觉更新和幂等销毁。
+- Stage 1-2 删除私有 `PlayerRuntime`、movement runtime、英雄 update/resolve 与普攻视觉生命周期；GameplayBridge 只提交输入、平台/边界和怪物目标，怪物 Map/AI/物理/奖励、五停点、双 Boss 与 `fbEnter` 保持不变。
+- 保留旧帧顺序并以显式兼容 facade 接续尚未迁移的 Monster owner；纯系统专项覆盖单/双成员、移动、技能 loadout、敌我攻击与重复销毁。
+- `check:level-architecture` 将 Stage 1-2 Hero owner token 预算归零，要求显式委托 HeroPartyRuntime；旧视觉测试改为验证共享 Runtime 唯一创建/更新/销毁普攻对象。
+- 依据试点规模把其余 Hero 消费者拆为 V2C Stage 1-3、V2D Stage 2-1、V2E Stage 2-2 正式+DEV、V2F Stage 1-1/TestScene；下一次 `/goal` 只执行 V2C，不进入 Monster owner 或游戏 `TASK-SLICE-159`。
+
+影响范围：
+
+- `src/systems/HeroPartyRuntimeSystem.ts`
+- `src/scenes/HeroPartyRuntimeBridge.ts`
+- `src/scenes/stage12/Stage12GameplayBridge.ts`
+- `tools/hero-party-runtime-tests.ts`
+- `tools/check-playable-level-architecture.mjs`
+- `tools/hero-combat-visual-coordinate-tests.ts`
+- `docs/architecture/playable-level-runtime.md`
+- `docs/tasks/execution-queue.md`
+- `docs/workflow/problem-governance.md`
+- `docs/workflow/problems/PG-003/004/006/008/012/013`
+
+验证：
+
+- `npm run test:hero-party-runtime`
+- `npm run test:stage12-flow`、`npm run test:stage12-traversal`、`npm run test:stage12-fb`
+- `npm run test:systems`
+- `npm run build`
+- `npm run check:all`
+- 940×590 Stage 1-2 正式 1P/2P 进入、P1 移动/普攻对象、P2 独立移动与零 console；P2 普攻由双成员纯 Runtime 专项补齐
+- `git diff --check`
+
+### PG-013 V2A 实体运行时边界复盘与合同冻结
+
+变更内容：
+
+- 用户再次指出人物动作和怪物运行不应由关卡承载；四个 GameplayBridge 的静态审计确认它们仍分别拥有玩家 combat model、怪物 Map、实体 update/resolve、物理、奖励与视觉帧循环。
+- 将 PG-013 从“效果观察中”退回“复盘中”，保留 V1 已统一的 Scene/门/结果/保存/路由，新增 V2 的 `HeroPartyRuntime` / `MonsterRuntimeRegistry` 目标边界。
+- `playable-level-runtime.md` 新增 `HeroPartyRuntime` / `MonsterRuntimeRegistry` 接口、五关逐 owner 消费者矩阵、环境快照/spawn 命令/实体事件边界和单-owner迁移顺序；V1 的 Scene/门/结果/保存/路由成果继续保留。
+- `check:level-architecture` 冻结四个正式 GameplayBridge、Stage 2-2 DEV 移动调度与 TestScene 的实体 owner token 预算，并以负向自测禁止新关卡/adapter 回填同义 runtime、实体 Map 或直接 update/resolve。
+- 统一语言和 `src-boundaries.md` 补充 Hero/Monster runtime owner；未来 `LINE-MONSTER-ARCH` 只处理 Definition/Brain 与既有 Registry 集成，不再建立第二套生命周期 owner。
+- V2A 完成后，全局执行队列只激活 V2B：建立 `HeroPartyRuntime` 并迁移 Stage 1-2；本轮不改玩法实现，也不继续 `TASK-SLICE-159`。
+
+影响范围：
+
+- `docs/tasks/execution-queue.md`
+- `docs/architecture/playable-level-runtime.md`
+- `docs/architecture/src-boundaries.md`
+- `docs/domain/glossary.md`
+- `docs/workflow/problem-governance.md`
+- `docs/workflow/problems/PG-002-功能条线提前关闭.md`
+- `docs/workflow/problems/PG-003-关卡角色移动接入边界不统一.md`
+- `docs/workflow/problems/PG-004-问题治理缺少效果反馈闭环.md`
+- `docs/workflow/problems/PG-009-启动资源加载边界缺失.md`
+- `docs/workflow/problems/PG-013-关卡运行框架按关卡复制.md`
+- `docs/workflow/governance-log.md`
+- `docs/tasks/task-board.md`
+- `docs/tasks/task-definitions/TASK-ARCH-010B.md`
+- `docs/tasks/feature-line-coverage/LINE-MONSTER-ARCH.md`
+- `tools/check-playable-level-architecture.mjs`
+
+验证：
+
+- `npm run check:workflow`
+- `git diff --check`
+
+### TASK-SETTINGS-069C 增量治理反馈
+
+变更内容：
+- 按活跃问题索引扫描 Role3 战斗视觉逆向任务，并向 PG-005/007/008/009 写入通过样本。
+- 样本证明六段证据、UI 显示列表、任务规模和唯一资源 owner 门禁在 BaJie 两个同字节恢复包上继续有效；没有修改治理规则或执行队列。
+
+验证：
+- `npm run check:annotations`、`npm run check:workflow` 与 `git diff --check`。
+
+本文记录 AI 工作流、任务体系和文档脚手架的维护历史。它不是游戏任务看板。
+
+## 2026-08-01
+
+### PG-015 通过真实空队列回退并归档
+
+变更内容：
+
+- 治理队列为空后的真实 `/goal` 正常回退游戏唯一 Ready `TASK-SLICE-158B`；其 compact 拆分后续又正常选择唯一 Ready `TASK-SLICE-162`，没有污染游戏功能线或产生第二个 Ready owner。
+- PG-015 的真实治理抢占、真实空队列回退、自动正负门禁和七入口路由均满足关闭标准，状态转为已归档并移入问题归档索引。
+- 本次游戏 task 收尾扫描同步命中 PG-002/004/005/007/008/009；PG-009 捕获并修复 Role2 PNG HUD 头像误走 SVG loader 的真实复发样本。
+
+影响范围：
+
+- `docs/workflow/problem-governance.md`
+- `docs/workflow/problems/PG-002/004/005/007/008/009/015`
+- `docs/workflow/governance-log.md`
+
+验证：
+
+- `npm run check:workflow`
+- `git diff --check`
+
+### PG-015 通过真实 `/goal` 抢占验收
+
+变更内容：
+
+- 在治理 `PG-015` 与游戏 `TASK-SLICE-158B` 同时 Ready 的真实状态下，本次 `/goal` 只执行 PG-015 验收，没有读取或实现游戏 task。
+- 验收通过后将 PG-015 从 `execution-queue.md` 移除，问题状态转为“已关闭待归档”；同一次 `/goal` 到此停止。
+- 收尾扫描命中 PG-004/008/015，分别回写反馈闭环、单执行项边界和真实抢占样本；PG-015 仍待下一次真实 `/goal` 的空队列回退样本，暂不归档。
+
+影响范围：
+
+- `docs/tasks/execution-queue.md`
+- `docs/workflow/problem-governance.md`
+- `docs/workflow/problems/PG-004-问题治理缺少效果反馈闭环.md`
+- `docs/workflow/problems/PG-008-Task缺少可执行规模门禁.md`
+- `docs/workflow/problems/PG-015-全局治理任务无法抢占游戏调度.md`
+- `docs/workflow/governance-log.md`
+
+验证：
+
+- `node --check tools/validate-workflow.mjs`
+- `npm run check:workflow`
+- `git diff --check`
+
+### 建立全局执行队列并登记 PG-015
+
+变更内容：
+
+- 用户执行 `/goal` 后仍进入 Role2 逆向，证明此前的问题索引/看板说明没有改变结构化调度；将其登记为独立的 `PG-015 全局治理任务无法抢占游戏调度`，不重开已完成读取路由整改的 PG-014。
+- 新增 `docs/tasks/execution-queue.md` 作为 `/goal` 第一调度入口：治理 Ready/Blocked 抢占游戏 Ready；队列无可执行项时才回退 Active 功能线与游戏看板。
+- Agent/Claude、战略导航、根/工作流 README、文档地图、游戏看板、任务生成规范和执行协议统一接入治理优先、完成即停止、显式重排先持久化的语义。
+- `tools/validate-workflow.mjs` 新增队列解析、PG 活跃/合同链接、优先级/状态/唯一可执行项门禁，以及一个治理抢占正向样例和七类负向样例；真实状态报告 PG-015 为全局执行项，同时保留 `TASK-SLICE-158B` 为游戏 Ready。
+- 收尾扫描命中 PG-004/008/015，分别回写问题反馈、新调度工作包边界和静态方案样本；PG-015 在下一次真实 `/goal` 抢占前保持活跃。
+
+影响范围：
+
+- `AGENTS.md`、`CLAUDE.md`、`TASK_OUTLINE.md`、`README.md`
+- `docs/tasks/execution-queue.md`、`docs/tasks/task-board.md`
+- `docs/workflow/README.md`、`docs/workflow/document-map.md`、`docs/workflow/agent-protocol.md`
+- `docs/workflow/task-generation.md`
+- `docs/workflow/problem-governance.md`、`docs/workflow/problems/PG-004-问题治理缺少效果反馈闭环.md`、`docs/workflow/problems/PG-008-Task缺少可执行规模门禁.md`、`docs/workflow/problems/PG-015-全局治理任务无法抢占游戏调度.md`
+- `tools/validate-workflow.mjs`
+
+验证：
+
+- `npm run check:structure`
+- `node --check tools/validate-workflow.mjs`
+- `npm run check:workflow`
+- `git diff --check`
+
+### 闭合并归档 PG-014 上下文读取路由治理
+
+变更内容：
+
+- 将 Agent/Claude、战略导航、根/工作流 README、文档地图和执行协议统一为“先判定任务类型；客户端注入的 `AGENTS.md` 视为已读；`TASK_OUTLINE.md` 仅供正式游戏 task、`/goal`、任务生成/重排和路线判断”。
+- 明确读取质量按无关输出、重复输出和大型全文聚合衡量，不以命令次数为目标；补充未变化文件不重复全文、compact/证据复核时窄读，以及 TypeScript LSP 优先、`rg` 降级且仍需精读实现的规则。
+- 在 `tools/validate-workflow.mjs` 增加读取路由合同和五类负向样例；完成轻量、TypeScript LSP、正式 `/goal` 三类真实样本。
+- PG-014 满足关闭标准并移入归档索引；从游戏 task-board 移除临时全局前置，唯一 Ready 仍为 `TASK-SETTINGS-069B`。
+
+影响范围：
+
+- `AGENTS.md`、`CLAUDE.md`、`TASK_OUTLINE.md`、`README.md`
+- `docs/workflow/README.md`、`docs/workflow/document-map.md`、`docs/workflow/agent-protocol.md`
+- `docs/workflow/problem-governance.md`、`docs/workflow/problems/PG-004-问题治理缺少效果反馈闭环.md`、`docs/workflow/problems/PG-008-Task缺少可执行规模门禁.md`、`docs/workflow/problems/PG-014-Agent上下文读取路由重复与过量.md`
+- `docs/tasks/task-board.md`
+- `tools/validate-workflow.mjs`
+
+验证：
+
+- `node --check tools/validate-workflow.mjs`
+- `npm run check:workflow`
+- `git diff --check`
+
+### 建立问题出清归档与换案复盘机制
+
+变更内容：
+
+- 将问题治理状态机补齐为待治理、治理中、效果观察中、复盘中、已关闭待归档和已归档，允许独立问题保留同阶段细分说明。
+- 建立证据驱动的出清门禁：关闭标准、可定位证据、持久防线、必要增量样本和精确重开信号齐备后转归档。
+- 将问题索引拆为“活跃问题索引”和“问题归档索引”；日常收尾只扫活跃索引，归档项只在用户/reviewer 报告复发、门禁/回归失败、新设计推翻旧决策或直接引用 PG id 时定向唤回。
+- 新增方案复盘流程：“复发/方案不充分”必须转“复盘中”，保留原方案版本，重建事实，比较补强与替换方案，并为新版本重建验证合同。
+- 将已关闭且具备迁移、唯一 owner、静态门禁、系统回归和多个后续样本的 PG-010 转为首个“已归档”样本，保留原文档路径与全部历史证据。
+- 更新 Agent/Claude 入口、执行协议、工作流 README、文档地图和自动校验，防止归档问题回流日常扫描。收尾扫描命中 PG-004/008/014，分别回写反馈机制、扫描规模和上下文子路由样本。
+
+影响范围：
+
+- `AGENTS.md`、`CLAUDE.md`
+- `docs/workflow/problem-governance.md`
+- `docs/workflow/problems/PG-004-问题治理缺少效果反馈闭环.md`
+- `docs/workflow/problems/PG-008-Task缺少可执行规模门禁.md`
+- `docs/workflow/problems/PG-010-灵魂货币所有权错误.md`
+- `docs/workflow/problems/PG-014-Agent上下文读取路由重复与过量.md`
+- `docs/workflow/agent-protocol.md`
+- `docs/workflow/README.md`
+- `docs/workflow/document-map.md`
+- `docs/workflow/governance-log.md`
+- `tools/validate-workflow.mjs`
+
+验证：
+
+- `node --check tools/validate-workflow.mjs`
+- `npm run check:workflow`
+- `git diff --check`
+
+### 登记 PG-014 并前置上下文读取路由治理
+
+变更内容：
+
+- 将用户观察到的重复 `Get-Content`、已注入 `AGENTS.md` 后再次全文读取、轻量请求无条件读取 `TASK_OUTLINE.md` 登记为 `PG-014`，状态为“已确认，待治理”。
+- `PG-014` 写入完整七段治理合同，方案覆盖先分类后读取、自动注入不重读、输出相关性与重复读取纪律、TypeScript LSP 优先/`rg` 降级、自动门禁和三类真实效果样本。
+- 在问题索引最前列将 `PG-014` 标为当前优先治理项；用户复核指出这没有改变实际查看的任务顺序后，又在 `task-board.md` 游戏任务表格之前增加“全局执行前置治理”及五项清单。它不作为游戏 task/表格行，不改变当前功能线或唯一 Ready task，但整改完成前不开始 `TASK-SETTINGS-069B`。
+- 收尾扫描命中 `PG-004`、`PG-008` 与新建 `PG-014`，分别回写问题反馈闭环、上下文规模边界和初始登记样本；其余问题未命中本次纯工作流登记。
+
+影响范围：
+
+- `docs/workflow/problem-governance.md`
+- `docs/tasks/task-board.md`
+- `docs/workflow/problems/PG-004-问题治理缺少效果反馈闭环.md`
+- `docs/workflow/problems/PG-008-Task缺少可执行规模门禁.md`
+- `docs/workflow/problems/PG-014-Agent上下文读取路由重复与过量.md`
+- `docs/workflow/governance-log.md`
+
+验证：
+
+- `npm run check:workflow`
+- `git diff --check`
+
+### Stage 2 公共关卡 Runtime 迁移反馈
+
+变更内容：
+
+- `TASK-ARCH-016C` 将 Stage 2-1/2-2 接入既有 `PlayableLevelRuntime`、Definition 与 `TransferDoorView`，并从架构门禁移除两关 Scene 遗留例外。
+- `PG-013` 回写四个横向关卡已收敛、Stage 1-1/TestScene 仍待 016D 的治理样本；`PG-003` 回写 Stage 2 继续复用共享移动 runtime、未复发的适用样本。
+- 本次没有修改问题治理协议或工作流规则；功能线继续 Active，唯一 Ready 切换为 `TASK-ARCH-016D`。
+
+影响范围：
+
+- `docs/workflow/problems/PG-003-关卡角色移动接入边界不统一.md`
+- `docs/workflow/problems/PG-013-关卡运行框架按关卡复制.md`
+- 当前 task、功能线、覆盖、机制、切片与历史文档
+
+验证：
+
+- `npm run test:systems`、`npm run build`、`npm run check:structure`、`npm run check:workflow`、`git diff --check` 与 940×590 Stage 2 正式/QA 代表旅程。
+
+## 2026-07-31
+
+### 移除 Goal 持久化层并拆分 Task 定义
+
+变更内容：
+
+- 用户确认 Goal 与 Task 在“一 Goal 一 Task、同启同停”的现行规则下重复维护；保留 Task 为唯一执行实体，`/goal` 改为执行唯一 Ready task 的命令语义。
+- 删除 `docs/tasks/goal-board.md` 和 `GOAL-*` 的现行映射；功能线继续持有长期完整交付承诺，task 同时承担一次执行包、交接边界和最小验收。
+- 将 21 个未完成 task 的完整合同从 1497 行 `task-board.md` 无损迁移到 `docs/tasks/task-definitions/TASK-*.md`；看板只保留轻量状态索引和定义链接，正式执行只读取当前 task 文件。
+- 更新 Agent/Claude/总任务书、工作流 README/文档地图/执行协议/任务生成规范/代码质量门禁与 Claude subagent 路由。
+- 重写 `tools/validate-workflow.mjs`：继续强制唯一 Active 功能线、唯一 Ready/推荐 task、同线阻塞和规模预算，并新增轻量看板、独立定义存在性、孤儿/缺失/错链与旧 Goal 看板退役门禁。
+- 将 `PG-008` 重命名为“Task 缺少可执行规模门禁”，并向 PG-002/008 回写本次治理反馈；历史记录中的旧 `GOAL-*` id 保留为当时事实。
+
+影响范围：
+
+- `AGENTS.md`、`CLAUDE.md`、`TASK_OUTLINE.md`、`.claude/agents/`
+- `docs/tasks/task-board.md`、`docs/tasks/task-definitions/`、`docs/tasks/goal-board.md`
+- `docs/tasks/feature-lines.md`、当前/计划功能线覆盖台账、`vertical-slices.md`
+- `docs/workflow/` 入口、协议、门禁、问题索引与 PG-002/008
+- `tools/validate-workflow.mjs`
+
+验证：
+
+- 迁移前 `npm run check:workflow` 通过：21 个未完成 task/21 个定义、17 个 Goal、唯一推荐 `TASK-SLICE-157C`。
+- 迁移后运行 `node --check tools/validate-workflow.mjs`、`npm run check:workflow`、`git diff --check`，并核对 21 个索引行与 21 个独立定义一一对应。
+
+### 关卡运行框架复制问题登记
+
+变更内容：
+
+- 用户确认“关卡类化”应治理全部关卡共同职责，而非只抽取光门；现代五关 Scene/World/Gameplay 骨架重复、Stage 1-1 寄居 TestScene、资源 provenance 与行为 owner 混淆被登记为 `PG-013`。
+- 在当前前置体验补全线新增 Split 父任务 `TASK-ARCH-016`，拆成 `TASK-ARCH-016A..D` 的合同审计、横向试点、Stage 2 迁移和 1-1/TestScene 收束。
+- 严格保持 `TASK-SLICE-157C` 为唯一 Ready；新治理 task 全部为 Planned，不抢占当前 WIP。
+
+影响范围：
+
+- `docs/workflow/problem-governance.md`
+- `docs/workflow/problems/PG-013-关卡运行框架按关卡复制.md`
+- task/feature-line/coverage/mechanics/vertical-slice 文档
+
+验证：
+
+- `npm run check:workflow` 与 `git diff --check`。
+
+### Stage 1-2 怪物视觉 Goal 治理反馈
+
+变更内容：
+
+- `TASK-SLICE-157B / GOAL-061` 收尾扫描 PG-001—012，命中 PG-002/004/005/006/008/009/012；分别回写不提前关线、六段证据消费、共享物理/奖励边界、0 compact、唯一 bundle owner 与公共生命周期/结果 owner 未漂移样本。
+- 本次没有修改问题定义、治理方案或通用协议；各问题保持原状态。功能线继续 Active，只激活同线 `GOAL-062 / TASK-SLICE-157C`。
+
+影响范围：
+
+- `docs/workflow/problems/PG-002/004/005/006/008/009/012-*.md`
+- Goal/task/feature-line/coverage/mechanics/vertical-slice/history 文档
+
+验证：
+
+- `npm run check:workflow` 与 `git diff --check`。
+
+## 2026-07-30
+
+### 公共原版关卡结果页补治
+
+变更内容：
+
+- 用户复验发现 `TASK-ARCH-015` 只统一逻辑终态，Stage 1-1 与其余四关仍保留私有现代黑框结果页；该反馈命中 `PG-012`，说明首轮方案遗漏结果视图 owner。
+- `TASK-SLICE-161 / GOAL-065` 从 `OtherMat1.swf` character 330/313 恢复原版 `GameWin/GameFail`，建立唯一 `LevelResultView` 并迁移五关，删除四个私有 ResultBridge 与 Stage 1-1 黑框实现。
+- 新门禁同时约束后续关卡消费公共生命周期和公共结果 presenter；`PG-012` 继续效果观察，不因存量补治提前关闭。
+
+影响范围：
+
+- `docs/architecture/src-boundaries.md`
+- `docs/domain/glossary.md`
+- `docs/workflow/problems/PG-012-关卡结果协议按关卡漂移.md`
+- Goal/task/feature-line/coverage/mechanics/vertical-slice/history 文档
+
+验证：
+
+- 原版显示列表/资源/按钮专项、五关迁移门禁、全系统、build、structure、annotations、workflow、diff check 与 940×590 成功/失败页。
+
+### 通用关卡生命周期治理落地
+
+变更内容：
+
+- `TASK-ARCH-015 / GOAL-064` 将五关重复的通关、判负、解锁和结果终态收敛到公共 `LevelLifecycle`，并建立后续关卡默认消费与窄策略扩展门禁。
+- `PG-012` 从“已确认，待治理”进入“方案已落地，效果观察中”；关闭仍等待首个未来关卡接入样本，不以五关存量迁移提前宣告根治。
+- 归档本 Goal，并恢复同线 `GOAL-061 / TASK-SLICE-157B` 为唯一 Active 工作包。
+
+影响范围：
+
+- `docs/architecture/src-boundaries.md`
+- `docs/domain/glossary.md`
+- `docs/workflow/problem-governance.md`
+- `docs/workflow/problems/PG-012-关卡结果协议按关卡漂移.md`
+- Goal/task/feature-line/coverage/mechanics/vertical-slice/history 文档
+
+验证：
+
+- `npm run check:workflow` 与 `git diff --check`。
+
+## 2026-07-26
+
+### 任务页实现 Goal 归档与治理样本回写
+
+变更内容：
+
+- `TASK-SLICE-155D / GOAL-048` 闭合任务页原生 UI、party 任务 owner、正式死亡 producer、奖励与跨日 V6，拆分父任务 `TASK-SLICE-155` 同步收束。
+- 按问题治理关闭扫描向 PG-005/007/008/009 回写六段证据消费、UI host 视觉纠偏、0 compact 规模样本和资源 bundle owner 样本；没有改变治理规则本身。
+- 唯一 Active 调度切到同线 `GOAL-038 / TASK-SETTINGS-067`，本次 `/goal` 不继续下一包。
+
+影响范围：
+
+- `docs/workflow/problems/PG-005-逆向证据链不完整却宣布闭合.md`
+- `docs/workflow/problems/PG-007-UI原生化缺少统一门禁.md`
+- `docs/workflow/problems/PG-008-Goal包缺少可执行规模门禁.md`
+- `docs/workflow/problems/PG-009-启动资源加载边界缺失.md`
+- `docs/workflow/governance-log.md`
+
+验证：
+
+- 运行 `npm run check:workflow` 与 `git diff --check`。
+
+## 2026-07-25
+
+### 登记共享 UI 组件化问题与分段任务
+
+变更内容：
+
+- 新增 `PG-011`，把商城灵魂余额黑框复发上升为共享 UI 组件 owner、页面保留项、资源 provenance、消费者迁移和防回填门禁缺失问题。
+- 新增 Planned `LINE-SHARED-UI-COMPONENTS`、Split 父任务 `TASK-ARCH-014`，并以 `GOAL-051..056 / TASK-ARCH-014A..F` 分别治理审计合同、灵魂余额、原生按钮/关闭、背包基础、正式背包试点和嵌入式消费者迁移。
+- `task-generation.md` 新增强制 `组件化合同`；`validate-workflow.mjs` 对组件化 task 执行七项固定文本及逐字段正/负样例校验。
+- 当前唯一 Active 线/Goal/task 保持 `LINE-PRE-STAGE-2-3-COMPLETION / GOAL-047 / TASK-SLICE-155C`，组件化任务全部为 Planned，不抢占当前 WIP。
+
+影响范围：
+
+- `docs/workflow/problem-governance.md`
+- `docs/workflow/problems/PG-011-共享UI组件边界与迁移门禁缺失.md`
+- `docs/workflow/task-generation.md`
+- `tools/validate-workflow.mjs`
+- `docs/tasks/feature-lines.md`
+- `docs/tasks/feature-line-coverage/LINE-SHARED-UI-COMPONENTS.md`
+- `docs/tasks/goal-board.md`
+- `docs/tasks/task-board.md`
+- 适用 PG-002/004/007/008/009/010 的效果样本
+
+验证：
+
+- 运行 `npm run check:workflow` 与 `git diff --check`。
+
+### 丹药页证据 Goal 归档
+
+变更内容：
+
+- `TASK-SETTINGS-066A / GOAL-037` 闭合丹药页六段证据并归档，功能线不关闭。
+- 新增 11 条丹药深层资源标注，更新 PG-002/004/005/007/008 实际效果样本。
+- 本 Goal 在证据和资源派生完成后发生一次 compact；随后只做既有证据回写、归档和校验，按规则停止扩张。
+- `GOAL-042 / TASK-SETTINGS-066B` 成为唯一 Active Goal / Ready task；本次不继续商城。
+
+验证：
+
+- `npm run check:annotations`、`npm run check:workflow` 与 `git diff --check` 在收尾运行。
+
+### 地图四服务页首次 compact 拆分检查点
+
+变更内容：
+
+- `TASK-SETTINGS-066` 在确认跨三恢复源包、四事务 owner 后触发既定拆分条件；父任务保持 `Split`。
+- 新增 `TASK-SETTINGS-066A..D / GOAL-037,042..044` 四个逐页证据包，以及 `TASK-SLICE-155A..D / GOAL-045..048` 四个逐页实现包。
+- 首次 compact 后停止读取新资料族、继续派生资源或进入实现，只回写公共证据、资源标注、任务调度和 PG-002/004/005/007/008 效果样本。
+
+影响范围：
+
+- `docs/tasks/goal-board.md`
+- `docs/tasks/task-board.md`
+- `docs/tasks/feature-lines.md`
+- `docs/tasks/feature-line-coverage/LINE-PRE-STAGE-2-3-COMPLETION.md`
+- `docs/reverse-engineering/map-service-ui-index.md`
+- `docs/workflow/problems/PG-002-功能条线提前关闭.md`
+- `docs/workflow/problems/PG-004-问题治理缺少效果反馈闭环.md`
+- `docs/workflow/problems/PG-005-逆向证据链不完整却宣布闭合.md`
+- `docs/workflow/problems/PG-007-UI原生化缺少统一门禁.md`
+- `docs/workflow/problems/PG-008-Goal包缺少可执行规模门禁.md`
+
+验证：
+
+- `npm run check:annotations` 通过，共 475 条标注。
+- `npm run check:workflow` 与 `git diff --check` 在文档字段修正后复跑。
+- 下一 Goal 只执行 `TASK-SETTINGS-066A`，不跨到商城、设置、任务或现代实现。
+
+## 2026-07-24
+
+### 登记灵魂货币所有权问题与 V6 迁移任务
+
+变更内容：
+
+- 新增 `PG-010`，确认 `player*.skillLearning.soulCount` 把玩家通用货币错误归属给技能学习子系统。
+- 重开 `LINE-FORMAL-GAME-LOOP`，新增连续的 `GOAL-035 / TASK-ARCH-013A` 与 `GOAL-036 / TASK-ARCH-013B`；Stage 2-3 暂回 Planned。
+- 第一次 compact 后只登记问题、拆分工作包和写入安全交接，没有新增实现。
+
+影响范围：
+
+- `docs/workflow/problem-governance.md`
+- `docs/workflow/problems/PG-010-灵魂货币所有权错误.md`
+- `docs/tasks/feature-lines.md`
+- `docs/tasks/feature-line-coverage/LINE-FORMAL-GAME-LOOP.md`
+- `docs/tasks/goal-board.md`
+- `docs/tasks/task-board.md`
+- `docs/workflow/governance-log.md`
+
+验证：
+
+- 待本次安全交接完成后运行 `npm run check:workflow` 与 `git diff --check`。
+- 下一 Goal 只执行玩家级所有权与 V6 迁移，不进入浏览器全旅程；跨功能闭环由再下一 Goal 独立验收。
+
+### 登记启动资源加载问题与场景分包任务
+
+变更内容：
+
+- 新增 `PG-009`，把 Boot 全量预加载、场景 bundle owner 缺失、失败/重试边界和防回填测试缺口登记为结构性问题。
+- 新增同线 Planned `GOAL-033` / `TASK-ARCH-012`，排在 `TASK-SLICE-153` 后、Stage 2-3 前；当前唯一 Active Goal/Task 保持 `GOAL-031` / `TASK-SLICE-152`。
+- 新增 `VS-058`，并把 `M-035` 更新为整改中；正式主循环关闭合同增加启动壳层、按场景加载、冷刷新性能和 DEV/QA 直达验证。
+- 明确治理不更换 Phaser/TypeScript/Vite，不在同一 Goal 混入图片转码、atlas 重做或纹理淘汰。
+
+影响范围：
+
+- `docs/workflow/problem-governance.md`
+- `docs/workflow/problems/PG-002-功能线唯一活跃项与切换规则.md`
+- `docs/workflow/problems/PG-004-问题治理触发与反馈闭环.md`
+- `docs/workflow/problems/PG-007-UI原生化验收合同缺失.md`
+- `docs/workflow/problems/PG-008-任务规模与Goal上下文预算失控.md`
+- `docs/workflow/problems/PG-009-启动资源加载边界缺失.md`
+- `docs/tasks/goal-board.md`
+- `docs/tasks/task-board.md`
+- `docs/tasks/feature-lines.md`
+- `docs/tasks/feature-line-coverage/LINE-FORMAL-GAME-LOOP.md`
+- `docs/reverse-engineering/mechanics-index.md`
+- `docs/tasks/vertical-slices.md`
+- `docs/workflow/governance-log.md`
+
+验证：
+
+- 收尾扫描命中 `PG-002/004/007/008/009`，已分别回写不抢占 Active、治理七段式、UI 原生化合同、Goal 规模预算和初始治理样本。
+- `npm run check:workflow` 通过：6 个未完成 task/6 个完整定义、6 个 Goal、唯一 Active 为 `GOAL-031`，470 条资源注释校验通过。
+- `git diff --check` 通过。
+
+### 回写 GOAL-023 问题治理效果样本
+
+变更内容：
+
+- `TASK-SLICE-150C` 收尾扫描未关闭/观察中问题，并向 PG-002/004/005/006/008 回写不提前关线、六段证据双重验证、共享怪物奖励 owner 和两个主工作包/0 compact 样本。
+- `GOAL-023` 完成后从执行看板移除，只激活同线 `GOAL-024` / `TASK-SLICE-150D`；`LINE-STAGE-2-2` 继续保持唯一 Active。
+- 本次只追加效果反馈，不改变治理问题状态、方案、关闭标准或工作流规则。
+
+相关文档：
+
+- `docs/workflow/problems/PG-002-功能条线提前关闭.md`
+- `docs/workflow/problems/PG-004-问题治理缺少效果反馈闭环.md`
+- `docs/workflow/problems/PG-005-逆向证据链不完整却宣布闭合.md`
+- `docs/workflow/problems/PG-006-怪物物理与死亡奖励按关卡漂移.md`
+- `docs/workflow/problems/PG-008-Goal包缺少可执行规模门禁.md`
+
+### 回写 GOAL-022 问题治理效果样本
+
+变更内容：
+
+- `TASK-SLICE-150B` 收尾按问题治理协议扫描未关闭/观察中问题，并向 PG-002/003/004/005/006/008 回写单线状态、共享移动/怪物 owner、六段证据消费、反馈执行与 0 compact 样本。
+- 本次只追加效果反馈，不改变治理问题状态、方案、关闭标准或工作流规则。
+
+影响范围：
+
+- `docs/workflow/problems/PG-002-功能条线提前关闭.md`
+- `docs/workflow/problems/PG-003-关卡角色移动接入边界不统一.md`
+- `docs/workflow/problems/PG-004-问题治理缺少效果反馈闭环.md`
+- `docs/workflow/problems/PG-005-逆向证据链不完整却宣布闭合.md`
+- `docs/workflow/problems/PG-006-怪物物理与死亡奖励按关卡漂移.md`
+- `docs/workflow/problems/PG-008-Goal包缺少可执行规模门禁.md`
+- `docs/workflow/governance-log.md`
+
+验证：
+
+- `npm run check:workflow` 通过；唯一 Active Goal 为 `GOAL-023`，唯一推荐 task 为 `TASK-SLICE-150C`。
+- 仅保留既有 `PlayerSlot` 禁止别名 warning。
+
+## 2026-07-23
+
+### 将 Goal 看板收敛为仅保存未完成项
+
+变更内容：
+
+- `goal-board.md` 移除 `GOAL-001..020` 的 `Done` 行和“最近完成 Goal”摘要；完成事实继续由绑定 task 的 `task-history.md` 承担。
+- Goal 总览移除冗余的“下一 Goal”列，只保留 `Active`、`Planned`、`Blocked` 未完成状态；当前未完成 `GOAL-021..024` 保持原调度状态。
+- Goal 完成流程改为从看板直接移除；功能线未关闭时再激活或生成同线后续 Goal，并停止当次 `/goal`。
+- 校验器拒绝 `Done` Goal 留在执行看板，并继续强制所有未完成 Goal 使用预计 0 次 compact 的规模预算。
+- PG-008 增加本次适用反馈，确认历史旧预算不再稀释当前 Goal 规模门禁信号。
+
+影响范围：
+
+- `AGENTS.md`
+- `TASK_OUTLINE.md`
+- `docs/tasks/goal-board.md`
+- `docs/workflow/README.md`
+- `docs/workflow/document-map.md`
+- `docs/workflow/agent-protocol.md`
+- `docs/workflow/task-generation.md`
+- `docs/workflow/code-quality-gates.md`
+- `docs/workflow/problems/PG-008-Goal包缺少可执行规模门禁.md`
+- `docs/workflow/governance-log.md`
+- `tools/validate-workflow.mjs`
+
+验证：
+
+- `node --check tools/validate-workflow.mjs` 通过。
+- `npm run check:workflow` 通过：5 个未完成 task / 5 个定义、4 个未完成 Goal、唯一 Active `GOAL-021`。
+- 仅保留既有 `PlayerSlot` 禁止别名 warning。
+
+### 建立 Goal 规模预算门禁并拆分 Stage 2-2 实现包
+
+变更内容：
+
+- 将用户指出的“Goal 形式单 task、实际包含过多工作包”登记为 `PG-008`；结论不是纯偶发，而是旧规则只限制 task 数和最多一次 compact、未限制 task 内部规模造成的可复发现象。
+- 新 Goal 改为预计 0 次上下文压缩；未完成 task 必须声明主工作包、预计 compact、独立验收批次和可执行拆分触发，工作包与验收批次均最多 2。
+- 第一次 compact 被定义为规模超限信号：只能收束当前检查、安全交接并拆分剩余范围，不再读取新资料族、派生资源或新增实现。
+- 校验器新增规模预算正/负样例，并拒绝新非 Done Goal 继续使用历史“最多 1 次”预算。
+- 原 `TASK-SLICE-150` 在实现前拆为 `150A..150D`，由 `GOAL-021..024` 依次关闭场景/机关、普通波次、Boss/结果和全程运行校准；功能线保持唯一 Active。
+
+影响范围：
+
+- `AGENTS.md`
+- `CLAUDE.md`
+- `.claude/agents/workflow-steward.md`
+- `docs/workflow/README.md`
+- `docs/workflow/document-map.md`
+- `docs/workflow/agent-protocol.md`
+- `docs/workflow/task-generation.md`
+- `docs/workflow/code-quality-gates.md`
+- `docs/workflow/review-protocol.md`
+- `docs/workflow/problem-governance.md`
+- `docs/workflow/problems/PG-002-功能条线提前关闭.md`
+- `docs/workflow/problems/PG-004-问题治理缺少效果反馈闭环.md`
+- `docs/workflow/problems/PG-008-Goal包缺少可执行规模门禁.md`
+- `docs/tasks/goal-board.md`
+- `docs/tasks/task-board.md`
+- `docs/tasks/feature-lines.md`
+- `docs/tasks/feature-line-coverage/LINE-STAGE-2-2.md`
+- `docs/tasks/vertical-slices.md`
+- `docs/tasks/task-history.md`
+- `tools/validate-workflow.mjs`
+
+验证：
+
+- `node --check tools/validate-workflow.mjs` 通过。
+- `npm run check:workflow` 通过：5 个未完成 task / 5 个定义、24 个 Goal、唯一推荐 `TASK-SLICE-150A`、唯一 Active `GOAL-021`。
+- 规模预算正样例通过；缺少字段、主工作包超限、预计 compact 非 0、独立验收批次超限四类负向样例均被拒绝。
+- 仅保留既有 `PlayerSlot` 禁止别名 warning。
+
+### 固化内置浏览器视觉验收入口
+
+变更内容：
+
+- 将 Vite 生产预览固定为 `0.0.0.0:4174` 并启用 `strictPort`，避免隔离的内置浏览器无法访问 loopback-only 监听，也避免端口被占用时静默漂移。
+- 保留 `npm run dev` 的 loopback-only 默认值；自动视觉验收统一使用构建后的 `npm run preview`，不扩大开发服务器暴露面。
+- 将用户对该项目级监听的长期授权写入 Agent、Claude 和质量门禁入口；预览服务允许跨验收保持运行，只有端口冲突、用户要求或确有必要时才停止。
+- 在 README 明示局域网可访问构建产物的边界。
+
+影响范围：
+
+- `vite.config.ts`
+- `package.json`
+- `AGENTS.md`
+- `CLAUDE.md`
+- `README.md`
+- `docs/workflow/README.md`
+- `docs/workflow/agent-protocol.md`
+- `docs/workflow/code-quality-gates.md`
+- `docs/workflow/governance-log.md`
+
+验证：
+
+- `npm run check:workflow` 通过，仅保留既有 `PlayerSlot` 禁止别名 warning。
+- `npm run build` 通过，仅保留既有大 chunk warning。
+- 主机侧确认 `0.0.0.0:4174` 正在监听且 HTTP 返回 `200`；内置浏览器成功打开 `http://127.0.0.1:4174/`，识别到标题“再续天庭 现代化”和单个 Phaser canvas，console 无 warning/error。
+- 预览服务按用户授权保持运行。
+
+### 落地 UI 显示列表与原版视觉基准治理门禁
+
+变更内容：
+
+- 将既有 `PG-007 UI 原生化缺少统一门禁` 从“已确认，待治理”推进为“规则已落地，运行观察中”，不重复创建新问题编号。
+- 复核工坊后撤销“无矩形/通用按钮即可视为原生化参考样本”的错误结论；明确扁平真背景、透明命中、业务测试和零 console error 都不能证明视觉复原。
+- `reverse-engineering-protocol.md` 新增 UI 显示列表分支，强制 root/child/depth、嵌套矩阵、mask/filter、TextField、按钮状态、动态 child、原版视觉基准和逐状态差异证据。
+- `task-generation.md` 新增固定 `UI 原生化合同` 字段；现有技能证据/实现 task 已补齐显示列表、原版基准、现代例外、逐状态验收和差异证据。
+- `code-quality-gates.md`、`review-protocol.md`、`AGENTS.md`、工作流入口和三个专业 agent 同步接入门禁。
+- `validate-workflow.mjs` 自动发现未完成 UI task，拒绝缺少任一合同字段的定义；内置六个 UI 合同负向样例，并扩展逆向协议负向样例。
+
+影响范围：
+
+- `AGENTS.md`
+- `.claude/agents/reverse-engineering-researcher.md`
+- `.claude/agents/modern-implementation-engineer.md`
+- `.claude/agents/engineering-reviewer.md`
+- `docs/workflow/reverse-engineering-protocol.md`
+- `docs/workflow/task-generation.md`
+- `docs/workflow/code-quality-gates.md`
+- `docs/workflow/review-protocol.md`
+- `docs/workflow/README.md`
+- `docs/workflow/document-map.md`
+- `docs/workflow/problem-governance.md`
+- `docs/workflow/problems/PG-004-问题治理缺少效果反馈闭环.md`
+- `docs/workflow/problems/PG-005-逆向证据链不完整却宣布闭合.md`
+- `docs/workflow/problems/PG-007-UI原生化缺少统一门禁.md`
+- `docs/tasks/task-board.md`
+- `tools/validate-workflow.mjs`
+
+验证：
+
+- `npm run check:workflow` 通过；3 个未完成 task / 3 个定义、12 个 Goal、唯一 Active `GOAL-009` 保持一致。
+- UI 合同六个必填字段的正样例通过，逐字段删除的六个负向样例均被拒绝。
+- 逆向协议原有三类退化样例及新增 UI 门禁/原版视觉基准退化样例均被拒绝。
+- 仅保留既有 `PlayerSlot` 禁止别名 warning。
+
+### 登记技能页面 UI 原生化计划功能线
+
+变更内容：
+
+- 根据用户要求新增 Planned `LINE-UI-NATIVE-SKILLS`，覆盖技能总页 250、主动页 868、绑定页 417 和被动页 213。
+- 新增 `TASK-SETTINGS-061` / `GOAL-011` 先闭合原生文字、按钮状态、命中区和动态槽位证据；新增 `TASK-SLICE-143` / `GOAL-012` 再执行四页原生化实现。
+- 保留现有技能业务、P1/P2 owner、HUD 同步和 V4 存档，不把 UI 重做扩张成技能系统重写。
+- 当前 `LINE-STAGE-2-1` / `GOAL-009` 继续唯一 Active；技能线保持 Planned，等待用户单独批准调度。
+- 回写 PG-002/004/005/007 适用性样本，并将 `M-052` 降为部分复现、增加 `VS-055` 追踪新的视觉合同。
+
+影响范围：
+
+- `docs/tasks/feature-lines.md`、`goal-board.md`、`task-board.md`、`vertical-slices.md`
+- `docs/tasks/feature-line-coverage/LINE-UI-NATIVE-SKILLS.md`
+- `docs/reverse-engineering/full-function-ui-index.md`、`mechanics-index.md`
+- `docs/workflow/problems/PG-002-功能条线提前关闭.md`
+- `docs/workflow/problems/PG-004-问题治理缺少效果反馈闭环.md`
+- `docs/workflow/problems/PG-005-逆向证据链不完整却宣布闭合.md`
+- `docs/workflow/problems/PG-007-UI原生化缺少统一门禁.md`
+- `docs/workflow/governance-log.md`
+
+验证：
+
+- `npm run check:workflow` 与 `git diff --check` 在本条记录落盘后运行。
+
+### 登记 UI 原生化系统性问题
+
+变更内容：
+
+- 新增 `PG-007 UI 原生化缺少统一门禁`，把“原图中的文字/按钮直接承担视觉与交互，不在其上重造外层 UI”确立为统一问题定义。
+- 区分已完成页面的存量迁移和未实现页面的增量防复发，技能页作为下一候选整改样本，炼丹炉作为首个已验证参考。
+- 记录任务生成、逆向证据、代码质量、评审和工作流校验的拟治理落点；本次只登记问题，不修改游戏代码或当前 Stage 2-1 调度。
+- 明确 skill 不能代替仓库内门禁，待至少三个稳定样本后再评估跨项目抽取。
+- 回写 PG-002/004/005 适用性样本，记录既有真 UI 关闭合同不足、治理反馈执行和视觉证据门禁。
+
+影响范围：
+
+- `docs/workflow/problem-governance.md`
+- `docs/workflow/problems/PG-002-功能条线提前关闭.md`
+- `docs/workflow/problems/PG-004-问题治理缺少效果反馈闭环.md`
+- `docs/workflow/problems/PG-005-逆向证据链不完整却宣布闭合.md`
+- `docs/workflow/problems/PG-007-UI原生化缺少统一门禁.md`
+- `docs/workflow/governance-log.md`
+
+验证：
+
+- `npm run check:workflow` 与 `git diff --check` 在本条记录落盘后运行。
+
+### 根据用户验收重排炼丹炉原生按钮整改 Goal
+
+变更内容：
+
+- 将炼丹炉现代顶层导航与暗色覆盖层从“完整功能 UI 已覆盖”退回待整改，保留 `LINE-FORMAL-GAME-LOOP` 为唯一 Active。
+- 新增 `TASK-SETTINGS-060` / `GOAL-006`，先按六段证据链闭合左下侧“强化 / 合成 / 打造 / 分解”原生按钮的时间轴、几何、命中区、帧状态和切页调用链。
+- 新增 `TASK-SLICE-141` / `GOAL-007`，要求移除现代替代导航、直接复用原生位置和原生按钮；原端到端 `TASK-SLICE-140` 后移至 `GOAL-008`，Stage 2-1 后移至 `GOAL-009`。
+- 回写 PG-002/004/005：记录用户反馈触发覆盖退回、问题治理扫描和逆向证据门禁。
+
+影响范围：
+
+- `docs/tasks/feature-lines.md`、`goal-board.md`、`task-board.md`、`vertical-slices.md`
+- `docs/tasks/feature-line-coverage/LINE-FORMAL-GAME-LOOP.md`
+- `docs/reverse-engineering/mechanics-index.md`
+- `docs/workflow/problems/PG-002-功能条线提前关闭.md`、`PG-004-问题治理缺少效果反馈闭环.md`、`PG-005-逆向证据链不完整却宣布闭合.md`
+- `docs/workflow/governance-log.md`
+
+验证：
+
+- `npm run check:workflow` 与 `git diff --check` 在本条记录落盘后重跑。
+
+## 2026-07-22
+
+### 新增 Goal 包层并限制单次 `/goal` 上下文预算
+
+变更内容：
+
+- 在功能线与 task 之间新增 `docs/tasks/goal-board.md`：功能线继续负责完整系统范围和单线 WIP，Goal 包专门负责一次 `/goal` 的停止与交接边界。
+- 规定 Goal 默认只绑定一个 task，只有共用同一产物/验证批次时才可书面说明后绑定最多两个；每个 Goal 最多承受一次 compact。
+- Goal 完成后激活同线下一 Goal，但必须停止当次 `/goal` 并交接；第一次 compact 后禁止扩展范围，估计需要第二次时必须回写安全检查点并拆分。
+- 将跨工坊容器、Fusion、强化、分解、制作书和 V4 迁移的 `TASK-SLICE-138` 标为 `Split`，拆成 `138A..138D`，并分别由 `GOAL-001..004` 承载。
+- 当前唯一可执行单元改为 `GOAL-001` / `TASK-SLICE-138A`；后续工坊子页、法宝、端到端闭环和 Stage 2-1 逆向各自占用独立 Goal。
+- 更新 Agent/Claude/总任务书、详细执行协议、任务生成规范、README、文档地图、功能线与覆盖/机制/切片/逆向索引。
+- 扩展 `tools/validate-workflow.mjs`，自动拒绝多 Active Goal、跨功能线 Goal、Active Goal 外可执行 task、task/Goal 映射不一致、超过两个 task 或未声明最多一次 compact 的 Goal。
+
+影响范围：
+
+- `AGENTS.md`、`CLAUDE.md`、`TASK_OUTLINE.md`
+- `docs/tasks/goal-board.md`、`feature-lines.md`、`task-board.md`、`vertical-slices.md`、`feature-line-coverage/LINE-FORMAL-GAME-LOOP.md`
+- `docs/workflow/README.md`、`document-map.md`、`agent-protocol.md`、`task-generation.md`、`governance-log.md`
+- `docs/reverse-engineering/equipment-workshop-index.md`、`full-function-ui-index.md`、`mechanics-index.md`
+- `docs/workflow/problems/PG-002-功能条线提前关闭.md`、`PG-004-问题治理缺少效果反馈闭环.md`
+- `tools/validate-workflow.mjs`
+
+验证：
+
+- 已在修改前运行 `npm run check:structure`，仅报告既有 `src/`/测试大文件 warning，本次不修改这些目标。
+- `npm run check:workflow` 和 `git diff --check` 在本条记录落盘后运行。
+
+### 归档 Stage 1 战斗校准切片并继续正式游戏循环
+
+变更内容：
+
+- `TASK-SLICE-130` 在三关共享战斗回归、1-2/1-3 代表失败分类及 1-1 三次完整通关后归档，VS-050 与 M-048 同步更新。
+- `LINE-FORMAL-GAME-LOOP` 继续保持唯一 Active；仅把同线 `TASK-SETTINGS-055` 提升为唯一 Ready，没有提前关闭功能线或切到 Stage 2-1。
+- 回写 PG-002/003/004/005 最终效果样本；现代预警、可达性校正与自动审计 watchdog 均保持证据分级，其中 watchdog 不属于原版或现代游戏波次规则。
+
+影响范围：
+
+- `docs/tasks/feature-lines.md`、本线覆盖台账、`task-board.md`、`task-history.md`、`vertical-slices.md`
+- `docs/reverse-engineering/stage1-combat-calibration.md`、`mechanics-index.md`
+- `docs/workflow/problems/PG-002-功能条线提前关闭.md` 至 `PG-005-逆向证据链不完整却宣布闭合.md`
+
+验证：
+
+- `npm run test:systems`、`npm run check:structure` 与 `npm run build` 已通过；工作流和 diff 检查在本条记录落盘后重跑。
+
+## 2026-07-21
+
+### 将正式游戏主循环前置到更多关卡复现之前
+
+变更内容：
+
+- 根据用户在 Stage 1 三关后的试玩反馈，把“容易死亡、攻击/UI 不完整、缺少启动存档和天庭地图”确认为继续批量制作关卡前的主流程缺口。
+- 新增唯一 Active 功能线 `LINE-FORMAL-GAME-LOOP` 及覆盖台账；依赖顺序固定为战斗证据/校准、核心 HUD、启动存档、天庭地图、完整功能 UI。
+- 保留 `LINE-STAGE-2-1` 与 `TASK-SETTINGS-053`，从 Active/Ready 降为 Planned；这是用户明确重定向，不是遇到阻塞后绕过当前线，也没有删除 Stage 2-1 资料。
+- 新增 `M-048..052` 与 `VS-050..054`，并生成 `TASK-SETTINGS-054..058`、`TASK-SLICE-130..133`；只有 `TASK-SETTINGS-054` 为当前 Ready，其余同线工作保持 Planned。
+- 把“完整 UI”先定义为覆盖盘点和连续小 task，不生成一次性实现全部页面的巨型任务；最小测试面板不得作为整页关闭证据。
+- 更新阶段路线，在 Stage 1 三关后加入正式游戏主循环检查点，关闭后才恢复 Stage 2-1 内容扩展。
+
+影响范围：
+
+- `TASK_OUTLINE.md`
+- `docs/tasks/feature-lines.md`
+- `docs/tasks/feature-line-coverage/LINE-FORMAL-GAME-LOOP.md`
+- `docs/tasks/feature-line-coverage/LINE-STAGE-2-1.md`
+- `docs/tasks/task-board.md`
+- `docs/tasks/vertical-slices.md`
+- `docs/reverse-engineering/mechanics-index.md`
+- `docs/workflow/problems/PG-002-功能条线提前关闭.md`
+- `docs/workflow/problems/PG-004-问题治理缺少效果反馈闭环.md`
+- `docs/workflow/problems/PG-005-逆向证据链不完整却宣布闭合.md`
+- `docs/workflow/governance-log.md`
+
+验证：
+
+- 已运行 `npm run check:workflow`，通过：10 个未完成 task/10 个完成定义、174 个已完成 task/174 个完成定义、唯一推荐 `TASK-SETTINGS-054` 和 376 条资源标注一致。
+- 已运行 `git diff --check`，通过；仅输出仓库既有 CRLF/LF 转换提示，无空白错误。
+
+### 重构玩法逆向为六段证据链
+
+变更内容：
+
+- 新增 `reverse-engineering-protocol.md`，把逆向固定为“局部证据 → 共享运行时调用链 → SWF 几何/坐标语义 → 可观察行为合同 → 现代实现映射 → 双重验证”。
+- 统一区分确认事实、交叉确认、推断、未知和现代设计选择；影响实现的推断/未知未清零时，禁止宣称“权威实现输入、已闭合、已复现”。
+- 视觉/空间结论必须记录 local/world/screen 坐标、注册点、碰撞盒、嵌套矩阵、推导公式和现代素材原点，防止把 MovieClip 注册坐标直接解释为脚底或中心。
+- 逆向产物必须落盘证据矩阵；实现任务在 compact、新对话或人员切换后必须重新窄读矩阵引用，不能只依赖聊天摘要。
+- 同步 AGENTS、CLAUDE、执行协议、任务生成、代码质量门禁、README、文档地图和逆向 researcher；`TASK-SETTINGS-*` 只完成文件定位或推断时不得越级解除实现阻塞。
+- 新增 `PG-005 逆向证据链不完整却宣布闭合`，以 Stage 1-2 的 K、地面坐标和停点屏幕触发作为治理前历史反例。
+- 工作流校验器新增逆向协议结构、入口路由和三类负向样例：缺共享运行时调用链、缺证据矩阵或缺推断分级时必须失败。
+
+影响范围：
+
+- `AGENTS.md`
+- `CLAUDE.md`
+- `.claude/agents/reverse-engineering-researcher.md`
+- `docs/workflow/README.md`
+- `docs/workflow/agent-protocol.md`
+- `docs/workflow/code-quality-gates.md`
+- `docs/workflow/document-map.md`
+- `docs/workflow/governance-log.md`
+- `docs/workflow/problem-governance.md`
+- `docs/workflow/reverse-engineering-protocol.md`
+- `docs/workflow/task-generation.md`
+- `docs/workflow/problems/PG-005-逆向证据链不完整却宣布闭合.md`
+- `tools/validate-workflow.mjs`
+
+验证：
+
+- `npm run check:structure` 通过，仅保留 8 个未修改旧大文件的既有 warning。
+- `node --check tools/validate-workflow.mjs` 通过。
+- `npm run check:workflow` 通过：动态验证 PG-001—05；缺共享调用链、证据矩阵或推断分级的三个逆向协议负向样例均被拒绝；任务、历史与 372 条资源标注保持一致。
+
+### 为问题治理增加效果反馈闭环
+
+变更内容：
+
+- 新增 `PG-004 问题治理缺少效果反馈闭环`，把“方案存在”与“方案持续有效”拆成两个必须分别举证的状态。
+- 所有 `PG-*` 统一增加“适用触发与反馈记录”，同时检查旧有缺口的解决程度和新代码的防复发效果；反馈结论统一为通过、复发、方案不充分或不适用。
+- 代码、架构、游戏 task 和工作流变更收尾必须扫描未关闭或效果观察中的问题；命中时回写证据，复发或方案不足时退回治理，已关闭问题必须重开。
+- 回审 PG-001—03：PG-001 对本轮关卡代码明确记为不适用；PG-002 因 Stage 1-2 在核心交互错误下曾被关闭，退回“方案补强中”；PG-003 记录本次移动接入遗漏为治理前复发基线。
+- 工作流校验器改为动态发现全部 `PG-*.md`，校验问题索引、状态、第 7 节、触发条件和反馈表，并内置缺失第 7 节、触发条件或反馈表的负向样例。
+
+影响范围：
+
+- `AGENTS.md`
+- `CLAUDE.md`
+- `docs/workflow/README.md`
+- `docs/workflow/agent-protocol.md`
+- `docs/workflow/code-quality-gates.md`
+- `docs/workflow/document-map.md`
+- `docs/workflow/problem-governance.md`
+- `docs/workflow/problems/PG-001-共享技能规则重复定义.md`
+- `docs/workflow/problems/PG-002-功能条线提前关闭.md`
+- `docs/workflow/problems/PG-003-关卡角色移动接入边界不统一.md`
+- `docs/workflow/problems/PG-004-问题治理缺少效果反馈闭环.md`
+- `tools/validate-workflow.mjs`
+
+验证：
+
+- `node --check tools/validate-workflow.mjs` 通过。
+- `npm run check:workflow` 通过：动态验证 PG-001—04 及三类反馈契约负向样例；任务、历史和 372 条资源标注保持一致。
+
+### 登记关卡角色移动接入边界问题
+
+变更内容：
+
+- 新增 `PG-003 关卡角色移动接入边界不统一`，记录 Stage 1-2 遗漏 K 跳跃所暴露的系统性接线缺口。
+- 明确问题不是 `HeroMovementSystem` 底层算法重复，而是 scene/bridge 分别持有移动模型、上一帧输入、调度和视图同步边界。
+- 提出关卡无关的玩家队伍移动运行时 owner，关卡仅提供平台/边界环境，关卡流程只观察位置处理镜头、停点、出怪和通关。
+- 固定了现有两个消费者迁移、共享系统回归、运行时验收、窄搜索门禁和两个后续关卡样本等关闭标准。
+- 本次只登记问题治理记录，不修改 `src/`、不启动跨关卡重构，也不改变当前唯一 `Active` 功能线。
+
+影响范围：
+
+- `docs/workflow/problem-governance.md`
+- `docs/workflow/problems/PG-003-关卡角色移动接入边界不统一.md`
+- `docs/workflow/governance-log.md`
+
+验证：
+
+- `npm run check:workflow` 通过：1 个未完成 task、172 个已完成 task、唯一推荐 `TASK-SETTINGS-052` 和 372 条资源标注一致。
+
+### 将 Stage 1-2 专项测试纳入默认代码门禁
+
+变更内容：
+
+- 扩展 `tools/run-system-tests.mjs` 的默认测试清单，把 Stage 1-2 普通流程与 `fbEnter` 两组专项测试纳入 `npm run test:systems`，从而自动进入 `check:code` / `check:all`。
+- 保留 `test:stage12-flow` 和 `test:stage12-fb` 作为快速专项入口；没有修改工作流协议、任务状态校验规则或游戏任务定义。
+
+影响范围：
+
+- `tools/run-system-tests.mjs`
+- `docs/workflow/governance-log.md`
+
+验证：
+
+- `npm run check:all` 应同时输出 Stage 1-2 resource、flow 与 fbEnter 三组通过结果。
+- `npm run check:workflow` 应不再报告当日治理日志缺失。
+
+## 2026-07-18
+
+### 修正评审证据时效并复核 PG-001 方案
+
+变更内容：
+
+- 复核当日工程评审，确认其中 CH1-CH3 和 Role1 `_tmp` 结论沿用了 2026-06-26 的旧证据；当前代码已在 2026-06-29 建立共享 owner，资产 key 也已修正。
+- 在 `review-protocol.md` 增加“证据时效与遗留发现复核”：旧评审只作为线索，必须按当前工作树标记“仍存在/已解决/部分解决/证据不足”，并纠正结构 warning 的整改语义。
+- 更新 PG-001 测试结果：当前快照无旧重复模式，但 owner 抽取后尚无新的相关代码生成任务，因此 3 个长期样本仍为 0，保持“方案试行中”。
+- 重写 `docs/评审/评审-2026-07-18.md` 为整改复核报告，逐项说明实施、保留或不采纳的原因。
+
+影响范围：
+
+- `docs/workflow/review-protocol.md`
+- `docs/workflow/problems/PG-001-共享技能规则重复定义.md`
+- `docs/评审/评审-2026-07-18.md`
+
+验证：
+
+- `npm run check:workflow` 通过：2 个未完成 task、150 个已完成 task 和 172 条资源标注一致；保留 1 条 `needs-annotation` 和 1 条 `unknown` 的已知状态。
+- 本轮不修改 `src/`，因此不重复运行系统测试和构建。
+
+### 评审归档自动化
+
+变更内容：
+
+- 在 `docs/workflow/review-protocol.md` 新增「评审归档约定」章节：用户要求评审时自动按当日日期生成 `docs/评审/评审-YYYY-MM-DD.md`，同一天多次独立评审追加 `-2`/`-3` 后缀。
+- 评审流程新增归档步骤，确保评审结论不会只停留在对话中。
+- 当日产出 `docs/评审/评审-2026-07-18.md`（全项目工程评审）。
+
+影响范围：
+
+- `docs/workflow/review-protocol.md`
+- `docs/评审/评审-2026-07-18.md`
+
+### 落地严格单线功能条线任务系统
+
+变更内容：
+
+- 新增 `docs/tasks/feature-lines.md` 和 `feature-line-coverage/LINE-CRAFTING.md`，把完整玩家系统设为承诺单位，把 task 保留为小而可验收的执行单位。
+- 建立严格单线 `WIP=1`：`LINE-CRAFTING` 是唯一 Active，Stage 1-1 保持 Planned；task 完成后必须继续同线下一 task，阻塞时不得切线。
+- 重写任务生成规范并更新 Agent、Claude、总任务书、详细协议、README 和文档地图，让正式 task 与 `/goal` 先恢复功能线所有权。
+- 新增 `TASK-SETTINGS-047`，先盘点 112 个权威配方的物品定义、库存类别、入口、真图标、UI 和测试覆盖；保留 `TASK-SETTINGS-046` 但禁止在合成线关闭前执行。
+- 纠正 `TASK-SLICE-118`、`M-039` 和资源状态中的整线完成外推，保留 `VS-042..044` 的局部完成事实。
+- 扩展 `validate-workflow.mjs`，校验功能线字段、唯一 Active、跨线 Ready/Blocked、跨线推荐、当前 task、Done 关闭证据和覆盖台账；增加五类内置负向样例。
+- 将 PG-002 更新为“治理规则已落地，运行观察中”；待合成线完整运行和下一条线切换样本完成后再判断关闭。
+
+影响范围：
+
+- `AGENTS.md`、`CLAUDE.md`、`TASK_OUTLINE.md`、`README.md`
+- `docs/tasks/feature-lines.md`、`docs/tasks/feature-line-coverage/LINE-CRAFTING.md`
+- `docs/tasks/task-board.md`、`docs/tasks/task-history.md`
+- `docs/workflow/agent-protocol.md`、`docs/workflow/task-generation.md`
+- `docs/workflow/README.md`、`docs/workflow/document-map.md`
+- `docs/workflow/problem-governance.md`、`docs/workflow/problems/PG-002-功能条线提前关闭.md`
+- `docs/reverse-engineering/mechanics-index.md`
+- `docs/reverse-engineering/asset-annotation/project-status.md`
+- `tools/validate-workflow.mjs`
+
+验证：
+
+- `npm run check:structure` 通过，仅报告 8 个既有无关 warning。
+- `npm run check:workflow` 通过；2 个未完成 task、唯一推荐 `TASK-SETTINGS-047`、150 个已完成 task 和 172 条资源标注均一致。
+- `npm run check:all` 通过；系统测试、合成专项测试和生产构建通过，保留既有 8 个结构 warning 与 Vite 大 chunk 提示。
+
+### 拆分问题治理记录并确认 PG-002 的单线方案
+
+变更内容：
+
+- 将 `PG-001`、`PG-002` 从总协议拆到 `docs/workflow/problems/` 下的独立问题文档；总协议只保留治理规则、问题索引和模板。
+- 根据用户确认修正 `PG-002` 方案：完整玩家系统是承诺单位，task 是内部执行单位；全项目严格保持单条功能线 `WIP=1`。
+- 明确同一功能线的 task 必须连续推进；遇到阻塞时生成并解决同线阻塞任务，不得切换到其他功能线。
+- 以炼丹炉为首个治理对象：只有真 UI、权威合成表全覆盖、正式可达流程和验证闭合后才能关闭，任一局部切片完成都不能结束条线。
+- 撤回本轮新增的“第二阶段”纪念文档及入口；等未来出现更大规模突破后再重新总结项目阶段。
+
+影响范围：
+
+- `docs/workflow/document-map.md`
+- `docs/workflow/governance-log.md`
+- `docs/workflow/problem-governance.md`
+- `docs/workflow/problems/PG-001-共享技能规则重复定义.md`
+- `docs/workflow/problems/PG-002-功能条线提前关闭.md`
+- `tools/validate-workflow.mjs`
+
+验证：
+
+- `npm run check:workflow` 通过；新增独立问题文档的结构与索引校验已生效，150 个已完成 task 和 172 条资源标注继续通过。
+
+## 2026-07-16
+
+### 登记纵向切片被越级解释为功能条线完成的问题
+
+变更内容：
+
+- 新增 `PG-002`，将问题定义为现有任务体系缺少功能条线层、覆盖台账和关闭门禁，而不是单句任务状态写错。
+- 记录炼丹炉案例证据：112 个唯一配方已注册，但只有土灵珠和枯叶灵两个配方族形成完整真图标/UI 闭环；已完成纵向切片不足以证明“合成所有物质”已经覆盖。
+- 提出 `LINE-*` 功能条线台账、条线级 `/goal` 持续推进语义、工作流负向校验和当前炼丹炉覆盖盘点方案。
+- 明确治理问题与游戏内容分别关闭：PG-002 负责修任务模型和防复发门禁，`LINE-CRAFTING` 后续负责追踪所有合成物质的实际完成度。
+- 本次只登记问题与方案，不修改游戏代码、不生成剩余炼丹炉实现 task，也不撤销已真实完成的 `VS-042..044`。
+
+影响范围：
+
+- `docs/workflow/problem-governance.md`
+- `docs/workflow/governance-log.md`
+
+验证：
+
+- `npm run check:workflow` 通过；现有校验报告 1 个未完成 task、1 个定义、当前推荐 `TASK-SETTINGS-046`，资源标注 172 条全部通过。
+
+## 2026-07-15
+
+### 将 RegiMA 恢复语料库迁入项目本地资源根并强制视觉路由
+
+变更内容：
+
+- 将 D 盘根目录的 EVB 原始解包、174 个恢复 SWF、验证图片、清单审计和既有资源任务输出迁入 `local-resources/regima/`，并由 `.gitignore` 排除整个本地资源根。
+- 将项目根的旧提取目录整体迁入 `local-resources/regima/legacy-extraction/`，删除旧根入口，并机械更新全部 54 个受版本控制文件中的路径引用。
+- 明确行为证据继续读取只读 `local-resources/regima/legacy-extraction/` AS3；视觉资源、SymbolClass、MovieClip 和原始命名 SWF 必须优先检索 `local-resources/regima/source/restored-swfs/`。
+- 更新入口、资源标注文档和 `TASK-SETTINGS-044`，禁止仅依据旧数字包宣告视觉资源缺失。
+- 扩展工作流校验，防止 RegiMA 视觉路由从入口和任何引用 `crafting-ui-index.md` 的未完成任务中回退，并禁止任何受版本控制文件重新引用已退役的旧根名称；检查按任务语义而非固定任务号生效，归档/换号后仍保留门禁。
+
+影响范围：
+
+- `.gitignore`
+- `AGENTS.md`、`CLAUDE.md`、`TASK_OUTLINE.md`、`.claude/agents/reverse-engineering-researcher.md`
+- `docs/workflow/`、`docs/reverse-engineering/`、`docs/tasks/task-board.md`
+- `tools/validate-workflow.mjs`
+
+验证：
+
+- `npm run check:structure` 通过，仅报告既有无关文件 warning。
+- `npm run check:workflow` 通过，包含 RegiMA 路由门禁与资源标注校验。
+
+### 将资源标注工程升级为 EVB 源包到现代接入的分阶段台账
+
+变更内容：
+
+- 把旧的“缺来源登记”模型改为 `source-corpus-ready -> export-ready -> derived-ready -> ready` 获取链，分别对应待定位符号、可选择性导出、派生素材待接入和现代工程可用。
+- 为 CSV 新增 `sourcePackage` 字段，并新增 `locate-symbol`、`export-selectively` 去向；只有检索恢复语料库后仍确认缺文件时，才允许 `missing-original + request-source`。
+- 将现有 152 条 `missing-original` 机械迁移为 `source-corpus-ready + locate-symbol`，不凭文件名批量猜具体源包；保留 1 条 unknown 和 1 条非视觉资源 rejected。
+- 更新八个既有批次与项目状态，明确角色、技能、法宝、宠物、怪物、Stage 1-1 和 UI 的下一步均从现 `local-resources/regima/source/restored-swfs/` 做窄定位与选择性导出。
+- UI 批次继续保持 0 个现代图片 key，但登记 `backpack1.swf`、`Common1.swf`、`EIcon*.swf`、`shop.swf` 等已恢复候选包；后续按单个完整界面建 stableKey，不做全量 UI 导出。
+- 扩展资源标注校验器，强制新状态与下一步配对，并要求 `export-ready` 必须填写 `sourcePackage`。
+
+影响范围：
+
+- `docs/reverse-engineering/asset-annotation/`
+- `docs/workflow/document-map.md`
+- `docs/workflow/governance-log.md`
+- `tools/validate-asset-annotations.mjs`
+
+验证：
+
+- `npm run check:annotations` 通过。
+- `npm run check:workflow` 通过。
+
+### 完成资源标注工程第一批并增加自动校验
+
+变更内容：
+
+- 恢复原审阅稿的完整第一批范围，完成五角色普攻/本体动作、已实现英雄技能、法宝、宠物效果、`Monster30`、Stage 1-1 和现代 UI 审计。
+- 交付 154 条标注和 8 份批次记录：152 条缺原素材、1 条待补证据、1 条确认为非视觉资产；当前没有拆分候选或必须立即执行的人工标注。
+- 新增 `project-status.md` 汇总覆盖、人工待办和后续边界，新增 `implementation-findings.md` 交接现代 sourceSymbol 与 AS3 不一致等代码侧发现。
+- 新增 `npm run check:annotations`，校验 manifest 131 个效果 key、固定范围、CSV 字段/枚举、证据路径、stableKey 唯一性和必需批次。
+- 将资源标注校验接入 `npm run check:workflow`。
+
+影响范围：
+
+- `docs/reverse-engineering/asset-annotation/`
+- `docs/workflow/README.md`
+- `docs/workflow/governance-log.md`
+- `tools/validate-asset-annotations.mjs`
+- `package.json`
+
+验证：
+
+- 已运行 `npm run check:all`，工作流校验、资源标注校验、结构检查、系统测试和生产构建均通过；结构检查仅报告既有无关文件 warning。
+
+## 2026-07-14
+
+### 将资源标注工程重构为独立目录
+
+变更内容：
+
+- 将单篇 `asset-annotation-and-splitting-plan.md` 重构为 `docs/reverse-engineering/asset-annotation/` 目录；原文件保留为兼容入口。
+- 在入口中明确“标注”的最小定义、实际产物，以及人工与 Agent 的责任边界；人工不再被隐含要求为全量数字资源命名。
+- 新增单资源族执行流程、CSV 字段/状态/可信度规范、批次模板和 annotations/batches 目录职责。
+- 将帧拆分降为标注后的例外决策，明确判定门、人工操作点和最小交付。
+- 明确已安装的 FFDec CLI 可由 Agent 在用户授权后从项目外目录调用；人工只负责安装、CLI 无法完成的 GUI 操作和视觉决策。
+- 更新文档职责地图，避免把缺口事实、标注执行记录和游戏接入 task 混为一体。
+
+影响范围：
+
+- `docs/reverse-engineering/asset-annotation-and-splitting-plan.md`
+- `docs/reverse-engineering/asset-annotation/`
+- `docs/workflow/document-map.md`
+- `docs/workflow/governance-log.md`
+
+验证：
+
+- 已运行 `npm run check:workflow`，通过。
+
+## 2026-07-04
+
+### 增加资源标注与帧拆分审阅入口
+
+变更内容：
+
+- 新增 `docs/reverse-engineering/asset-annotation-and-splitting-plan.md`，作为后续标注工程和拆分必要性评估的重开对话入口。
+- 明确资源工作后续不再围绕同一 EXE 重复抽取，而是转入标注、归类、缺口登记和必要时选择性拆分。
+- 明确拆分工程默认不处理几十万帧；只有 Phaser 参数化重建无法达到接近原版视觉，且目标能限定到单个符号或动作族时，才进入选择性拆分。
+- 在 `docs/workflow/document-map.md` 登记该文档职责，便于新 agent 冷启动时定位。
+
+影响范围：
+
+- `docs/reverse-engineering/asset-annotation-and-splitting-plan.md`
+- `docs/workflow/document-map.md`
+- `docs/workflow/governance-log.md`
+
+验证：
+
+- 已运行 `npm run check:workflow`，通过。
+
+### 修正 PG-001 的问题定义和验证方式
+
+变更内容：
+
+- 将 `PG-001` 的问题本体从“数值校准需要跨文件同步”修正为“共享技能规则重复定义”。
+- 明确“数值校准容易遗漏”只是重复定义带来的影响，不是问题本体。
+- 将解决方案从单次代码抽取调整为 harness 生成约束：共享定义所有权约束。
+- 在 `docs/workflow/code-quality-gates.md` 中新增 Shared definition ownership 门禁，要求 AI 生成共享表、公式或 helper 前先搜索 owner，已有 owner 必须复用。
+- 将 PG-001 的测试结果改为长期可行性验证：后续至少 3 次相关代码生成任务不新增重复定义，才说明方案初步可行。
+- 将 Shared definition ownership 接入 `tools/validate-workflow.mjs`，避免该门禁从脚手架中漂移。
+
+影响范围：
+
+- `docs/workflow/problem-governance.md`
+- `docs/workflow/code-quality-gates.md`
+- `docs/workflow/governance-log.md`
+- `tools/validate-workflow.mjs`
+
+验证：
+
+- 已运行 `npm run check:workflow`，通过。
+
+## 2026-06-29
+
+### 增加问题治理协议
+
+变更内容：
+
+- 新增 `docs/workflow/problem-governance.md`，定义系统性工程问题的适用范围、问题定义、证据、解决方案、测试方案、测试结果和关闭标准。
+- 登记首个问题治理记录 `PG-001`：技能系统共享规则重复与 `HeroSkillModel` runtime 耦合。
+- 在 `AGENTS.md`、`CLAUDE.md`、`docs/workflow/README.md`、`docs/workflow/document-map.md` 和 `docs/workflow/agent-protocol.md` 中登记问题治理入口。
+- 将 `problem-governance.md` 接入 `tools/validate-workflow.mjs` 的必备文件和内容校验，避免问题治理协议从脚手架中漂移。
+- 在 `面试.md` 中补充问题治理作为 Harness Engineering 的可讲述实践。
+
+影响范围：
+
+- `AGENTS.md`
+- `CLAUDE.md`
+- `docs/workflow/README.md`
+- `docs/workflow/document-map.md`
+- `docs/workflow/agent-protocol.md`
+- `docs/workflow/problem-governance.md`
+- `docs/workflow/governance-log.md`
+- `tools/validate-workflow.mjs`
+- `面试.md`
+
+验证：
+
+- 已运行 `npm run check:workflow`，通过。
+
+## 2026-06-14
+
+### 增加工程评审协议
+
+变更内容：
+
+- 新增 `docs/workflow/review-protocol.md`，统一 Codex、Claude、DeepSeek 或人工 reviewer 的工程评审流程。
+- 明确评审适用范围、必读资料、评审流程、严重程度、输出格式、评分维度和整改落点。
+- 在 `AGENTS.md`、`CLAUDE.md`、`docs/workflow/README.md` 和 `docs/workflow/document-map.md` 中登记评审入口。
+- 将 `review-protocol.md` 接入 `tools/validate-workflow.mjs` 的必备文件和内容校验，避免评审协议从脚手架中漂移。
+
+影响范围：
+
+- `AGENTS.md`
+- `CLAUDE.md`
+- `docs/workflow/README.md`
+- `docs/workflow/document-map.md`
+- `docs/workflow/review-protocol.md`
+- `docs/workflow/governance-log.md`
+- `tools/validate-workflow.mjs`
+
+验证：
+
+- 已运行 `npm run check:workflow`，通过。
+
+### 调整结构门禁和现代架构路线
+
+变更内容：
+
+- 将结构 warning 从“绝对阻塞”调整为“目标文件优先拆分、轻量小修可说明理由后局部修改、无关 warning 不阻塞当前任务”。
+- 为 `src/scenes/test-scene/*Bridge.ts` 增加独立 warn 阈值：800 行 warn、1200 行 error，承认桥接层短期偏厚但仍禁止承载领域规则。
+- 在 `src` 边界文档中明确 `test-scene` bridge 是过渡层，后续增长优先把纯规则下沉到 `src/systems/`。
+- 将阶段 3 的 `GameContext` / `EntityManager` 路线调整为：保留薄 `GameContext`，等统一生命周期需求明确后再引入轻量 `EntityManager`，不提前上完整 ECS。
+
+影响范围：
+
+- `AGENTS.md`
+- `TASK_OUTLINE.md`
+- `docs/workflow/code-quality-gates.md`
+- `docs/architecture/src-boundaries.md`
+- `tools/check-structure.mjs`
+- `docs/workflow/governance-log.md`
+
+后续规则：
+
+- error 仍是硬阻塞，必须先拆。
+- warning 是维护信号，不再让无关文件阻塞当前任务。
+- bridge 文件只能做场景和系统的适配，不作为新领域规则的归宿。
+
+## 2026-06-08
+
+### 增加结构性代码门禁（check:structure）
+
+变更内容：
+
+- 新增 `tools/check-structure.mjs`，对 `src/` 和 `tools/` 执行四项结构性检查：
+  - **文件行数上限**：system > 800 行 warn、> 1500 行 error；scene > 600 行 warn、> 1200 行 error；test > 6000 行 warn、> 10000 行 error。
+  - **代码重复检测**：基于结构指纹（归一化标识符、字符串、数值后的行级相似度比较），同一文件中超过 3 个相似代码块时告警。
+  - **Scene 导入耦合度**：scene 导入超过 10 个 system 文件时 warn、超过 15 个时 error。
+  - **Scene 边界注释**：超过 300 行的 scene 文件必须有文档化边界注释。
+- 脚本始终 exit 0；强制力来自 agent protocol 规则。
+- 新增 `npm run check:structure` 脚本。
+- `npm run check:all` 扩展为 `check:workflow && check:structure && check:code`。
+- 更新 `docs/workflow/code-quality-gates.md`，新增 Structural Gates 章节（文件大小限制表、代码重复规则、scene 导入耦合度和边界注释要求）。
+- 更新 `docs/workflow/agent-protocol.md` 代码任务规则，要求修改现有文件前先运行 `check:structure`。
+- 更新 `AGENTS.md` 必须遵守规则，新增第 6 条：新增逻辑前先运行 `check:structure`。
+- 更新 `CLAUDE.md` Code Quality Gates 章节，加入 structural check 步骤。
+- 扩展 `tools/validate-workflow.mjs`：校验 `check:structure` 脚本存在、`package.json` 包含所需 script、`code-quality-gates.md` 包含 Structural Gates 章节、`CLAUDE.md` 和 `agent-protocol.md` 引用 structural gate。
+
+影响范围：
+
+- `AGENTS.md`
+- `CLAUDE.md`
+- `package.json`
+- `docs/workflow/agent-protocol.md`
+- `docs/workflow/code-quality-gates.md`
+- `docs/workflow/document-map.md`
+- `docs/workflow/governance-log.md`
+- `tools/check-structure.mjs`
+- `tools/validate-workflow.mjs`
+
+验证：
+
+- 已运行 `npm run check:workflow`，通过。
+- 已运行 `npm run check:structure`，预期输出当前超标文件的 warning/error 列表。
+
+## 2026-06-02
+
+### 固化 PowerShell rg 低风险命令模板
+
+变更内容：
+
+- 在 `AGENTS.md` 的读取与编码约束中新增低风险 `rg` 模板：中文、代码片段或含引号内容优先搜短而窄的固定字符串，再按行号读取小范围上下文。
+- 明确不要手拼包含转义双引号的 regex alternation，也不要把宽关键词和窄关键词混进一个 `a|b|c` 或多个 `-e` 中造成海量输出；多个 `-e` 只用于每个关键词都足够窄的情况。
+- 目标从“失败后少汇报”调整为“命令一次成功，避免浪费 token 和时间”。
+- 在 `docs/workflow/README.md` 同步读取纪律摘要。
+
+影响范围：
+
+- `AGENTS.md`
+- `docs/workflow/README.md`
+- `docs/workflow/governance-log.md`
+
+验证：
+
+- 已运行 `npm run check:workflow`，通过。
+
+### 固定 1.0 装备资料表位置和使用边界
+
+变更内容：
+
+- 将根目录 `再续1.0装备属性合成掉落表.xlsx` 移动到 `docs/reverse-engineering/reference/`。
+- 新增 `docs/reverse-engineering/reference/equipment-spreadsheet.md`，说明该表只能作为 1.0 辅助索引和交叉校验资料，1.1 事实仍以 AS3 为准。
+- 将工作簿四个 sheet 拆分为 `docs/reverse-engineering/reference/equipment-spreadsheet/*.csv`，并新增拆分索引 README，方便 agent 按任务读取小文件。
+- 更新 `TASK_OUTLINE.md` 和 `docs/workflow/document-map.md` 的资源入口。
+- 更新装备、掉落和合成相关逆向索引中的 xlsx 资料状态。
+
+影响范围：
+
+- `TASK_OUTLINE.md`
+- `docs/reverse-engineering/reference/equipment-spreadsheet.md`
+- `docs/reverse-engineering/reference/equipment-spreadsheet/README.md`
+- `docs/reverse-engineering/reference/equipment-spreadsheet/equipment-attributes.csv`
+- `docs/reverse-engineering/reference/equipment-spreadsheet/crafting-recipes.csv`
+- `docs/reverse-engineering/reference/equipment-spreadsheet/gem-attributes.csv`
+- `docs/reverse-engineering/reference/equipment-spreadsheet/drop-reference.csv`
+- `docs/reverse-engineering/reference/再续1.0装备属性合成掉落表.xlsx`
+- `docs/reverse-engineering/equipment-index.md`
+- `docs/reverse-engineering/drops-index.md`
+- `docs/reverse-engineering/mechanics-index.md`
+- `docs/workflow/document-map.md`
+- `docs/workflow/governance-log.md`
+
+验证：
+
+- 已运行 `npm run check:workflow`，通过。
+
+### 增加 UTF-8 读取纪律与片段读取约束
+
+变更内容：
+
+- 在 `AGENTS.md` 新增读取与编码约束，要求 PowerShell 读取中文/Markdown 文档时显式使用 `Get-Content -Encoding UTF8 -LiteralPath ...`。
+- 明确遇到乱码输出时不能继续基于该输出推理，必须用 UTF-8 重新读取。
+- 明确优先用 `rg -n` 和小范围片段读取，避免为了定位单条记录全文读入大型 Markdown、AS3 或历史文档。
+- 在 `CLAUDE.md` 和 `docs/workflow/README.md` 同步入口摘要。
+- 扩展 `tools/validate-workflow.mjs`，校验入口文档是否保留 UTF-8 读取纪律和片段读取要求。
+
+影响范围：
+
+- `AGENTS.md`
+- `CLAUDE.md`
+- `docs/workflow/README.md`
+- `docs/workflow/governance-log.md`
+- `tools/validate-workflow.mjs`
+
+验证：
+
+- 已运行 `npm run check:workflow`，通过。
+
+## 2026-06-01
+
+### 重做项目 README 与脚手架 README
+
+变更内容：
+
+- 重写根目录 `README.md`，面向 GitHub 访问者说明项目目标、当前进度、快速开始、仓库结构、提取资料边界和检索关键词。
+- 重写 `docs/workflow/README.md`，面向 AI agent 接手者说明脚手架目标、文档分工、冷启动路由、维护规则和验证入口。
+- 从 `.gitignore` 移除 `面试.md`，允许将 Harness Engineering 面试准备文档纳入版本管理。
+
+影响范围：
+
+- `.gitignore`
+- `README.md`
+- `docs/workflow/README.md`
+- `docs/workflow/governance-log.md`
+- `面试.md`
+
+验证：
+
+- 已运行 `npm run check:workflow`，通过。
+
+## 2026-05-31
+
+### 增加 `/goal` 自动推进与收尾提醒规则
+
+变更内容：
+
+- 在 `docs/workflow/agent-protocol.md` 新增 `Goal 管理协议`，明确 `/goal` 按任务文档自动推进到可交接点，不因普通阶段性进展要求用户手动“继续”。
+- 明确 `/goal` 的停止条件：完成定义达成、验证失败且无法自行修复、任务过大需要拆分、权限/资料缺口，或需要用户确认 Git / 对话边界。
+- 明确正式 task 或 `/goal` 收尾时必须输出下一步、验证结果、对话管理判断、commit 建议和 push 建议。
+- 将 Git 规则扩展为：AI 必须主动给出是否建议 commit / push，但 `git add`、`git commit` 和 `git push` 仍必须由用户明确授权。
+- 同步更新 `AGENTS.md`、`TASK_OUTLINE.md`、`CLAUDE.md`、`docs/workflow/README.md` 和 `docs/workflow/document-map.md` 的摘要规则。
+
+影响范围：
+
+- `AGENTS.md`
+- `TASK_OUTLINE.md`
+- `CLAUDE.md`
+- `docs/workflow/agent-protocol.md`
+- `docs/workflow/README.md`
+- `docs/workflow/document-map.md`
+- `docs/workflow/governance-log.md`
+
+验证：
+
+- 已运行 `npm run check:workflow`，通过。
+
+## 2026-05-30
+
+### 增加 TestScene / sandbox 增长约束
+
+变更内容：
+
+- 在 `docs/architecture/src-boundaries.md` 新增 `TestScene` / sandbox 增长约束。
+- 明确 `TestScene.ts` 是集成验证场景，不作为最终正式游戏架构承载点。
+- 明确新增切片若预计让 `TestScene.ts` 增加超过约 150 行，应先判断是否抽到 `src/scenes/test-scene/` helper 或 `src/systems/`。
+- 明确同类职责第二次出现时优先抽 helper：视图创建、调试键、命中桥接、UI 面板桥接、运行时查询、系统调度。
+- 明确不为“彻底架构化”做大重构，每次只拆一个职责簇，并保持 `npm run build` 通过。
+
+影响范围：
+
+- `docs/architecture/src-boundaries.md`
+- `docs/workflow/governance-log.md`
+
+验证：
+
+- 已运行 `npm run check:workflow`，通过。
+
+## 2026-05-27
+
+### 收缩 AGENTS 入口并外移详细协议
+
+变更内容：
+
+- 将 `AGENTS.md` 收缩为高频硬规则、任务分级、冷启动阅读分流和对话收束摘要。
+- 新增 `docs/workflow/agent-protocol.md`，承接正式游戏 task 工作流、代码任务规则、Git 维护、对话收束、任务生成和统一语言细则。
+- 更新 `docs/workflow/README.md` 和 `docs/workflow/document-map.md`，登记新协议文档及读取时机。
+
+影响范围：
+
+- `AGENTS.md`
+- `docs/workflow/agent-protocol.md`
+- `docs/workflow/README.md`
+- `docs/workflow/document-map.md`
+- `docs/workflow/governance-log.md`
+
+验证：
+
+- 已运行 `npm run check:workflow`，通过。
+
+### 明确新开对话与 compact 的权衡
+
+变更内容：
+
+- 在 `AGENTS.md` 中明确：同一个正式游戏 task 未完成时默认继续当前对话，上下文过长时优先依赖 compact。
+- 明确 compact 后应重新检查当前 task 的关键文档和正在修改的文件，避免只凭摘要继续。
+- 明确不要因为只完成少量工作、仍在同一 task 的验证/修 bug/补文档阶段，就建议用户新开对话。
+- 明确只有完成 task、切换明显不同机制/切片/子系统，或已阅读大量 AS3/逆向文档/历史记录时，才在文档收尾后温和建议新开对话。
+- 同步更新 `TASK_OUTLINE.md`、`CLAUDE.md` 和 `docs/workflow/README.md` 的入口规则摘要。
+
+影响范围：
+
+- `AGENTS.md`
+- `TASK_OUTLINE.md`
+- `CLAUDE.md`
+- `docs/workflow/README.md`
+- `docs/workflow/governance-log.md`
+
+验证：
+
+- 已运行 `npm run check:workflow`，通过。
+
+## 2026-05-24
+
+### 降低轻量请求的启动和收束成本
+
+变更内容：
+
+- 重写 `AGENTS.md` 为更短的协作入口，新增“轻量请求 / 正式游戏 task / 脚手架维护”三档分流。
+- 明确轻量请求只读入口和直接相关文件，不进入完整看板流程，不归档 `task-history.md`，完成后不要求建议新开对话。
+- 将正式游戏 task 的完整看板、机制表、切片表和历史归档流程限制在用户指定 task 或明确执行游戏任务时。
+- 同步更新 `TASK_OUTLINE.md`、`CLAUDE.md`、`README.md`、`docs/workflow/README.md` 和 `docs/workflow/document-map.md` 的入口说明。
+
+影响范围：
+
+- `AGENTS.md`
+- `TASK_OUTLINE.md`
+- `CLAUDE.md`
+- `README.md`
+- `docs/workflow/README.md`
+- `docs/workflow/document-map.md`
+- `docs/workflow/governance-log.md`
+
+验证：
+
+- 已运行 `npm run check:workflow`，通过。
+
+### 加入 Git 维护规则
+
+变更内容：
+
+- 在 `AGENTS.md` 中新增 Git 维护规则，明确 Codex 默认不自动提交。
+- 明确只有用户要求“提交/commit”时才执行 `git add` 和 `git commit`。
+- 明确提交前必须区分本次改动和已有未提交改动，不提交无关文件，不回滚用户改动。
+- 在 `docs/workflow/README.md` 中同步 Git 规则摘要。
+
+影响范围：
+
+- `AGENTS.md`
+- `docs/workflow/README.md`
+- `docs/workflow/governance-log.md`
+
+验证：
+
+- 已运行 `npm run check:workflow`，通过。
+
+## 2026-05-23
+
+### 明确 dev server 与编译检查分工
+
+变更内容：
+
+- 在 `AGENTS.md` 中明确：Codex 默认不启动 `npm run dev`，开发服务器由用户每次打开项目时自行运行，视觉效果由用户手工查看。
+- 明确 Codex 修改代码后仍应优先运行可自动结束的编译/检查命令（如 `npm run build` 或更小范围检查）来发现新增代码编译错误。
+- 明确用户在 `npm run dev` 中看到的编译或运行报错，可以直接反馈给 Codex 作为修复输入。
+- 在 `docs/workflow/README.md` 中同步该脚手架协作规则。
+
+影响范围：
+
+- `AGENTS.md`
+- `docs/workflow/README.md`
+- `docs/workflow/governance-log.md`
+
+验证：
+
+- 已运行 `npm run check:workflow`，通过。
+
+## 2026-05-19
+
+### 补齐轻量 DDD 统一语言维护规则
+
+变更内容：
+
+- 确认本项目采用轻量 DDD：统一语言、上下文边界和命名约束，不引入完整 DDD 架构。
+- 在 `AGENTS.md` 新增对话管理规则：一个对话默认只执行一个 task，上下文变长或任务切换时先收尾并建议新开对话。
+- 新增或更新 `docs/domain/glossary.md`，维护推荐代码名和禁止别名。
+- 新增或更新 `docs/domain/ubiquitous-language-process.md`，维护统一语言更新流程。
+- 将统一语言和对话管理规则接入 `AGENTS.md`、`docs/workflow/document-map.md`、`docs/workflow/README.md` 和 `docs/architecture/src-boundaries.md`。
+- `tools/validate-workflow.mjs` 接入领域词汇表检查，并对 `src/` 中出现的禁止别名给出 warning。
+- 根据现有代码命名，将单玩家输入状态登记为 `PlayerInputState`，将 P1/P2 输入快照登记为 `InputState`。
+
+影响范围：
+
+- `AGENTS.md`
+- `TASK_OUTLINE.md`
+- `docs/domain/glossary.md`
+- `docs/domain/ubiquitous-language-process.md`
+- `docs/architecture/src-boundaries.md`
+- `docs/workflow/README.md`
+- `docs/workflow/document-map.md`
+- `docs/workflow/governance-log.md`
+- `tools/validate-workflow.mjs`
+
+验证：
+
+- 已运行 `npm run check:workflow`；允许 `TASK-SLICE-001` 依赖 `M-047` 部分已扒的 warning 保留，因为看板已明确真实资源缺失和占位策略。
+
+## 2026-05-15
+
+### 清理失效来源表述并收紧 `AGENTS.md` 职责边界
+
+变更内容：
+
+- 删除项目文档中已经失效的来源文件相关表述。
+- 将“方向键属于玩家 2”这类玩法观察从 `AGENTS.md` 移出，避免把入口协作规约写成玩法事实清单。
+- 将 `docs/FFDEC_EXTRACTION_GUIDE.md` 收缩为现有提取资料维护说明，不再保留围绕外部源文件的命令模板。
+
+影响范围：
+
+- `AGENTS.md`
+- `CLAUDE.md`
+- `TASK_OUTLINE.md`
+- `docs/FFDEC_EXTRACTION_GUIDE.md`
+- `docs/workflow/document-map.md`
+- `docs/tasks/task-board.md`
+- `docs/reverse-engineering/mechanics-index.md`
+- `local-resources/regima/legacy-extraction/README_extract.md`
+- `docs/workflow/governance-log.md`
+
+验证：
+
+- 已运行 `npm run check:workflow`，通过。
+
+## 2026-05-13
+
+### 建立轻量 DDD 统一语言
+
+变更内容：
+
+- 新增 `docs/domain/glossary.md`，维护领域概念、推荐代码名、上下文和禁止别名。
+- 新增 `docs/domain/ubiquitous-language-process.md`，维护统一语言更新流程、命名规则和例外处理。
+- 在 `AGENTS.md` 中加入统一语言规则和冷启动分流入口。
+- 在 `docs/architecture/src-boundaries.md` 中要求现代代码命名遵循领域词汇表。
+- 在 `tools/validate-workflow.mjs` 中加入领域词汇表结构校验和 `src/` 禁止别名 warning。
+
+影响范围：
+
+- `AGENTS.md`
+- `TASK_OUTLINE.md`
+- `docs/domain/glossary.md`
+- `docs/domain/ubiquitous-language-process.md`
+- `docs/architecture/src-boundaries.md`
+- `docs/workflow/README.md`
+- `docs/workflow/document-map.md`
+- `docs/workflow/governance-log.md`
+- `tools/validate-workflow.mjs`
+
+后续规则：
+
+- 新增核心领域命名前，先查 `docs/domain/glossary.md`。
+- 如果需要新增或调整领域概念，按 `docs/domain/ubiquitous-language-process.md` 更新。
+- 现代代码使用推荐代码名；AS3 原名只作为证据或映射说明。
+
+### 强化工作流校验和代码边界文档
+
+变更内容：
+
+- `mechanics-index.md` 的总览表增加 `M-*` 机制 ID。
+- `task-board.md` 的目标机制/切片改为 `M-*` / `VS-*` 强引用，并补齐标准任务字段。
+- `vertical-slices.md` 的依赖机制补充 `M-*` 引用。
+- `AGENTS.md` 改为冷启动阅读决策表，降低小任务阅读负担。
+- 新增 `docs/architecture/src-boundaries.md`，记录 `src/` 模块边界、输入系统约束和 TypeScript/Phaser 参数约定。
+- `tools/validate-workflow.mjs` 重构为 error/warning 两级校验，并增加必填字段、Blocked 阻塞原因、M/VS 引用、Ready 依赖、推荐遗漏、治理日志和 `src` 边界检查。
+
+影响范围：
+
+- `AGENTS.md`
+- `TASK_OUTLINE.md`
+- `docs/tasks/task-board.md`
+- `docs/tasks/vertical-slices.md`
+- `docs/reverse-engineering/mechanics-index.md`
+- `docs/workflow/task-generation.md`
+- `docs/workflow/document-map.md`
+- `docs/architecture/src-boundaries.md`
+- `tools/validate-workflow.mjs`
+
+验证：
+
+- 已运行 `npm run check:workflow`，通过。
+
+### 增加工作流一致性校验
+
+变更内容：
+
+- 新增 `tools/validate-workflow.mjs`。
+- 在 `package.json` 中新增 `npm run check:workflow`。
+- 校验未完成任务表、历史任务表、任务完成定义、当前推荐任务、旧路径和工作流条目是否一致。
+- 在 `AGENTS.md` 和 `docs/workflow/README.md` 中要求修改任务/工作流文档后运行校验。
+
+影响范围：
+
+- `tools/validate-workflow.mjs`
+- `package.json`
+- `AGENTS.md`
+- `docs/workflow/README.md`
+- `docs/workflow/governance-log.md`
+
+后续规则：
+
+- 文档脚手架调整后优先运行 `npm run check:workflow`。
+- 该脚本只做一致性校验，不替代 Markdown 任务文档。
+
+### 拆分未完成任务和已完成任务
+
+变更内容：
+
+- 新增 `docs/tasks/task-history.md`。
+- `docs/tasks/task-board.md` 改为只保存未完成游戏任务和完成定义。
+- 已完成游戏任务、历史完成定义和执行记录迁移到 `task-history.md`。
+- `AGENTS.md` 增加规则：新对话默认不读 `task-history.md`；任务完成后从看板移入历史。
+- `TASK_OUTLINE.md` 和 `docs/workflow/document-map.md` 更新文档职责。
+- `docs/workflow/task-generation.md` 更新任务归档规则。
+
+影响范围：
+
+- `AGENTS.md`
+- `TASK_OUTLINE.md`
+- `docs/tasks/task-board.md`
+- `docs/tasks/task-history.md`
+- `docs/workflow/task-generation.md`
+- `docs/workflow/document-map.md`
+- `docs/workflow/governance-log.md`
+
+后续规则：
+
+- 新对话默认读取 `task-board.md`，不读取 `task-history.md`。
+- 完成任务时，将任务条目、完成定义和执行记录归档到 `task-history.md`。
+- 只有追溯历史、修改已完成任务或处理历史依赖时，才读取 `task-history.md`。
+
+### 拆分游戏任务和工作流脚手架
+
+变更内容：
+
+- 新增 `docs/workflow/` 目录。
+- 将任务生成规范迁移为工作流脚手架文档。
+- 新增文档职责地图。
+- 将 `docs/tasks/task-board.md` 定位为游戏任务看板。
+- 从游戏任务看板移除 `TASK-DOCS-*` 文档治理任务。
+- 明确脚手架维护只记录在 `governance-log.md`，不再进入游戏任务看板。
+
+影响范围：
+
+- `AGENTS.md`
+- `TASK_OUTLINE.md`
+- `docs/tasks/task-board.md`
+- `docs/workflow/README.md`
+- `docs/workflow/document-map.md`
+- `docs/workflow/task-generation.md`
+- `docs/workflow/governance-log.md`
+- `docs/reverse-engineering/mechanics-index.md`
+
+后续规则：
+
+- 游戏复现任务使用 `docs/tasks/task-board.md`。
+- 任务生成规则使用 `docs/workflow/task-generation.md`。
+- AI 工作流和文档脚手架维护记录在本文件。
+
+## 历史整理
+
+以下事项原先曾以 `TASK-DOCS-*` 记录在游戏任务看板中，现归档为工作流治理历史：
+
+- 建立机制表和纵向切片表。
+- 建立任务看板并重构总任务书。
+- 固化跨对话工作流并补齐任务完成定义。
+- 建立任务生成规范并拆分看板待办/已完成。
+
+## 2026-05-23
+
+### 建立代码质量门禁和系统测试入口
+
+变更内容：
+- 新增 `docs/workflow/code-quality-gates.md`，明确视觉测试不能替代自动验证，要求 `src/` 改动运行 `npm run test:systems` 和 `npm run build`。
+- 新增 `npm run test:systems`、`npm run check:code`、`npm run check:all`，用无新增依赖的 esbuild 打包方式运行系统级断言。
+- 更新 `CLAUDE.md`、`docs/workflow/README.md` 和 `docs/workflow/document-map.md`，把代码质量门禁接入 AI 交接入口和文档职责图。
+- 扩展 `tools/validate-workflow.mjs`，校验代码质量门禁文档、Claude 入口和 package scripts 是否存在。
+
+影响范围：
+- `CLAUDE.md`
+- `docs/workflow/README.md`
+- `docs/workflow/document-map.md`
+- `docs/workflow/code-quality-gates.md`
+- `docs/workflow/governance-log.md`
+- `tools/validate-workflow.mjs`
+- `package.json`
+- `tools/run-system-tests.mjs`
+- `tools/system-tests.ts`
+
+验证：
+- 运行 `npm run test:systems`，通过。
+- 运行 `npm run build`，通过。
+
+## 2026-08-28
+
+### MO-003 记录马系第二家族证据阶段样本
+
+变更内容：
+- `TASK-SETTINGS-209` 使用修订后的 `$pet-family-reverse` 生成 43 项马系字段级合同、独立 handoff 与 `TASK-SLICE-210`；证据阶段 `unresolved=[]`，不提前宣告正式复现。
+- `MO-003` 记录 Skill 阻止的遗漏、马系差异、返工和阶段结论；方法状态仍为“修订中”，最终裁决等待 210 的 P1H、独立 verifier、mutation-kill 与 940×590 正式运行。
+- 本次没有修改方法协议或默认工作流，只增加真实样本与可定位证据。
+
+验证：
+- `npm run test:pet-horse-family-truth`
+- `npm run test:pet-animation-corpus`
+- `npm run check:workflow`
+
+## 2026-08-31
+
+### MO-003 完成第二家族样本并裁决采纳
+
+变更内容：
+- `TASK-SLICE-210` 直接消费 209 的 43 项马系合同，独立 verifier、range/hit/source mutation-kill、`pet P1H=0`、正式五关与 940×590 双人运行均通过。
+- 第二家族没有新增重大遗漏、稳定步骤修订、返工、错误完成声明或跨家族切换；继承技能、受击门和组合奥义均由 V3 Skill 的家族专属证据槽位承载。
+- `MO-003` 从“修订中”裁决为“采纳”并归档；本批不改写 Skill，也不改变默认任务调度协议。
+
+验证：
+- `npm run check:system-design -- pet P1H`
+- `npm run test:pet-horse-behavior-contract`
+- `npm run check:workflow`
+
+## 2026-09-05：青龙 213 反证阻止假绿交接
+
+214A 消费预检发现缺完整本体时序和奥义 trigger 基准 40px 错位，旧 truth 门禁仍通过。按 PG-017 保留 V2 并记录方案不充分，213 接受状态 blocked，generator/交接门禁显式拒绝；同线新增 213A 补证后恢复 214A→214B。未修改 src 或原始提取资料；未改变通用工作流规则。
+
+213A 同日补强：生成器在写verified前强制独立源/产物检查，handoff执行15类负向变异；345基准、完整本体倒计时与根坐标修复后恢复214A。临时hold改为resolved历史记录，机器门禁仍检查实际产物，不以人工标记放行。
+
+2026-09-05 214A增加generate/test:pet-dragon-assets资源门禁：来源哈希、透明裁边元数据、唯一加载owner、生产查询驱动345原版对账与4类视觉反证。不引入新的工作流规则，P1G完整家族验收继续由214B承担。
+
+2026-09-05：214B首次compact按agent-protocol落盘安全检查点并拆分214C/214D/214E；仅任务交接，不新增实现、不缩减原214完整范围，214C唯一Ready。
+
+## 2026-09-05：允许一次 compact 与条件委派
+
+按用户明确要求，首次 compact 落盘并窄读关键合同/当前代码后可继续原 task，第二次强制交接；同一对话累计，不因任务拆分清零。预计0次仍是规划目标，余量不扩大工作包或验收范围。有独立有界调查/验证包且主 agent 可同时推进工作时适当使用 subagent；单 agent 仅初始计划，调整前记录分工，默认主写/子只读，禁止并写共享核心。同步 AGENTS、CLAUDE、README、agent-protocol、task-generation、TASK_OUTLINE、214CDE与harness正负用例；214B保留旧检查点并标注规则已替代。本次使用只读subagent独立审查遗漏。验证：check:structure通过（9个已有无关warning）；check:workflow（含15项harness测试）、audit:problems与diff check通过；已有PlayerSlot别名warning保留。
+
+## 2026-09-06：214C4碰撞输入补证调度
+
+214C4独立源核对发现目标colipse/像素采样真值缺口，设Blocked并创建同线218为唯一Ready；所有父级战斗合同保持。PG-017回写方案不充分/V2.3，集中审计记录一次；不修改调度规则、不建立治理抢占项。现有213/214A视觉事实保留，初步src试改全部撤回，预检脚本只输出阻塞证据，不替代生产战斗验收。
+
+245B门禁重跑环境记录：后续浏览器连接确认4174 preview已停止（connection refused），原参考PNG均存在；因此先前EncodingError不能归因于文件损坏或内存问题。恢复项目已授权preview，当前完整gate浏览器阶段重新导航；fetch响应检查保留以使后续HTTP错误有明确URL，未修改图片或比较阈值。
+
+245B末轮联合门禁：浏览器11,572态及三张940×590原生画面对比已通过，随后同一Node进程在默认约4GB堆上限退出。此为tools/local-validation.md既有242B容量边界；前轮漏带环境设置。保留design-gates-default-heap-failure.log，按既有NODE_OPTIONS=--max-old-space-size=8192仅本次命令环境重跑原116组五gate，未改变测试集合或全局配置。
+
+245B归档文档检查首次拒绝两个任务定义的CRLF首行及247缺少显式逆向方案字段；改回LF，并声明代码逆向方案不适用，不新增视觉方案或改变执行范围。

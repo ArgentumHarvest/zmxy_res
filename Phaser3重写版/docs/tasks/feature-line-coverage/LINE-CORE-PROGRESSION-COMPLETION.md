@@ -1,0 +1,98 @@
+# LINE-CORE-PROGRESSION-COMPLETION 覆盖台账
+
+## 用户确认范围
+
+- 炼丹炉左侧强化、合成、分解、打造四页直接复用原版已有 Symbol、文字、按钮、槽位和布局；不以现代文字块或 SVG 占位取代。
+- 四个功能的全量规则、拒绝、随机、材料/灵魂、实例属性、P1/P2 owner 和保存回合闭合。
+- 原版 1.1 全部可穿戴装备的身份、真图标/穿戴 UI、槽位、职业/品质门禁和权威数值全集。
+- 五个人物的基础数值、等级/经验、升级成长、HP/MP 与装备派生值、P1/P2 隔离。
+- 在既有六槽 `localStorage` 基础上扩展完整成长字段、损坏保护、跨页/跨关卡/重启回合；不新建第二套存档 owner，schema 变更时旧档直接废弃。
+- 已完成关卡中左下五个原生按钮的真 pointer 入口、门禁、P1/P2 归属、打开/关闭/返回与暂停生命周期逐项可点。
+- 上述范围完成后集中复验 UI；只修复用户确认的有界差异清单，不顺手重构其他页面。
+- 纳入 2026-08-13 评审经 2026-08-15 复评确认的当前线缺陷：存档/工坊数据损坏立即前插；Role1 影分身、世界特效普攻几何、Role5 移动弹体和功能 UI 真值债务保持有界后续，不接纳已否定或降为 Low 的观察。
+
+## 依赖调度
+
+1. 炼丹炉左侧四页 UI：先逆向显示列表和 verified 机器真值，再按有界页面批次实现。
+2. 四功能规则完整性审计：先冻结强化/合成/分解/打造的权威内容和当前缺口。
+3. 全装备数据与 UI：补齐可穿戴全集、基础数值和页面动态字段。
+4. 四功能事务收口：用第 3 步的全装备定义重放全量产物/材料/实例；此时才能宣称“完成四功能”。
+5. 五角色数值与升级：先证据后实现，不从现有测试常量反推原版事实。
+6. 存档扩展与旧档废弃：在所有新增持久字段确定后统一替换当前 schema，旧版直接不可用，再做当前版本正式旅程回归。
+7. 左下五按钮可点复验与修复。
+8. 用户确认 UI 差异清单的有界重做与整线验收。
+
+用户的第 2 项被拆为“规则审计”和“全装备就绪后的事务收口”，不改变交付顺序与优先级，只是显式处理数据依赖。
+
+## 覆盖矩阵
+
+| 维度 | 现有基础 | 本线缺口 | 关闭证据 |
+| --- | --- | --- | --- |
+| 炼丹炉左页 | 119 容器、四页根、事务与 167 四份 verified 真值已闭合 | 已关闭；168A/168B 已完成四页原字段、动态 child、按钮态、全局反馈和联合校准 | 四页原生视觉、按钮/槽位/文字/动态字段、P1/P2 与差异证据见 168A/168B；右栏继续消费 165D 同一背包投影 |
+| 炼丹炉四功能 | 169 冻结规则；170A/170C 提供 164 件权威目录；171/171A 已完成 121 Fusion、78 打造、百分数点、1888 材料上限与四事务联合重放 | 已闭合：171B 将经书继承值改为实例 override；178 删除其迁移链但保留当前存档往返 | 正式经书继承两次保存、P1/P2、坏当前结构拒绝和全系统回归 |
+| 装备 | 170A/170B1/170B2 已冻结数据、页面真值与视觉 provenance；170C 已接入 164 项唯一目录与 111 个唯一预览资源；170D 已让正式页面消费 63 对象/9 状态 verified 真值，并闭合五角色、双 owner、Role4/Role5/520/521/称号/不变槽位逐状态证据 | 已关闭；后续只消费装备目录，不重开正式页面 | 权威装备目录、数值和六槽/时装/法宝页面回放 |
+| 人物成长 | 172 已冻结带 hash/locator/Schema 的 5×90 目录、共同经验表、Role5 `int` 防御、升级递归/回满/派生顺序、普通怪双 owner 与存档交接 | 已关闭；179 已直连目录并闭合五角色全级、正式装备派生、回满、P1/P2 与 HUD | `hero-progression-runtime-tests.ts`、五关共享 runtime/reward、940×590 1P/2P HUD 与当前 V7 回归 |
+| 存档 | 六槽、单一当前 V7、旧版/损坏拒绝、装备实例 override 与正式旅程已有 | 成长字段边界已关闭；后续同线 task 不新增第二存档 owner | 179 的 `heroId/level/currentExp` 双 owner 写回、装备派生恢复、坏类型/旧版拒绝与重载回归 |
+| 左下五入口 | 原生按钮与共享 router 已有；175C 已闭合 574/371/444 的 25 对象/42 状态 verified 真值 | 已关闭；182 已直接消费真值、删除地图共享 chrome 并恢复单页门 | 175C manifest/证据矩阵；182 的 P1/P2、门禁、五关共享 owner、打开/关闭/返回与 940×590 证据 |
+| UI 整改 | 176 已关闭背包灵魂值错位、关卡 HUD 背包/设置重复层、设置页重复层与 Role5 自主换装四项用户确认差异 | 当前无新增用户确认差异；HUD/设置新版 machine-truth 债务仍归 175 | `TASK-SLICE-176-runtime-regressions.md` 的重复 normal 层、字段锚点、Role5 appearance-selector 专项与 940×590 连续帧证据；清单外页面不修改 |
+| 评审战斗纠错 | Role1/Role5 真视觉和五关正式 Runtime 已有；173/173A 已闭合影分身 verified 真值、共享状态机/视觉、正式输入/目标/弹体/销毁与 P1/P2 owner | 已关闭：174 生成 detached 普攻 verified 空间真值并建立唯一几何 owner；Role5 projectile 恢复二维命中并委托共享结算 | 共享消费者一致性、X/Y 边界、重复/死亡/P1/P2 专项与 940×590 单/双人零 console |
+| 功能 UI 真值债务 | 175A..I 已全部生成 verified 真值；宠物、法宝、宿主、技能、商城、设置、任务、建档/选角及丹药页分别直接消费 74/16、28/21、25/42、250/32、132/31、19/23、45/28、20/30、132/26 对象/状态真值 | 已关闭；188 删除丹药页五组手写坐标表并直接消费 990/969/1006 真值投影 | 175 审计、175A..I manifests；180..188 运行投影、差异证据与专项 |
+
+## 当前调度
+
+1. `TASK-SETTINGS-167`：Done；四页显示列表、动态拓扑、原版基准、差异矩阵与四份 verified manifest 已归档。
+2. `TASK-SLICE-168A`：Done；强化/合成 verified manifest 直连、动态真图标、原字段/按钮态、全局反馈及 P1/P2 逐状态证据已闭合。
+3. `TASK-SLICE-168B`：Done；分解/打造 verified manifest 直连、四页联合校准、同一右栏背包、单一页码、左槽 63×62 去白边投影与逐槽点击退回已闭合。
+4. `TASK-SETTINGS-169`：Done；四功能逐规则证据、现代映射、缺口分层与全装备后的事务收口输入已冻结，详见 `docs/reverse-engineering/workshop-rules-completeness-audit.md`。
+5. `TASK-SETTINGS-170A`：Done；164 件唯一装备、五槽/角色/品质、基础 12 属性、强化成长、随机边界与原字段单位已由可重复生成目录闭合，431 子集与 1.0 辅助差异可自动复查。
+6. `TASK-SETTINGS-170B`：Done（Split 父任务收束）；页面、图标和角色穿戴按来源族拆为 170B1/170B2，两个证据包均已闭合。
+7. `TASK-SETTINGS-170B1`：Done；character 304/246/628、六槽、`HeadSprite/ShowObj`、动态字段、操作层、P1/P2/分页/时装/关闭共 63 对象与 9 状态已由 `task-settings-170b1.equipment-page` verified manifest 闭合。
+8. `TASK-SETTINGS-170B2`：Done；164 图标、138 条适用角色穿戴/称号资源、111 个唯一 character、520/521 跨包、Role4/Role5 分支与两个原查找缺陷已由生成目录闭合，影响接入的未知为零。
+9. `TASK-SLICE-170C`：Done；164 项权威目录、原字段比例/范围、强化成长、既有穿脱事务、111 character 派生资产、视觉目录映射与按当前装备选择性加载已接入；940×590 代表性穿脱、属性刷新、操作层、关闭/再入和零 console 通过。按预设拆分触发，完整逐状态视觉校准转 170D。
+10. `TASK-SLICE-170D`：Done；正式页面通过源 hash 绑定的可重复投影直接消费 170B1 verified 真值；五角色/P1/P2、Role4 双分支、Role5 动态帧、520/521、正常称号、37 不变项、两个原缺陷、分页/操作层/关闭再入均由自动与 940×590 证据闭合。
+11. `TASK-SLICE-171`：Done（Split 父任务）；9 条 Fusion 时装、打造百分数点/V6 兼容和 164 件联合回放主体已形成，compact 后转 171A 收口。
+12. `TASK-SLICE-171A`：Done；单堆上限以权威最高需求 1888 闭合，164 件强化/分解、121 Fusion、78 打造的 P1/P2/V6/正式四页联合验收通过，171 父子共同归档。
+13. `TASK-SLICE-176`：Done；关卡 HUD/设置重复 normal 层、背包灵魂值错位与 Role5 appearance selector 被误当时间动画的用户反馈回归已关闭。
+14. `TASK-SLICE-171B`：已归档；经书继承属性 round-trip、灵魂安全整数与双 owner 回归保留；其历史版本迁移合同已由 178 取代。
+15. `TASK-ARCH-178`：Done；按用户裁决删除全部历史存档迁移，只接受唯一当前 schema，旧档直接不可用。
+16. `TASK-SETTINGS-172`：Done；已冻结 5×90 基础数值、共同经验表、升级/回满/派生时序、普通怪 P1/P2 owner 与当前存档边界，未修改 `src/`。
+17. `TASK-SLICE-179`：Done；已直接消费 172 目录，闭合五角色全级、跨级/回满/装备派生、P1/P2、HUD 数值和当前 V7 往返。
+18. `TASK-SETTINGS-173`：Done；verified 真值、差异矩阵与零未知实现合同已闭合。`TASK-SLICE-173A`：Done（Split 父任务收束）；173A1/173A3 闭合状态机、共享视觉投射与 TestScene 薄适配，173A2 闭合正式 P1/P2 输入/目标/弹体/销毁和五关代表回归。
+19. `TASK-ARCH-174`：Done；四个 detached 普攻 verified 空间真值与唯一几何 owner 已闭合，Role5 移动弹体恢复二维命中并委托共享结算。
+20. `TASK-SETTINGS-175`：Done；九个页面/宿主已按“明确占位 / 旧视觉审计 / verified / 未知”分级，冻结五个恢复源 SHA/locator、truthId、状态集、完整性门禁和实现生成条件；VS-054/055/059 保持降级措辞。
+21. `TASK-SETTINGS-175A`：Done；`task-settings-175a.pet-page` 已闭合 74 对象、16 状态、940×590 基准、P1/P2/两页/selected/技能/确认/洗练/进化/关闭，`unresolved=[]`；生成 `TASK-SLICE-180`（Planned）。
+22. `TASK-SETTINGS-175B`：Done；`task-settings-175b.magic-weapon-page` 已闭合 17 个根 child、200/34 动态确认、28 对象、21 状态、940×590 基准、九字段/按钮态/升级/拒绝/取消/重置/P2 无入口/关闭，`unresolved=[]`；生成 `TASK-SLICE-181`（Planned）。
+23. `TASK-SETTINGS-175C`：Done；25 对象/42 状态 verified 宿主真值与地图态无共享 chrome 负向差异已闭合，生成 `TASK-SLICE-182`（Planned）。
+24. `TASK-SETTINGS-175D`：Done；250 对象/32 状态、五角色 selector、50 主动图标×3 帧、P1/P2 绑定与被动字段已由 verified 真值闭合，生成 `TASK-SLICE-183`（Planned）。
+25. `TASK-SETTINGS-175E`：已完成；丹药 990/969/1006 已闭合为 132 对象/26 状态 verified manifest，`unresolved=[]`。
+26. `TASK-SETTINGS-175F`：Done；商城 721/717/624 已闭合为 132 对象/31 状态 verified manifest，`unresolved=[]`；生成 `TASK-SLICE-184`（Planned）。
+27. `TASK-SETTINGS-175G`：Done；设置 148 已闭合为 19 对象/23 状态 verified manifest，`unresolved=[]`；生成 `TASK-SLICE-185`（Planned）。
+28. `TASK-SETTINGS-175H`：Done；任务 85 已闭合为 45 对象/28 状态 verified manifest，`unresolved=[]`，并生成 `TASK-SLICE-186`（Planned）。
+29. `TASK-SETTINGS-175I`：Done；`task-settings-175i.party-creation` 已闭合为 20 对象/30 状态 verified manifest，`unresolved=[]`；生成 `TASK-SLICE-187`（Planned）。
+30. `TASK-SLICE-180`：Done；已直接消费 175A 宠物页真值，删除未经批准的现代覆盖层并通过视觉/owner/存档回归。
+31. `TASK-SLICE-181`：Done；直接消费 175B 的 28 对象/21 状态 verified 真值，投影 596/200/34 与原按钮/字段，删除未经批准的现代覆盖；owner、事务、存档和 940×590 回归通过。
+32. `TASK-SLICE-182`：Done；直接消费 175C 宿主真值，删除地图态共享 chrome，恢复地图/战斗单页门、页内 owner、同键关闭与 Escape 设置边界。
+33. `TASK-SLICE-183`：Done；直接消费 175D 的 250 对象/32 状态技能四页真值，删除手写视觉源、现代 owner 文字与第二坐标表，主动/被动/P1-P2 绑定/拖放/返回通过。
+34. `TASK-SLICE-184`：Done；`ShopScene` 通过 `FormalShopPageTruth` 直接消费 175F 的 132 对象/31 状态 verified 真值，删除分类、九卡、字段、按钮和 624 确认层第二套手写坐标；业务/owner/存档、940×590 差异和零 console 回归通过。
+35. `TASK-SLICE-185`：Done；新增 `FormalSettingsPageTruth` 直接消费 175G 的 19 对象/23 状态，删除五行坐标、命中、字体与关闭按钮锚点的手写视觉真值；四项循环、死控件、全局 owner、关闭/重开/重载、940×590 差异和零 console 回归通过。
+36. `TASK-SLICE-186`：Done；`FormalTaskPageTruth/TaskScene` 已直接消费 175H 的 45 对象/28 状态，删除行/奖励/文字/按钮手写真值与现代反馈文字；`root-static.svg` 修复整帧动态 child 回填，空活动、末页、P1/P2 奖励、存档、关闭/重开与零 console 通过。
+37. `TASK-SLICE-187`：Done；新增 `SavePartyCreationTruth` 并直接消费 175I 的 20 对象/30 状态真值，删除 `RoleImageX/RoleRegistrationX/RoleHitBounds`；修正基准生成 alpha 缺陷，1P/2P、取消、原子建槽、重载、940×590 与零 console 通过。
+38. `TASK-SLICE-188`：Done；直接消费 175E 丹药页 132 对象/26 状态真值，删除 `ImmortalityScene` 五组手写视觉坐标，owner/事务/重载、全系统、build 与 940×590 零 console 回归通过；本线关闭并恢复 Stage 2-3。
+
+## 明确排除
+
+- Stage 2-3 关卡逆向/实现、商城/任务/宠物/技能新功能、网络与活动系统。
+- 没有原版证据的新装备、新数值、新配方或可见现代替代层。
+- 未经用户列入本轮差异清单的其他 UI 重做。
+
+## 关闭检查
+
+- [x] 炼丹炉左侧四页原生显示列表、四功能和右侧背包共同通过正式流程；171B/178 已关闭当前 schema 的继承属性持久化回归。
+- [x] 原版 1.1 全可穿戴装备的 UI、数值、槽位、穿脱与双 owner 全集闭合。
+- [x] 五角色基础数值、经验/等级、升级成长、装备派生和 HUD 闭合。
+- [x] 当前 V7、旧档废弃、成长双 owner、跨关卡/重启和损坏保护闭合。
+- [x] 已完成关卡的左下五按钮 pointer 矩阵通过。
+- [x] 用户确认的 UI 差异清单无未解释缺口。
+- [x] 复评确认的 Role1 影分身与普攻几何/Role5 弹体已关闭；175A..I 与 180..188 已逐页关闭功能 UI 真值债务。
+- [x] 自动测试、structure/build/workflow、多次 940×590 正式旅程与 console 零 warning/error 通过。
+- [x] 无未完成同线 task。

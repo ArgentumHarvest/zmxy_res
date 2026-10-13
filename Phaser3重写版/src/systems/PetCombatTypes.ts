@@ -1,0 +1,117 @@
+import type {
+  PetBehaviorAction, PetBehaviorDestroyReason, PetBehaviorEvent,
+  PetCombatAnimationEvent, PetCombatDamageEvent,
+} from './PetBehavior';
+import type {
+  PetOwnerSnapshot, PetRoster, PetRuntimeModel, PetSkillRandomSource,
+  PetSkillTarget, PetState,
+} from './PetTypes';
+import type { ProjectileSystemModel } from './ProjectileSystem';
+import type { PetAnimationClock } from './PetAnimationClock';
+import type { PetGroundEnvironment } from '../assets/PetGroundEnvironmentAssets';
+import type { PetGroundMotion } from './PetGroundMovementSystem';
+import type { PetProjectileCombatPort } from './PetProjectileCombatPort';
+import type { IncomingDamageFeedbackModel } from './IncomingDamageFeedbackSystem';
+import type { PlayerSlot } from './InputSystem';
+import type { HeroCombatModel } from './HeroCombatSystem';
+import type { HeroPetBuffName } from './HeroPetBuffSystem';
+import type { PetPassiveSession } from './PetPassiveSession';
+
+export type PetCombatFrame = Readonly<{
+  /** Offline P1/P2 are local. False models a source-owned remote pet without granting AI authority. */
+  isLocalOwner?: boolean;
+  roster: PetRoster;
+  owner: Readonly<PetOwnerSnapshot>;
+  ownerCombat?: HeroCombatModel;
+  targets: readonly PetSkillTarget[];
+  projectiles?: ProjectileSystemModel;
+  random?: PetSkillRandomSource;
+  damageEvents?: readonly PetCombatDamageEvent[];
+  incomingFeedback?: Readonly<{ model: IncomingDamageFeedbackModel; ownerSlot: PlayerSlot; timeMs: number }>;
+  animationEvents?: readonly PetCombatAnimationEvent[];
+  deltaMs: number;
+  /** Original host clock selected by the scene; movement speed is pixels per tick. */
+  hostFps?: number;
+  /** Party-owned hero effect phase; the existing slot runtime drives it even without a pet. */
+  ownerStep?: () => void;
+  passiveVisual?: (runtimeKey: string, signal: import('./PetPassiveSession').PetPassiveVisualSignal) => void;
+  ownerAddPetBuff?: (name: HeroPetBuffName, value: number, ticks: number) => void;
+  stunnedRuntimeKeys?: readonly string[];
+  /** Internal world-dispatched step, bypassing the entity's render-frame accumulator. */
+  hostTicks?: 0 | 1;
+  groundEnvironment?: PetGroundEnvironment;
+  projectileCombat?: PetProjectileCombatPort;
+  /** Transient entity effects, indexed by session key rather than persistent skills. */
+  gxpRuntimeKeys?: readonly string[];
+}>;
+
+export type PetCombatSessionPhase = 'alive' | 'dead-playing';
+export type PetCombatReleaseReason = PetBehaviorDestroyReason | 'dismissed' | 'expired';
+
+export type PetCombatRuntimeEvent = Readonly<{
+  sequence: number;
+  type: 'activated' | 'deactivated' | 'action' | 'behavior' | 'destroyed';
+  petId?: string;
+  runtimeKey?: string;
+  parentRuntimeKey?: string;
+  sourcePetId?: string;
+  reason?: PetCombatReleaseReason;
+  action?: PetBehaviorAction;
+  behaviorEvent?: PetBehaviorEvent;
+  actionToken?: number;
+}>;
+
+export type PetCombatSummonHandle = Readonly<{
+  runtimeKey: string;
+  petId: string;
+  parentRuntimeKey: string;
+  sourcePetId: string;
+}>;
+
+export type PetCombatEntitySnapshot = Readonly<{
+  passive?: ReturnType<PetPassiveSession['snapshot']>;
+  turtleLinkVisible?: boolean;
+  petId: string;
+  species: string;
+  form: number;
+  runtime: Readonly<PetRuntimeModel>;
+  phase: PetCombatSessionPhase;
+  target?: Readonly<PetSkillTarget>;
+  actionToken: number;
+  parentRuntimeKey?: string;
+  sourcePetId: string;
+  hp: number;
+  protectedFromHits?: boolean;
+  maxHp: number;
+  mp: number;
+  maxMp: number;
+  animation?: ReturnType<PetAnimationClock['snapshot']>;
+  groundMotion?: Readonly<PetGroundMotion>;
+}>;
+
+export type PetCombatSnapshot = Readonly<{
+  passive?: ReturnType<PetPassiveSession['snapshot']>;
+  turtleLinkVisible?: boolean;
+  protectedFromHits?: boolean;
+  destroyed: boolean;
+  petId?: string;
+  species?: string;
+  form?: number;
+  runtime?: Readonly<PetRuntimeModel>;
+  target?: Readonly<PetSkillTarget>;
+  phase?: PetCombatSessionPhase;
+  actionToken?: number;
+  animation?: ReturnType<PetAnimationClock['snapshot']>;
+  summons?: readonly PetCombatEntitySnapshot[];
+  groundMotion?: Readonly<PetGroundMotion>;
+}>;
+
+export type PetCombatSummonRequest = Readonly<{
+  // Transient source values are copied on adoption. Never insert this pet into a save roster.
+  pet: Readonly<PetState>;
+  x: number;
+  y: number;
+  facingX: -1 | 1;
+  initialAction?: PetBehaviorAction;
+  onReleased?: (reason: PetCombatReleaseReason) => void;
+}>;

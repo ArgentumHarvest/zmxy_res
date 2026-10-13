@@ -1,0 +1,239 @@
+import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import path from 'node:path';
+import {
+  combatHudAssets,
+  petCombatHudAssets,
+  petNativeHeadAssets,
+} from '../src/assets/AssetManifest';
+import {
+  buildPetCombatHudHeadProjections,
+  petCombatHudHeadAssets,
+  petCombatHudHeadProjections,
+  PetCombatHudHeadTruthId,
+} from '../src/assets/PetCombatHudHeadAssets';
+import petCombatHudHeadTruth from '../docs/reverse-engineering/ground-truth/manifests/task-settings-201-pet-combat-hud-head.json';
+import {
+  clearCombatHudBossRuntime,
+  createCombatHudBossRuntime,
+  createCombatHudPetSnapshot,
+  createCombatHudPlayerSnapshot,
+  createStage1CombatEnemyHudSnapshot,
+  createStage1CombatPlayerHudSnapshot,
+  updateCombatHudBossRuntime,
+} from '../src/systems/Stage1CombatHudSystem';
+import { createSeedPetRoster, getActivePet, restSelectedPet } from '../src/systems/PetSystem';
+import {
+  createStage1CombatEnemy,
+  createStage1CombatPlayer,
+  awardStage1CombatPlayerExperience,
+} from '../src/systems/Stage1CombatSystem';
+import { ProgressionTuning } from '../src/systems/ProgressionSystem';
+
+const repoRoot = process.cwd();
+
+for (const asset of Object.values(combatHudAssets)) {
+  assert.equal(asset.status, 'ready');
+  assert.equal(asset.source, 'extracted-flash');
+  assert.match(asset.sourcePackage, /\.swf$/);
+  const assetFile = readFileSync(path.join(repoRoot, 'public', asset.path));
+  if (asset.path.endsWith('.svg')) {
+    assert.match(assetFile.toString('utf8'), /<svg\b/);
+  } else {
+    assert.deepEqual([...assetFile.subarray(0, 8)], [137, 80, 78, 71, 13, 10, 26, 10]);
+  }
+}
+
+for (const relativePath of [
+  'src/scenes/stage12/Stage12GameplayBridge.ts',
+  'src/scenes/stage13/Stage13GameplayBridge.ts',
+  'src/scenes/stage21/Stage21GameplayBridge.ts',
+  'src/scenes/stage22/Stage22GameplayBridge.ts',
+]) {
+  const source = readFileSync(path.join(repoRoot, relativePath), 'utf8');
+  assert.match(source, /createStage1CombatHudBridge\(/);
+  assert.match(source, /hud\.update\(deltaMs\)/);
+  assert.match(source, /hud\.destroy\(\)/);
+}
+const stage11Source = readFileSync(path.join(repoRoot, 'src/scenes/TestScene.ts'), 'utf8');
+const stage11RuntimeAdapterSource = readFileSync(
+  path.join(repoRoot, 'src/scenes/test-scene/TestSceneStage11RuntimeAdapter.ts'),
+  'utf8',
+);
+assert.match(stage11Source, /createTestSceneStage11Runtime\(this, this\.formalPartyRuntime\)/);
+assert.match(stage11RuntimeAdapterSource, /createTestSceneStage1HudBridge\(scene\)/);
+assert.match(stage11RuntimeAdapterSource, /stage1CombatHud\?\.update\(deltaMs\)/);
+assert.match(stage11RuntimeAdapterSource, /stage1CombatHud\?\.destroy\(\)/);
+
+for (const asset of [petCombatHudAssets.shell, ...Object.values(petNativeHeadAssets)]) {
+  const file = readFileSync(path.join(repoRoot, 'public', asset.path));
+  assert.deepEqual([...file.subarray(0, 8)], [137, 80, 78, 71, 13, 10, 26, 10]);
+}
+assert.equal(Object.keys(petCombatHudHeadProjections).length, 35);
+assert.equal(Object.keys(petCombatHudHeadAssets).length, 33, 'mouse1/2/3 share character 648');
+for (const asset of Object.values(petCombatHudHeadAssets)) {
+  const file = readFileSync(path.join(repoRoot, 'public', asset.path));
+  assert.deepEqual([...file.subarray(0, 8)], [137, 80, 78, 71, 13, 10, 26, 10]);
+}
+{
+  const monkey2 = petCombatHudHeadProjections.monkey2;
+  assert.ok(monkey2);
+  assert.equal(monkey2.truthId, PetCombatHudHeadTruthId);
+  assert.equal(monkey2.frame, 5);
+  assert.equal(monkey2.childCharacterId, 619);
+  assert.deepEqual([monkey2.x, monkey2.y], [7.8, -11.3]);
+  assert.deepEqual(monkey2.visibleBounds, { left: 7.4, top: 94.45, width: 49, height: 42 });
+  assert.equal(monkey2.originX, 20.4 / 105);
+  assert.equal(monkey2.originY, 18.25 / 94);
+
+  type HeadTruthInput = NonNullable<Parameters<typeof buildPetCombatHudHeadProjections>[0]>;
+  const mutatedFrame = structuredClone(petCombatHudHeadTruth) as HeadTruthInput;
+  const monkey2State = mutatedFrame.states.find((state) => state.id === 'monkey2-p1');
+  assert.ok(monkey2State);
+  (monkey2State as { frame: number }).frame += 1;
+  assert.throws(() => buildPetCombatHudHeadProjections(mutatedFrame), /frame\/baseline drifted/);
+
+  for (const [field, value] of [
+    ['localMatrix', { ...monkey2.childMatrix, tx: monkey2.childMatrix.tx + 1 }],
+    ['registrationPoint', { ...monkey2.registrationPoint, x: monkey2.registrationPoint.x + 1 }],
+    ['visibleBounds', { ...monkey2.visibleBounds, width: monkey2.visibleBounds.width + 1 }],
+  ] as const) {
+    const mutated = structuredClone(petCombatHudHeadTruth) as HeadTruthInput;
+    const child = mutated.displayObjects.find((object) => object.id === 'pet-combat-hud-head.monkey2.character-619');
+    const placement = child?.placements.find((candidate) => candidate.stateId === 'monkey2-p1');
+    assert.ok(placement);
+    (placement as unknown as Record<string, unknown>)[field] = value;
+    assert.notDeepEqual(
+      buildPetCombatHudHeadProjections(mutated).monkey2,
+      monkey2,
+      `${field} must affect the runtime projection`,
+    );
+  }
+}
+for (const sequence of [petCombatHudAssets.hp, petCombatHudAssets.mp]) {
+  assert.equal(sequence.frameKeys.length, 25);
+  assert.equal(sequence.framePaths.length, 25);
+  for (const framePath of sequence.framePaths) {
+    const file = readFileSync(path.join(repoRoot, 'public', framePath));
+    assert.deepEqual([...file.subarray(0, 8)], [137, 80, 78, 71, 13, 10, 26, 10]);
+  }
+}
+
+{
+  const roster = createSeedPetRoster();
+  const active = getActivePet(roster);
+  assert.ok(active);
+  let snapshot = createCombatHudPetSnapshot(active);
+  assert.ok(snapshot);
+  assert.equal(snapshot.nativeHeadName, 'monkey1');
+  assert.equal(snapshot.hpFrame, 1);
+  assert.equal(snapshot.mpFrame, 1);
+  active.hp = active.maxHp / 2;
+  active.mp = 0;
+  snapshot = createCombatHudPetSnapshot(active);
+  assert.equal(snapshot?.hpFrame, 12);
+  assert.equal(snapshot?.mpFrame, 25);
+  active.hp = 0;
+  assert.equal(createCombatHudPetSnapshot(active)?.hpFrame, 25, 'zero HP remains visible while lifetime is positive');
+  restSelectedPet(roster);
+  assert.equal(createCombatHudPetSnapshot(getActivePet(roster)), undefined);
+}
+
+const heroPartyRuntimeSource = readFileSync(
+  path.join(repoRoot, 'src/scenes/HeroPartyRuntimeBridge.ts'),
+  'utf8',
+);
+const petHudViewSource = readFileSync(
+  path.join(repoRoot, 'src/scenes/stage1/Stage1PetCombatHudView.ts'),
+  'utf8',
+);
+assert.match(heroPartyRuntimeSource, /FormalPetsUpdatedEvent/);
+assert.match(heroPartyRuntimeSource, /createCombatHudPetSnapshot\(roster \? getActivePet\(roster\) : undefined\)/);
+assert.match(petHudViewSource, /task-settings-191\.pet-combat-hud/);
+assert.match(petHudViewSource, /PetCombatHudHeadTruthId/);
+assert.doesNotMatch(petHudViewSource, /getPetNativeHeadAsset|setDisplaySize\(104\.8, 93\.6\)/);
+assert.doesNotMatch(petHudViewSource, /fillRect|Graphics/);
+
+{
+  const snapshot = createCombatHudPlayerSnapshot({
+    slot: 'p1', hp: 40, maxHp: 80, mp: 0, maxMp: 0,
+    level: 1, currentExp: 20, expToNext: 135, isMaxLevel: false,
+    skillBindings: [
+      { skillName: 'slot-y', level: 1 },
+      { skillName: 'slot-l', level: 1 },
+      { skillName: 'slot-u', level: 1 },
+      null,
+      { skillName: 'slot-o', level: 1 },
+    ],
+  });
+  assert.equal(snapshot.hpRatio, 0.5);
+  assert.equal(snapshot.mpRatio, 0);
+  assert.deepEqual(snapshot.skillSlots.map((slot) => slot.displayKey), ['Y', 'U', 'I', 'O', 'L']);
+  assert.deepEqual(snapshot.skillSlots.map((slot) => slot.binding?.skillName ?? null),
+    ['slot-y', 'slot-u', null, 'slot-o', 'slot-l']);
+}
+
+{
+  const p1 = createStage1CombatPlayer('p1');
+  const p2 = createStage1CombatPlayer('p2');
+  p2.combat.hp = 71;
+  p1.combat.hp = 1;
+  p1.mp = 1;
+  const levelResult = awardStage1CombatPlayerExperience(p1, 140);
+  p1.skill.loadout.slots[0] = { skillName: 'slz', level: 1 };
+  p1.skill.activeAction = {
+    skillName: 'slz', slotIndex: 0, actionName: 'hit3', projectileId: 1,
+  };
+  const p1Snapshot = createStage1CombatPlayerHudSnapshot(p1);
+  const p2Snapshot = createStage1CombatPlayerHudSnapshot(p2);
+  assert.equal(p1Snapshot.hp, 130);
+  assert.equal(p2Snapshot.hp, 71);
+  assert.equal(p1Snapshot.level, 2);
+  assert.equal(levelResult.levelsGained, 1);
+  assert.equal(p1.combat.hp, 130);
+  assert.equal(p1.mp, 70);
+  assert.equal(p2Snapshot.level, 1);
+  assert.equal(p1Snapshot.skillSlots[0]?.binding?.skillName, 'slz');
+  assert.equal(p1Snapshot.skillSlots[0]?.binding?.usableState, 'active');
+  assert.equal(p2Snapshot.skillSlots[0]?.binding, null);
+  assert.deepEqual(p2Snapshot.skillSlots.map((slot) => slot.displayKey), ['8', '4', '5', '6', '3']);
+}
+
+{
+  const max = createCombatHudPlayerSnapshot({
+    slot: 'p1', hp: 1, maxHp: 1, mp: 1, maxMp: 1,
+    level: ProgressionTuning.maxLevel, currentExp: 10, expToNext: 20, isMaxLevel: true,
+    skillBindings: [],
+  });
+  assert.equal(max.expText, 'MAX');
+  assert.equal(max.expRatio, 1);
+}
+
+{
+  const runtime = createCombatHudBossRuntime();
+  const first = createStage1CombatEnemy({ id: 'same-a', enemyType: 2, x: 0, y: 0 });
+  const second = createStage1CombatEnemy({ id: 'same-b', enemyType: 2, x: 0, y: 0 });
+  let bars = updateCombatHudBossRuntime(runtime, [
+    createStage1CombatEnemyHudSnapshot(second, 1),
+    createStage1CombatEnemyHudSnapshot(first, 0),
+  ], 0);
+  assert.deepEqual(bars.map((bar) => bar.enemyId), ['same-a', 'same-b']);
+  assert.equal(bars[0]?.displayName, bars[1]?.displayName);
+  first.hp = 0;
+  bars = updateCombatHudBossRuntime(runtime, [
+    createStage1CombatEnemyHudSnapshot(first, 0),
+    createStage1CombatEnemyHudSnapshot(second, 1),
+  ], 400);
+  assert.equal(bars[0]?.hpRatio, 0);
+  assert.equal(bars[0]?.trailingRatio, 0.5);
+  bars = updateCombatHudBossRuntime(runtime, [
+    createStage1CombatEnemyHudSnapshot(first, 0),
+    createStage1CombatEnemyHudSnapshot(second, 1),
+  ], 400);
+  assert.equal(bars[0]?.trailingRatio, 0);
+  assert.equal(bars[1]?.trailingRatio, 1);
+  clearCombatHudBossRuntime(runtime);
+  assert.equal(runtime.bars.size, 0);
+}
+
+console.log('stage1-hud-tests: ok');

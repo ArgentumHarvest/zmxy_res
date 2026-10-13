@@ -1,0 +1,504 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Bounded original monster knockback behavior sidecar",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "truthId",
+    "status",
+    "scope",
+    "generatedBy",
+    "spatialTruth",
+    "sources",
+    "methods",
+    "counts",
+    "deterministicObservationSha256",
+    "applicability",
+    "motion",
+    "entryAndScheduler",
+    "naturalTweenOutcome",
+    "exclusions",
+    "unresolved",
+    "monsterProfiles",
+    "countsMeaning",
+    "directionObservations"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "truthId": {
+      "const": "task-settings-230.monster-knockback"
+    },
+    "status": {
+      "const": "verified"
+    },
+    "scope": {
+      "type": "string"
+    },
+    "generatedBy": {
+      "type": "string"
+    },
+    "spatialTruth": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "type": "object",
+        "required": [
+          "path",
+          "truthId",
+          "sha256"
+        ]
+      }
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "required": [
+          "path",
+          "sha256"
+        ]
+      }
+    },
+    "methods": {
+      "type": "array",
+      "minItems": 30,
+      "items": {
+        "type": "object",
+        "required": [
+          "path",
+          "method",
+          "line",
+          "fileSha256",
+          "methodSha256"
+        ]
+      }
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "motionStates",
+        "gateCases",
+        "scheduleStates"
+      ]
+    },
+    "deterministicObservationSha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "applicability": {
+      "type": "object",
+      "required": [
+        "monsterIds",
+        "owners",
+        "boss",
+        "coordinateSpace",
+        "velocityUnit",
+        "stateColumns"
+      ]
+    },
+    "motion": {
+      "type": "array",
+      "minItems": 270,
+      "maxItems": 270,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "shape",
+          "fps",
+          "mode",
+          "direction",
+          "collider",
+          "states"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "shape": {
+            "enum": [
+              "ObjectBaseSprite",
+              "ObjectBaseSprite2",
+              "ObjectBaseSprite7"
+            ]
+          },
+          "fps": {
+            "enum": [
+              20,
+              24,
+              30
+            ]
+          },
+          "mode": {
+            "type": "string"
+          },
+          "direction": {
+            "enum": [
+              -1,
+              1
+            ]
+          },
+          "collider": {
+            "type": "object",
+            "required": [
+              "x",
+              "y",
+              "width",
+              "height"
+            ]
+          },
+          "states": {
+            "type": "array",
+            "minItems": 25,
+            "maxItems": 25,
+            "items": {
+              "type": "array",
+              "minItems": 8,
+              "maxItems": 8,
+              "prefixItems": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "boolean"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "entryAndScheduler": {
+      "type": "array",
+      "minItems": 23,
+      "maxItems": 23,
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "type",
+              "x",
+              "y"
+            ],
+            "properties": {
+              "type": {
+                "const": "null-config"
+              },
+              "x": {
+                "type": "number"
+              },
+              "y": {
+                "type": "number"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "type",
+              "owner",
+              "mode",
+              "misses",
+              "state",
+              "ids",
+              "accepted"
+            ],
+            "properties": {
+              "type": {
+                "const": "gate"
+              },
+              "owner": {
+                "enum": [
+                  1,
+                  2
+                ]
+              },
+              "mode": {
+                "enum": [
+                  "hit",
+                  "protected",
+                  "dodge",
+                  "geometry-miss",
+                  "forced",
+                  "null-config",
+                  "excluded-hero-bullet"
+                ]
+              },
+              "misses": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "state": {
+                "$ref": "#/$defs/state"
+              },
+              "ids": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "uniqueItems": true
+              },
+              "accepted": {
+                "type": "boolean"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "type",
+              "mode",
+              "ids",
+              "state",
+              "refresh"
+            ],
+            "properties": {
+              "type": {
+                "const": "dedup"
+              },
+              "mode": {
+                "enum": [
+                  "same",
+                  "different",
+                  "protected-then-hit",
+                  "dodge-then-hit"
+                ]
+              },
+              "ids": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "uniqueItems": true
+              },
+              "state": {
+                "$ref": "#/$defs/state"
+              },
+              "refresh": {
+                "type": "integer",
+                "minimum": 0
+              }
+            }
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "type",
+              "tick",
+              "state"
+            ],
+            "properties": {
+              "type": {
+                "const": "schedule"
+              },
+              "tick": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 3
+              },
+              "state": {
+                "$ref": "#/$defs/state"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "naturalTweenOutcome": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "replace",
+        "edgeReturn",
+        "zero"
+      ],
+      "properties": {
+        "replace": {
+          "type": "number"
+        },
+        "edgeReturn": {
+          "type": "number"
+        },
+        "zero": {
+          "type": "number"
+        }
+      }
+    },
+    "exclusions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "unresolved": {
+      "type": "array",
+      "maxItems": 0
+    },
+    "monsterProfiles": {
+      "type": "array",
+      "minItems": 12,
+      "maxItems": 12,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "path",
+          "sha256",
+          "collider",
+          "explicitlyFlying",
+          "movementPredicateOverrides"
+        ]
+      }
+    },
+    "countsMeaning": {
+      "const": "counts describe original source observations; motion contains 270 equivalent representative groups, each with 25 states"
+    },
+    "directionObservations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "selection",
+        "canonicalization",
+        "sha256",
+        "count"
+      ],
+      "properties": {
+        "path": {
+          "type": "string"
+        },
+        "selection": {
+          "const": "rows where type == direction"
+        },
+        "canonicalization": {
+          "const": "Python json.dumps(sort_keys=True,separators=(comma,colon)); UTF-8"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "count": {
+          "const": 432
+        }
+      }
+    }
+  },
+  "$defs": {
+    "state": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "x",
+        "y",
+        "stageX",
+        "stageY",
+        "vx",
+        "vy",
+        "left",
+        "right",
+        "standing",
+        "head",
+        "wallLeft",
+        "wallRight",
+        "action",
+        "collider"
+      ],
+      "properties": {
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        },
+        "stageX": {
+          "type": "number"
+        },
+        "stageY": {
+          "type": "number"
+        },
+        "vx": {
+          "type": "number"
+        },
+        "vy": {
+          "type": "number"
+        },
+        "left": {
+          "type": "boolean"
+        },
+        "right": {
+          "type": "boolean"
+        },
+        "standing": {
+          "type": "boolean"
+        },
+        "head": {
+          "type": "boolean"
+        },
+        "wallLeft": {
+          "type": "boolean"
+        },
+        "wallRight": {
+          "type": "boolean"
+        },
+        "action": {
+          "type": "string",
+          "minLength": 1
+        },
+        "collider": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "x",
+            "y",
+            "width",
+            "height"
+          ],
+          "properties": {
+            "x": {
+              "type": "number"
+            },
+            "y": {
+              "type": "number"
+            },
+            "width": {
+              "type": "number"
+            },
+            "height": {
+              "type": "number"
+            }
+          }
+        }
+      }
+    }
+  }
+}

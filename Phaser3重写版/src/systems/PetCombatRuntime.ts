@@ -1,0 +1,263 @@
+import type { PlayerSlot } from './InputSystem';
+import type { MonsterAttackTarget } from './MonsterExperienceSystem';
+import { PetBehaviorRegistry } from './PetBehaviorRegistry';
+import { PetCombatTargeting } from './PetCombatTargeting';
+import { createDefaultPetBehaviorRegistry } from './pet-behaviors/createDefaultPetBehaviorRegistry';
+import { PetCombatEntitySession, validatePetCombatFrame } from './PetCombatEntitySession';
+import type {
+  PetCombatEntitySnapshot, PetCombatFrame, PetCombatReleaseReason, PetCombatRuntimeEvent,
+  PetCombatSnapshot, PetCombatSummonHandle, PetCombatSummonRequest,
+} from './PetCombatTypes';
+import type { PetOwnerSnapshot, PetState } from './PetTypes';
+import { DefaultGlobalSettings } from './GlobalSettingsSystem';
+import type { MonsterDamageRequest } from './MonsterDamageReception';
+import type { PetMonsterReceptionInput, PetMonsterReceptionEffect } from './PetMonsterDamageReception';
+import { rejectPetMonsterReception } from './PetMonsterDamageReception';
+import type { MonsterReceptionTarget } from './MonsterAttackReception';
+
+export type {
+  PetCombatFrame, PetCombatRuntimeEvent, PetCombatSessionPhase, PetCombatSnapshot,
+} from './PetCombatTypes';
+
+let nextRuntimeId = 1;
+
+export class PetCombatRuntime {
+  private readonly instanceId = nextRuntimeId++;
+  private nextEntityId = 1;
+  private active: PetCombatEntitySession | undefined;
+  private readonly entities = new Map<string, PetCombatEntitySession>();
+  private completedDeadIdentity: string | undefined;
+  private publishedEvents: PetCombatRuntimeEvent[] = [];
+  private nextEventSequence = 1;
+  private destroyed = false;
+  private pendingOwnerHostTicks = 0;
+
+  constructor(
+    private readonly registry: PetBehaviorRegistry = createDefaultPetBehaviorRegistry(),
+    private readonly targeting: PetCombatTargeting = new PetCombatTargeting(),
+  ) {}
+
+  update(frame: PetCombatFrame): PetCombatSnapshot {
+    if (this.destroyed) return this.snapshot();
+    validatePetCombatFrame(frame);
+    this.publishedEvents = [];
+    const activePet = frame.roster.pets.find((pet) => (
+      pet.isActive && (pet.lifetime > 0 || (this.active?.pet === pet && this.active.phase === 'dead-playing'))
+      && !(pet.hp <= 0 && this.completedDeadIdentity === `${pet.id}:${pet.species}:${pet.form}`)
+    ));
+    this.synchronizePet(activePet, frame.owner, frame.groundEnvironment?.ownerRootOffsetY);
+    const rosterIndex = frame.roster.pets.indexOf(activePet!);
+    if (this.active && rosterIndex >= 0) frame.roster.pets[rosterIndex] = this.active.pet;
+    if (frame.ownerStep) {
+      // A formal slot uses this single host accumulator for hero effects and
+      // main/private pet entities. Session accumulation is bypassed below.
+      const fps = frame.hostFps ?? DefaultGlobalSettings.frameRate;
+      this.pendingOwnerHostTicks += frame.deltaMs * fps / 1000;
+      const ticks = Math.floor(this.pendingOwnerHostTicks + 1e-9);
+      this.pendingOwnerHostTicks = Math.max(0, this.pendingOwnerHostTicks - ticks);
+      for (let tick = 0; tick < ticks; tick++) {
+        frame.ownerStep();
+        if (this.active) this.stepEntity(this.active, { ...frame, hostTicks: 1, deltaMs: 1000 / fps,
+          damageEvents: tick === 0 ? frame.damageEvents : [],
+          animationEvents: tick === 0 ? frame.animationEvents : [] });
+      }
+      // Retain subframe events in the existing session buffer without a tick.
+      if (!ticks && this.active) this.stepEntity(this.active, { ...frame, hostTicks: 0 });
+      return this.snapshot();
+    }
+    if (!this.active) return this.snapshot();
+    this.stepEntity(this.active, frame);
+    return this.snapshot();
+  }
+
+  currentAttackTarget(ownerSlot: PlayerSlot): MonsterAttackTarget | undefined {
+    return this.active && !this.active.released ? this.active.attackTarget(ownerSlot) : undefined;
+  }
+
+  supports(pet: Pick<PetState, 'species' | 'form'>): boolean {
+    return this.registry.has(pet.species, pet.form);
+  }
+
+  applyDamageEvents(events: NonNullable<PetCombatFrame['damageEvents']>, timeMs: number): PetCombatSnapshot {
+    if (!this.destroyed) {
+      for (const entity of this.entities.values()) entity.applyDamageEvents(events, timeMs);
+    }
+    return this.snapshot();
+  }
+
+  receiveMonsterDamage(runtimeKey: string,
+    input: Omit<PetMonsterReceptionInput, 'action' | 'protected' | 'gxp'>,
+    request: MonsterDamageRequest): PetMonsterReceptionEffect | undefined {
+    if (this.destroyed) return undefined;
+    const entity = this.entities.get(runtimeKey);
+    return entity?.receiveMonsterDamage(input, request);
+  }
+
+  /** Internal world port: source counters register on the same target-owned ID list. */
+  currentMonsterReceptionTarget(runtimeKey: string,
+    readCounterChance: () => number | undefined): MonsterReceptionTarget | undefined {
+    if (this.destroyed) return undefined;
+    const entity = this.entities.get(runtimeKey);
+    if (!entity) return undefined;
+    return { ids: entity.monsterHitIds,
+      receive: request => this.destroyed || entity.released || this.entities.get(runtimeKey) !== entity
+        ? rejectPetMonsterReception(entity.pet, entity.runtime.state)
+        : entity.receiveCurrentMonsterDamage(readCounterChance(), request) };
+  }
+
+  monsterReceptionTarget(runtimeKey: string,
+    readInput: () => Omit<PetMonsterReceptionInput, 'action' | 'protected' | 'gxp'>): MonsterReceptionTarget | undefined {
+    if (this.destroyed) return undefined;
+    const entity = this.entities.get(runtimeKey);
+    if (!entity) return undefined;
+    return { ids: entity.monsterHitIds, receive: request => entity.receiveMonsterDamage(readInput(), request) };
+  }
+
+  snapshot(): PetCombatSnapshot {
+    const active = this.active?.snapshot();
+    return Object.freeze({
+      destroyed: this.destroyed,
+      petId: active?.petId, species: active?.species, form: active?.form,
+      runtime: active?.runtime, target: active?.target, phase: active?.phase,
+      actionToken: active?.actionToken,
+      animation: active?.animation,
+      passive: active?.passive,
+      groundMotion: active?.groundMotion,
+      protectedFromHits: active?.protectedFromHits,
+      turtleLinkVisible: active?.turtleLinkVisible,
+      summons: Object.freeze([...this.entities.values()]
+        .filter((entity) => entity.parentRuntimeKey && !entity.released)
+        .map((entity) => entity.snapshot())),
+    });
+  }
+
+  events(): readonly PetCombatRuntimeEvent[] {
+    return Object.freeze(this.publishedEvents.map((event) => Object.freeze({ ...event })));
+  }
+
+  destroy(): void {
+    if (this.destroyed) return;
+    this.publishedEvents = [];
+    try {
+      if (this.active) this.releaseEntity(this.active, 'runtime-destroyed');
+    } finally {
+      this.destroyed = true;
+      this.publish({ type: 'destroyed' });
+    }
+  }
+
+  /** Owner death releases the current tree without treating pets as hit deaths. */
+  releaseOwner(): void {
+    if (this.active) this.releaseEntity(this.active, 'inactive');
+    this.pendingOwnerHostTicks = 0;
+  }
+
+  private synchronizePet(pet: PetState | undefined, owner: Readonly<PetOwnerSnapshot>, ownerRootOffsetY = 0): void {
+    if (!pet) {
+      if (this.active) this.releaseEntity(this.active, 'inactive');
+      return;
+    }
+    const identity = `${pet.id}:${pet.species}:${pet.form}`;
+    if (this.active?.identity === identity) {
+      if (this.active.pet !== pet) Object.assign(this.active.pet, pet);
+      return;
+    }
+    // Resolve before releasing the current session: failed selection leaves it intact.
+    const behavior = this.registry.resolve(pet.species, pet.form);
+    if (this.active) this.releaseEntity(this.active, 'replaced');
+    const key = `${identity}:session:${this.instanceId}:${this.nextEntityId++}`;
+    const entity = new PetCombatEntitySession(
+      pet, key, pet.id, undefined, behavior, this.targeting, this.entityPorts(key), owner, undefined, ownerRootOffsetY,
+    );
+    this.active = entity;
+    this.entities.set(key, entity);
+    entity.enter(behavior.groundMovement ? { ...owner, y: owner.y + ownerRootOffsetY } : owner);
+  }
+
+  private entityPorts(key: string) {
+    return {
+      publish: (event: Omit<PetCombatRuntimeEvent, 'sequence'>) => this.publish(event),
+      stepChildren: (frame: PetCombatFrame, eventsOnly: boolean) => {
+        for (const child of this.childrenOf(key)) this.stepEntity(child, frame, eventsOnly);
+      },
+      releaseChildren: (reason: PetCombatReleaseReason) => {
+        const failures: unknown[] = [];
+        for (const child of this.childrenOf(key)) {
+          try { this.releaseEntity(child, reason); } catch (error) { failures.push(error); }
+        }
+        if (failures.length) throw new AggregateError(failures, 'Pet child release callbacks failed after cleanup');
+      },
+      spawnSummon: (request: PetCombatSummonRequest, owner: Readonly<PetOwnerSnapshot>) => this.spawnSummon(key, request, owner),
+      releaseSummon: (handle: PetCombatSummonHandle, reason: PetCombatReleaseReason) => {
+        const child = this.entities.get(handle.runtimeKey);
+        if (child?.parentRuntimeKey === key && handle.parentRuntimeKey === key
+          && child.pet.id === handle.petId && child.sourcePetId === handle.sourcePetId) {
+          this.releaseEntity(child, reason);
+        }
+      },
+      summonSnapshots: (): readonly PetCombatEntitySnapshot[] => Object.freeze(
+        this.childrenOf(key).map((entity) => entity.snapshot()),
+      ),
+    };
+  }
+
+  private spawnSummon(
+    parentKey: string, request: PetCombatSummonRequest, owner: Readonly<PetOwnerSnapshot>,
+  ): PetCombatSummonHandle {
+    const parent = this.entities.get(parentKey);
+    if (!parent || parent.released || parent.phase !== 'alive' || this.destroyed) {
+      throw new Error('Cannot summon from a released pet combat session.');
+    }
+    if (!Number.isFinite(request.x) || !Number.isFinite(request.y)
+      || ![-1, 1].includes(request.facingX)) throw new Error('Pet summon position must be finite.');
+    const behavior = this.registry.resolve(request.pet.species, request.pet.form);
+    const key = `${parentKey}:summon:${this.nextEntityId++}`;
+    const pet: PetState = { ...structuredClone(request.pet), id: key, isActive: true };
+    const child = new PetCombatEntitySession(
+      pet, key, parent.sourcePetId, parentKey, behavior, this.targeting,
+      { ...this.entityPorts(key), publish: (event) => {
+        this.publish(event);
+        if (event.type === 'deactivated' && event.reason) request.onReleased?.(event.reason);
+      } }, owner, request,
+    );
+    this.entities.set(key, child);
+    try {
+      child.enter(owner, request.initialAction);
+    } catch (error) {
+      this.releaseEntity(child, 'dismissed');
+      throw error;
+    }
+    return Object.freeze({
+      runtimeKey: key, petId: pet.id, parentRuntimeKey: parentKey, sourcePetId: parent.sourcePetId,
+    });
+  }
+
+  private childrenOf(key: string): PetCombatEntitySession[] {
+    return [...this.entities.values()].filter((entity) => (
+      entity.parentRuntimeKey === key && !entity.released
+    ));
+  }
+
+  private stepEntity(entity: PetCombatEntitySession, frame: PetCombatFrame, eventsOnly = false): void {
+    if (entity.released || !this.entities.has(entity.runtimeKey)) return;
+    try { entity.update(frame, eventsOnly); }
+    finally { if (entity.released) this.forgetEntity(entity); }
+  }
+
+  private releaseEntity(entity: PetCombatEntitySession, reason: PetCombatReleaseReason): void {
+    try { entity.release(reason); }
+    finally { this.forgetEntity(entity); }
+  }
+
+  private forgetEntity(entity: PetCombatEntitySession): void {
+    this.entities.delete(entity.runtimeKey);
+    if (this.active === entity) {
+      if (entity.releaseReason === 'dead-complete') this.completedDeadIdentity = entity.identity;
+      this.active = undefined;
+    }
+  }
+
+  private publish(event: Omit<PetCombatRuntimeEvent, 'sequence'>): void {
+    this.publishedEvents.push(Object.freeze({ ...event, sequence: this.nextEventSequence++ }));
+  }
+}

@@ -1,0 +1,2058 @@
+import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
+import path from 'node:path';
+
+const root = process.cwd();
+
+const files = {
+  agents: 'AGENTS.md',
+  readme: 'README.md',
+  outline: 'TASK_OUTLINE.md',
+  executionQueue: 'docs/tasks/execution-queue.md',
+  board: 'docs/tasks/task-board.md',
+  history: 'docs/tasks/task-history.md',
+  featureLines: 'docs/tasks/feature-lines.md',
+  taskGeneration: 'docs/workflow/task-generation.md',
+  verticalSlices: 'docs/tasks/vertical-slices.md',
+  mechanics: 'docs/reverse-engineering/mechanics-index.md',
+  governanceLog: 'docs/workflow/governance-log.md',
+  workflowReadme: 'docs/workflow/README.md',
+  documentMap: 'docs/workflow/document-map.md',
+  codeQualityGates: 'docs/workflow/code-quality-gates.md',
+  reviewProtocol: 'docs/workflow/review-protocol.md',
+  problemGovernance: 'docs/workflow/problem-governance.md',
+  problemAudit: 'docs/workflow/problem-audit.md',
+  methodObservation: 'docs/workflow/method-observation.md',
+  reverseEngineeringProtocol: 'docs/workflow/reverse-engineering-protocol.md',
+  reverseEngineeringTaskProtocol: 'docs/workflow/reverse-engineering-task-protocol.md',
+  groundTruthGenerationPlan: 'docs/reverse-engineering/plans/ground-truth-fine-grained-generation.md',
+  groundTruthCompletenessValidator: 'docs/workflow/ground-truth-completeness-validator.md',
+  systemDesignProtocol: 'docs/workflow/system-design-protocol.md',
+  systemDesignAcceptanceProtocol: 'docs/workflow/system-design-acceptance-protocol.md',
+  systemDesignTemplate: 'docs/architecture/system-designs/_template.md',
+  groundTruthReadme: 'docs/reverse-engineering/ground-truth/README.md',
+  uiGroundTruthSchema: 'docs/reverse-engineering/ground-truth/schema/ui-ground-truth.schema.json',
+  srcBoundaries: 'docs/architecture/src-boundaries.md',
+  glossary: 'docs/domain/glossary.md',
+  languageProcess: 'docs/domain/ubiquitous-language-process.md',
+  agentProtocol: 'docs/workflow/agent-protocol.md',
+  reverseEngineeringAgent: '.claude/agents/reverse-engineering-researcher.md',
+  implementationAgent: '.claude/agents/modern-implementation-engineer.md',
+  reviewAgent: '.claude/agents/engineering-reviewer.md',
+  workflowAgent: '.claude/agents/workflow-steward.md',
+  structureCheck: 'tools/check-structure.mjs',
+  systemDesignCheck: 'tools/check-system-design.mjs',
+  packageJson: 'package.json',
+  tsconfig: 'tsconfig.json',
+  inputSystem: 'src/systems/InputSystem.ts',
+  extractionReadme: 'local-resources/regima/legacy-extraction/README_extract.md',
+};
+
+const errors = [];
+const warnings = [];
+
+const taskDefinitionFields = [
+  '任务类型：',
+  '功能条线：',
+  '目标机制/切片：',
+  '规模预算：',
+  '拆分触发：',
+  '输入资料：',
+  '输出产物：',
+  '完成定义：',
+  '验收标准：',
+  '禁止范围：',
+  '状态更新：',
+  '推荐后续任务：',
+];
+
+function error(message) {
+  errors.push(message);
+}
+
+function warn(message) {
+  warnings.push(message);
+}
+
+function filePath(relativePath) {
+  return path.join(root, relativePath);
+}
+
+function read(relativePath) {
+  const absolutePath = filePath(relativePath);
+  if (!existsSync(absolutePath)) {
+    error(`Missing required file: ${relativePath}`);
+    return '';
+  }
+  return readFileSync(absolutePath, 'utf8');
+}
+
+function section(markdown, heading) {
+  const start = markdown.indexOf(`## ${heading}`);
+  if (start === -1) return '';
+  const next = markdown.indexOf('\n## ', start + 1);
+  return next === -1 ? markdown.slice(start) : markdown.slice(start, next);
+}
+
+function beforeSection(markdown, heading) {
+  const start = markdown.indexOf(`## ${heading}`);
+  return start === -1 ? markdown : markdown.slice(0, start);
+}
+
+function tableRows(markdown, prefixPattern) {
+  return markdown
+    .split(/\r?\n/)
+    .filter((line) => prefixPattern.test(line))
+    .map((line) => line.split('|').slice(1, -1).map((cell) => cell.trim()));
+}
+
+function taskDefinitions(markdown) {
+  return [...markdown.matchAll(/^###\s+(TASK-(?:[A-Z]+-)?\d+[A-Z]?\d?)/gm)].map((match) => match[1]);
+}
+
+function taskBlocks(markdown) {
+  const matches = [...markdown.matchAll(/^###\s+(TASK-(?:[A-Z]+-)?\d+[A-Z]?\d?)/gm)];
+  return matches.map((match, index) => {
+    const next = matches[index + 1]?.index ?? markdown.length;
+    return {
+      id: match[1],
+      text: markdown.slice(match.index, next),
+    };
+  });
+}
+
+function duplicateIds(ids) {
+  const seen = new Set();
+  const duplicates = new Set();
+  for (const id of ids) {
+    if (seen.has(id)) duplicates.add(id);
+    seen.add(id);
+  }
+  return [...duplicates];
+}
+
+function taskSizeBudgetErrors(text, status = 'Ready') {
+  const budgetErrors = [];
+  const budgetStart = text.indexOf('规模预算：');
+  const splitStart = text.indexOf('拆分触发：');
+  const inputStart = text.indexOf('输入资料：');
+  const budgetSection = budgetStart >= 0 && splitStart > budgetStart
+    ? text.slice(budgetStart, splitStart)
+    : '';
+  const splitSection = splitStart >= 0 && inputStart > splitStart
+    ? text.slice(splitStart, inputStart)
+    : '';
+  const workPackages = Number(budgetSection.match(/主工作包：\s*(\d+)/)?.[1]);
+  const expectedCompacts = Number(budgetSection.match(/预计上下文压缩：\s*(\d+)/)?.[1]);
+  const acceptanceBatches = Number(budgetSection.match(/独立验收批次：\s*(\d+)/)?.[1]);
+
+  if (!Number.isInteger(workPackages) || (status === 'Split' ? workPackages !== 0 : workPackages < 1 || workPackages > 2)) {
+    budgetErrors.push(status === 'Split' ? 'Split task 主工作包 must be 0' : '主工作包 must be between 1 and 2');
+  }
+  if (expectedCompacts !== 0) {
+    budgetErrors.push('预计上下文压缩 must be 0');
+  }
+  if (!Number.isInteger(acceptanceBatches) || (status === 'Split' ? acceptanceBatches !== 0 : acceptanceBatches < 1 || acceptanceBatches > 2)) {
+    budgetErrors.push(status === 'Split' ? 'Split task 独立验收批次 must be 0' : '独立验收批次 must be between 1 and 2');
+  }
+  if (!/\n-\s+\S/.test(splitSection)) {
+    budgetErrors.push('拆分触发 must contain at least one actionable bullet');
+  }
+  return budgetErrors;
+}
+
+function checkTaskSizeBudgetSamples() {
+  const valid = `规模预算：
+- 主工作包：1
+- 预计上下文压缩：0
+- 独立验收批次：1
+
+拆分触发：
+- 新增资料族时拆分。
+
+输入资料：`;
+  if (taskSizeBudgetErrors(valid).length > 0) {
+    error('Task size budget positive sample failed.');
+  }
+  const negativeCases = [
+    valid.replace('主工作包：1', '主工作包：3'),
+    valid.replace('预计上下文压缩：0', '预计上下文压缩：1'),
+    valid.replace('独立验收批次：1', '独立验收批次：3'),
+    valid.replace('- 新增资料族时拆分。', ''),
+  ];
+  negativeCases.forEach((negativeCase, index) => {
+    if (taskSizeBudgetErrors(negativeCase).length === 0) {
+      error(`Task size budget negative case ${index + 1} must fail validation.`);
+    }
+  });
+}
+
+function collaborationPlanErrors(text) {
+  if (!text.includes('协作计划：')) return [];
+  const planErrors = [];
+  const planStart = text.indexOf('协作计划：');
+  const inputStart = text.indexOf('输入资料：', planStart);
+  const plan = inputStart > planStart ? text.slice(planStart, inputStart) : text.slice(planStart);
+  for (const requiredText of ['模式：', '并行工作包：', '写入 owner：', '归并检查点：', '方法观测：']) {
+    if (!plan.includes(requiredText)) planErrors.push(`协作计划 missing ${requiredText}`);
+  }
+  if (plan.includes('主 agent + subagent')) {
+    if (!plan.includes('写入 owner：主 agent')) planErrors.push('subagent collaboration must keep 主 agent as write owner');
+    if (/并行工作包：\s*无/.test(plan)) planErrors.push('subagent collaboration must declare a bounded parallel package');
+    if (/归并检查点：\s*(不适用|无)/.test(plan)) planErrors.push('subagent collaboration must declare a merge checkpoint');
+  }
+  return planErrors;
+}
+
+function checkCollaborationPlanSamples() {
+  const valid = `协作计划：
+- 模式：主 agent + subagent
+- 并行工作包：只读校验器审查
+- 写入 owner：主 agent
+- 归并检查点：实现前
+- 方法观测：MO-001
+
+输入资料：`;
+  if (collaborationPlanErrors(valid).length > 0) error('Collaboration-plan positive sample failed.');
+  const negativeCases = [
+    valid.replace('写入 owner：主 agent', '写入 owner：subagent'),
+    valid.replace('并行工作包：只读校验器审查', '并行工作包：无'),
+    valid.replace('归并检查点：实现前', '归并检查点：不适用'),
+  ];
+  negativeCases.forEach((negativeCase, index) => {
+    if (collaborationPlanErrors(negativeCase).length === 0) {
+      error(`Collaboration-plan negative case ${index + 1} must fail validation.`);
+    }
+  });
+}
+
+function compareIdSets(label, rowIds, definitionIds) {
+  const rowSet = new Set(rowIds);
+  const definitionSet = new Set(definitionIds);
+  const missingDefinitions = rowIds.filter((id) => !definitionSet.has(id));
+  const missingRows = definitionIds.filter((id) => !rowSet.has(id));
+
+  if (missingDefinitions.length > 0) {
+    error(`${label}: task rows missing definitions: ${missingDefinitions.join(', ')}`);
+  }
+  if (missingRows.length > 0) {
+    error(`${label}: definitions missing task rows: ${missingRows.join(', ')}`);
+  }
+}
+
+function extractRefs(text, prefix) {
+  const pattern = new RegExp(`${prefix}-\\d{3}`, 'g');
+  return [...new Set(text.match(pattern) ?? [])];
+}
+
+function extractLineRefs(text) {
+  return [...new Set(text.match(/LINE-[A-Z0-9-]+/g) ?? [])];
+}
+
+function parseFeatureLineRows(markdown) {
+  const overview = section(markdown, '功能条线总览');
+  return tableRows(overview, /^\|\s*LINE-[A-Z0-9-]+\s*\|/).map((row) => ({
+    id: row[0],
+    status: row[1],
+    scope: row[2],
+    currentTask: row[3].replaceAll('`', '').trim(),
+    coverage: row[4].replaceAll('`', '').trim(),
+    blocker: row[5],
+    closureEvidence: row[6],
+    row,
+  }));
+}
+
+function parseMechanics(markdown) {
+  const overview = section(markdown, '总览');
+  const rows = tableRows(overview, /^\|\s*M-\d{3}\s*\|/);
+  const map = new Map();
+  for (const row of rows) {
+    const [id, name, reverseStatus, reproductionStatus] = row;
+    map.set(id, { id, name, reverseStatus, reproductionStatus, row });
+  }
+  return map;
+}
+
+function parseTaskRows(markdown) {
+  const taskSection = section(markdown, '待完成任务');
+  return tableRows(taskSection, /^\|\s*TASK-/).map((row) => ({
+    id: row[0],
+    status: row[1],
+    featureLine: row[2],
+    type: row[3],
+    goal: row[4],
+    targetRefs: row[5],
+    output: row[6],
+    next: row[7],
+    definitionPath: row[8].match(/\(([^)]+)\)/)?.[1] ?? '',
+    row,
+  }));
+}
+
+function parseExecutionQueueRows(markdown) {
+  const queueSection = section(markdown, '活跃治理执行项');
+  return tableRows(queueSection, /^\|\s*[^|-]/)
+    .filter((row) => row[0] !== '优先级' && !/^:?-{3,}/.test(row[0]))
+    .map((row) => ({
+    priority: Number(row[0]),
+    id: row[1],
+    status: row[2],
+    type: row[3],
+    goal: row[4],
+    contractPath: row[5].match(/\(([^)]+)\)/)?.[1] ?? '',
+    next: row[6],
+      row,
+    }));
+}
+
+function globalExecutionQueueErrors(queueText, queueRows, problemRecords, recommendedIds) {
+  const queueErrors = [];
+  for (const requiredText of ['## 调度规则', '## 活跃治理执行项', '## 游戏回退']) {
+    if (!queueText.includes(requiredText)) {
+      queueErrors.push(`execution-queue.md must include: ${requiredText}`);
+    }
+  }
+
+  const allowedStatuses = new Set(['Ready', 'Blocked', 'Planned']);
+  const actionableRows = queueRows.filter((row) => row.status === 'Ready' || row.status === 'Blocked');
+  if (actionableRows.length > 1) {
+    queueErrors.push(`execution-queue.md must have at most one Ready/Blocked governance item; found ${actionableRows.length}`);
+  }
+
+  const priorities = queueRows.map((row) => row.priority);
+  if (duplicateIds(priorities).length > 0) {
+    queueErrors.push('execution-queue.md has duplicate priorities');
+  }
+  queueRows.forEach((row, index) => {
+    if (!Number.isInteger(row.priority) || row.priority !== index + 1) {
+      queueErrors.push(`execution-queue.md priorities must be consecutive from 1 in table order: ${row.priority}`);
+    }
+    if (!/^PG-\d{3}$/.test(row.id)) {
+      queueErrors.push(`execution-queue.md has invalid governance id: ${row.id || '(missing)'}`);
+    }
+    if (!allowedStatuses.has(row.status)) {
+      queueErrors.push(`execution-queue.md has invalid status for ${row.id}: ${row.status}`);
+    }
+    const record = problemRecords.find((candidate) => candidate.id === row.id);
+    if (!record) {
+      queueErrors.push(`execution-queue.md references missing problem record: ${row.id}`);
+      return;
+    }
+    const problemStatus = record.text.match(/^状态：(.+)。$/m)?.[1] ?? '';
+    if (problemStatus === '已归档') {
+      queueErrors.push(`execution-queue.md cannot schedule archived problem: ${row.id}`);
+    }
+    const expectedPath = `../workflow/${record.path.replace('docs/workflow/', '')}`;
+    if (row.contractPath !== expectedPath) {
+      queueErrors.push(`${row.id} must link to ${expectedPath} from execution-queue.md`);
+    }
+  });
+
+  if (actionableRows.length === 0 && recommendedIds.length !== 1) {
+    queueErrors.push('execution-queue.md game fallback requires exactly one recommended game task');
+  }
+
+  return {
+    errors: queueErrors,
+    currentExecution: actionableRows[0]
+      ? { id: actionableRows[0].id, scope: 'governance' }
+      : { id: recommendedIds[0] ?? '', scope: 'game' },
+  };
+}
+
+function checkGlobalExecutionQueueSamples() {
+  const activeProblem = {
+    id: 'PG-900',
+    path: 'docs/workflow/problems/PG-900-sample.md',
+    text: '# PG-900 Sample\n\n状态：治理中。',
+  };
+  const archivedProblem = {
+    id: 'PG-901',
+    path: 'docs/workflow/problems/PG-901-archived.md',
+    text: '# PG-901 Archived\n\n状态：已归档。',
+  };
+  const baseRow = {
+    priority: 1,
+    id: activeProblem.id,
+    status: 'Ready',
+    type: '治理',
+    goal: 'sample',
+    contractPath: '../workflow/problems/PG-900-sample.md',
+    next: 'fallback',
+  };
+  const sampleText = '## 调度规则\n\n## 活跃治理执行项\n\n## 游戏回退';
+  const positive = globalExecutionQueueErrors(sampleText, [baseRow], [activeProblem], ['TASK-SETTINGS-900']);
+  if (positive.errors.length > 0 || positive.currentExecution.id !== activeProblem.id || positive.currentExecution.scope !== 'governance') {
+    error(`Global execution queue positive sample failed: ${positive.errors.join(' | ')}`);
+  }
+  const fallback = globalExecutionQueueErrors(sampleText, [], [activeProblem], ['TASK-SETTINGS-900']);
+  if (fallback.errors.length > 0 || fallback.currentExecution.id !== 'TASK-SETTINGS-900' || fallback.currentExecution.scope !== 'game') {
+    error(`Global execution queue fallback sample failed: ${fallback.errors.join(' | ')}`);
+  }
+
+  const negativeCases = [
+    { name: 'two Ready items', rows: [baseRow, { ...baseRow, priority: 2, id: 'PG-902', contractPath: '../workflow/problems/PG-902-sample.md' }], records: [activeProblem, { id: 'PG-902', path: 'docs/workflow/problems/PG-902-sample.md', text: '状态：治理中。' }], expected: 'at most one Ready/Blocked' },
+    { name: 'Ready and Blocked', rows: [baseRow, { ...baseRow, priority: 2, status: 'Blocked' }], records: [activeProblem], expected: 'at most one Ready/Blocked' },
+    { name: 'duplicate priority', rows: [baseRow, { ...baseRow, status: 'Planned' }], records: [activeProblem], expected: 'duplicate priorities' },
+    { name: 'non-consecutive priority', rows: [{ ...baseRow, priority: 2 }], records: [activeProblem], expected: 'consecutive from 1' },
+    { name: 'archived problem', rows: [{ ...baseRow, id: archivedProblem.id, contractPath: '../workflow/problems/PG-901-archived.md' }], records: [archivedProblem], expected: 'cannot schedule archived problem' },
+    { name: 'missing problem', rows: [{ ...baseRow, id: 'PG-999', contractPath: '../workflow/problems/PG-999-missing.md' }], records: [activeProblem], expected: 'missing problem record' },
+    { name: 'invalid status', rows: [{ ...baseRow, status: 'Done' }], records: [activeProblem], expected: 'invalid status' },
+  ];
+  for (const sample of negativeCases) {
+    const sampleResult = globalExecutionQueueErrors(sampleText, sample.rows, sample.records, ['TASK-SETTINGS-900']);
+    if (!sampleResult.errors.some((message) => message.includes(sample.expected))) {
+      error(`Global execution queue negative sample did not fail (${sample.name}): ${sample.expected}`);
+    }
+  }
+}
+
+function checkGlobalExecutionQueue(queueText, queueRows, problemRecords, recommendedIds) {
+  const result = globalExecutionQueueErrors(queueText, queueRows, problemRecords, recommendedIds);
+  for (const message of result.errors) error(message);
+  checkGlobalExecutionQueueSamples();
+  return result.currentExecution;
+}
+
+function parseGlossary(markdown) {
+  const tableSection = section(markdown, '统一语言表');
+  return tableRows(tableSection, /^\|\s*[^|-]/)
+    .filter((row) => row.length >= 6 && row[0] !== '中文概念')
+    .map((row) => ({
+      concept: row[0],
+      recommendedName: row[1].replaceAll('`', '').trim(),
+      type: row[2],
+      context: row[3],
+      description: row[4],
+      forbiddenAliases: row[5]
+        .split(',')
+        .map((alias) => alias.replaceAll('`', '').trim())
+        .filter(Boolean),
+    }));
+}
+
+function assertRequiredFiles() {
+  for (const requiredPath of Object.values(files)) {
+    if (!existsSync(filePath(requiredPath))) {
+      error(`Missing required file: ${requiredPath}`);
+    }
+  }
+  if (existsSync(filePath('docs/tasks/task-generation.md'))) {
+    error('Old task generation path still exists: docs/tasks/task-generation.md');
+  }
+  if (!existsSync(filePath('docs/tasks/task-definitions'))) {
+    error('Missing required task definition directory: docs/tasks/task-definitions');
+  }
+  if (existsSync(filePath('docs/tasks/goal-board.md'))) {
+    error('Retired Goal board still exists: docs/tasks/goal-board.md');
+  }
+}
+
+function checkBoardShape(board, taskRows, taskDefinitionIds, taskBlockList) {
+  const rowIds = taskRows.map((row) => row.id);
+
+  if (taskRows.length === 0) {
+    error('task-board.md has no unfinished task rows.');
+  }
+  if (board.includes('TASK-DOCS-')) {
+    error('task-board.md must not contain TASK-DOCS-* workflow tasks.');
+  }
+  if (!board.includes('execution-queue.md')) {
+    error('task-board.md must route /goal through execution-queue.md before the game Ready task.');
+  }
+  if (board.includes('docs/tasks/task-generation.md')) {
+    error('task-board.md references old path docs/tasks/task-generation.md.');
+  }
+  if (board.includes('## 已完成任务') || board.includes('## 执行记录')) {
+    error('task-board.md should not contain completed-task sections or execution history.');
+  }
+  if (board.includes('## 任务完成定义') || /^###\s+TASK-/m.test(board)) {
+    error('task-board.md must remain a thin index; full definitions belong in task-definitions/TASK-*.md.');
+  }
+
+  compareIdSets('task-board/task-definitions', rowIds, taskDefinitionIds);
+
+  for (const id of duplicateIds(rowIds)) error(`task-board.md has duplicate task row: ${id}`);
+  for (const id of duplicateIds(taskDefinitionIds)) error(`task-definitions has duplicate task definition: ${id}`);
+
+  for (const row of taskRows) {
+    if (row.status === 'Done') {
+      error(`${row.id} is Done but still appears in task-board.md; move it to task-history.md.`);
+    }
+    if (row.id.startsWith('TASK-DOCS-')) {
+      error(`${row.id} is a workflow task and must not appear in task-board.md.`);
+    }
+    if (extractRefs(row.targetRefs, 'M').length === 0 && extractRefs(row.targetRefs, 'VS').length === 0) {
+      error(`${row.id} target refs must include at least one M-* or VS-* id.`);
+    }
+    if (row.status === 'Blocked' && !/阻塞[:：]/.test(row.next)) {
+      error(`${row.id} is Blocked but its table next-step cell does not include an explicit 阻塞 reason.`);
+    }
+    if (row.definitionPath !== `task-definitions/${row.id}.md`) {
+      error(`${row.id} must link to task-definitions/${row.id}.md from task-board.md.`);
+    }
+  }
+
+  for (const block of taskBlockList) {
+    if (!block.text.startsWith(`# ${block.id}\n`)) {
+      error(`${block.path} must start with a level-one ${block.id} heading.`);
+    }
+    for (const field of taskDefinitionFields) {
+      if (!block.text.includes(field)) {
+        error(`${block.id} definition is missing required field: ${field}`);
+      }
+    }
+    const row = taskRows.find((candidate) => candidate.id === block.id);
+    if (row && !extractLineRefs(block.text).includes(row.featureLine)) {
+      error(`${block.id} definition must reference its feature line: ${row.featureLine}`);
+    }
+    if (row?.status === 'Blocked' && !block.text.includes('阻塞原因：')) {
+      error(`${block.id} is Blocked but its definition is missing 阻塞原因：`);
+    }
+    for (const budgetError of taskSizeBudgetErrors(block.text, row?.status)) {
+      error(`${block.id} has invalid size budget: ${budgetError}.`);
+    }
+    for (const planError of collaborationPlanErrors(block.text)) {
+      error(`${block.id} has invalid collaboration plan: ${planError}.`);
+    }
+  }
+  checkTaskSizeBudgetSamples();
+  checkCollaborationPlanSamples();
+}
+
+function checkRecommendations(board, taskRows) {
+  const recommendationSection = section(board, '当前推荐');
+  const recommendedIds = [
+    ...new Set([...recommendationSection.matchAll(/`(TASK-(?:[A-Z]+-)?\d+[A-Z]?\d?)`/g)].map((match) => match[1])),
+  ];
+  const readyIds = taskRows.filter((row) => row.status === 'Ready').map((row) => row.id);
+
+  if (recommendedIds.length === 0) {
+    error('task-board.md has no current recommended task ids.');
+  }
+  for (const id of recommendedIds) {
+    const row = taskRows.find((candidate) => candidate.id === id);
+    if (!row) {
+      error(`Recommended task does not exist in task-board.md: ${id}`);
+    } else if (row.status !== 'Ready' && row.status !== 'Blocked') {
+      error(`Recommended task is neither Ready nor Blocked: ${id} is ${row.status}`);
+    }
+  }
+  for (const id of readyIds) {
+    if (!recommendedIds.includes(id)) {
+      warn(`Ready task is not listed in 当前推荐: ${id}`);
+    }
+  }
+
+  return recommendedIds;
+}
+
+function featureLineInvariantErrors(featureLines, taskRows, recommendedIds) {
+  const invariantErrors = [];
+  const lineIds = featureLines.map((line) => line.id);
+  const activeLines = featureLines.filter((line) => line.status === 'Active');
+  const unfinishedLines = featureLines.filter((line) => line.status !== 'Done');
+  const activeLine = activeLines[0];
+
+  if (featureLines.length === 0) {
+    invariantErrors.push('feature-lines.md has no feature line rows.');
+    return invariantErrors;
+  }
+  for (const id of duplicateIds(lineIds)) {
+    invariantErrors.push(`feature-lines.md has duplicate line id: ${id}`);
+  }
+  for (const line of featureLines) {
+    if (!['Active', 'Planned', 'Done'].includes(line.status)) {
+      invariantErrors.push(`${line.id} has invalid feature line status: ${line.status}`);
+    }
+  }
+  if (unfinishedLines.length > 0 && activeLines.length !== 1) {
+    invariantErrors.push(`feature-lines.md must have exactly one Active line while unfinished lines exist; found ${activeLines.length}.`);
+  }
+
+  for (const task of taskRows) {
+    if (!lineIds.includes(task.featureLine)) {
+      invariantErrors.push(`${task.id} references missing feature line: ${task.featureLine || '(missing)'}`);
+    }
+    if ((task.status === 'Ready' || task.status === 'Blocked') && task.featureLine !== activeLine?.id) {
+      invariantErrors.push(`${task.id} is ${task.status} outside the Active feature line ${activeLine?.id ?? '(none)'}.`);
+    }
+  }
+
+  if (activeLine) {
+    const currentTask = taskRows.find((task) => task.id === activeLine.currentTask);
+    if (!currentTask) {
+      invariantErrors.push(`${activeLine.id} current task does not exist in task-board.md: ${activeLine.currentTask}`);
+    } else {
+      if (currentTask.featureLine !== activeLine.id) {
+        invariantErrors.push(`${activeLine.id} current task belongs to ${currentTask.featureLine}: ${currentTask.id}`);
+      }
+      if (currentTask.status !== 'Ready' && currentTask.status !== 'Blocked') {
+        invariantErrors.push(`${activeLine.id} current task must be Ready or Blocked: ${currentTask.id} is ${currentTask.status}`);
+      }
+    }
+    if (recommendedIds.length !== 1 || recommendedIds[0] !== activeLine.currentTask) {
+      invariantErrors.push(`${activeLine.id} current task must be the only current recommendation: ${activeLine.currentTask}`);
+    }
+    for (const recommendedId of recommendedIds) {
+      const recommendedTask = taskRows.find((task) => task.id === recommendedId);
+      if (recommendedTask && recommendedTask.featureLine !== activeLine.id) {
+        invariantErrors.push(`Recommended task ${recommendedId} is outside the Active feature line ${activeLine.id}.`);
+      }
+    }
+  }
+
+  for (const line of featureLines.filter((candidate) => candidate.status === 'Done')) {
+    const unfinishedTask = taskRows.find((task) => task.featureLine === line.id);
+    if (unfinishedTask) {
+      invariantErrors.push(`${line.id} is Done but still has unfinished task: ${unfinishedTask.id}`);
+    }
+    if (!line.coverage || /待建立/.test(line.coverage)) {
+      invariantErrors.push(`${line.id} is Done without a coverage ledger.`);
+    }
+    if (!line.closureEvidence || /未开始|待/.test(line.closureEvidence)) {
+      invariantErrors.push(`${line.id} is Done without concrete closure evidence.`);
+    }
+  }
+
+  const blockedCurrentTask = activeLine
+    ? taskRows.find((task) => task.id === activeLine.currentTask && task.status === 'Blocked')
+    : undefined;
+  if (blockedCurrentTask) {
+    const otherReadyTask = taskRows.find((task) => task.status === 'Ready');
+    if (otherReadyTask) {
+      invariantErrors.push(`${blockedCurrentTask.id} is the blocked Active task, but ${otherReadyTask.id} is Ready; resolve the same-line blocker instead of switching.`);
+    }
+  }
+
+  return invariantErrors;
+}
+
+function checkFeatureLineInvariantSamples() {
+  const active = {
+    id: 'LINE-A', status: 'Active', currentTask: 'TASK-SETTINGS-900', coverage: 'coverage-a.md', closureEvidence: '待关闭',
+  };
+  const planned = {
+    id: 'LINE-B', status: 'Planned', currentTask: 'TASK-SETTINGS-901', coverage: '待建立', closureEvidence: '未开始',
+  };
+  const activeTask = { id: 'TASK-SETTINGS-900', status: 'Ready', featureLine: 'LINE-A' };
+  const plannedTask = { id: 'TASK-SETTINGS-901', status: 'Planned', featureLine: 'LINE-B' };
+
+  const validErrors = featureLineInvariantErrors([active, planned], [activeTask, plannedTask], [activeTask.id]);
+  if (validErrors.length > 0) {
+    error(`Feature-line positive sample failed: ${validErrors.join(' | ')}`);
+  }
+
+  const samples = [
+    {
+      name: 'double Active',
+      lines: [active, { ...planned, status: 'Active' }],
+      tasks: [activeTask, plannedTask],
+      recommendations: [activeTask.id],
+      expected: 'exactly one Active',
+    },
+    {
+      name: 'Ready task outside Active line',
+      lines: [active, planned],
+      tasks: [activeTask, { ...plannedTask, status: 'Ready' }],
+      recommendations: [activeTask.id],
+      expected: 'outside the Active feature line',
+    },
+    {
+      name: 'cross-line recommendation',
+      lines: [active, planned],
+      tasks: [activeTask, plannedTask],
+      recommendations: [plannedTask.id],
+      expected: 'only current recommendation',
+    },
+    {
+      name: 'Done line with unfinished task',
+      lines: [active, { ...planned, status: 'Done', coverage: 'coverage-b.md', closureEvidence: 'verified' }],
+      tasks: [activeTask, plannedTask],
+      recommendations: [activeTask.id],
+      expected: 'Done but still has unfinished task',
+    },
+    {
+      name: 'blocked line switches to another Ready task',
+      lines: [active, planned],
+      tasks: [{ ...activeTask, status: 'Blocked' }, { ...plannedTask, status: 'Ready' }],
+      recommendations: [activeTask.id],
+      expected: 'resolve the same-line blocker',
+    },
+  ];
+
+  for (const sample of samples) {
+    const sampleErrors = featureLineInvariantErrors(sample.lines, sample.tasks, sample.recommendations);
+    if (!sampleErrors.some((message) => message.includes(sample.expected))) {
+      error(`Feature-line negative sample did not fail as expected (${sample.name}): ${sample.expected}`);
+    }
+  }
+}
+
+function checkFeatureLines(featureLinesText, featureLines, taskRows, recommendedIds) {
+  for (const message of featureLineInvariantErrors(featureLines, taskRows, recommendedIds)) {
+    error(message);
+  }
+
+  if (!featureLinesText.includes('WIP=1') || !featureLinesText.includes('阻塞')) {
+    error('feature-lines.md must document strict WIP=1 and same-line blocker handling.');
+  }
+
+  for (const line of featureLines.filter((candidate) => candidate.status === 'Active')) {
+    if (!line.coverage || /待建立/.test(line.coverage)) {
+      error(`${line.id} Active line must reference a coverage ledger.`);
+      continue;
+    }
+    const coveragePath = path.join('docs/tasks', line.coverage);
+    if (!existsSync(filePath(coveragePath))) {
+      error(`${line.id} coverage ledger does not exist: ${coveragePath}`);
+    }
+  }
+
+  checkFeatureLineInvariantSamples();
+}
+
+function checkHistory(history, boardIds) {
+  const historyTaskSection = section(history, '已完成任务');
+  const historyDefinitionsOnly = beforeSection(section(history, '已完成任务定义'), '执行记录');
+  const historyRows = tableRows(historyTaskSection, /^\|\s*TASK-/);
+  const historyIds = historyRows.map((row) => row[0]);
+  const historyDefinitionIds = taskDefinitions(historyDefinitionsOnly);
+
+  compareIdSets('task-history.md', historyIds, historyDefinitionIds);
+
+  for (const id of duplicateIds(historyIds)) error(`task-history.md has duplicate task row: ${id}`);
+  for (const id of duplicateIds(historyDefinitionIds)) error(`task-history.md has duplicate task definition: ${id}`);
+  for (const id of boardIds) {
+    if (historyIds.includes(id)) {
+      error(`Task appears in both board and history: ${id}`);
+    }
+  }
+
+  return { historyRows, historyDefinitionIds };
+}
+
+function checkRefs(taskRows, mechanics, verticalSlices) {
+  const mechanicIds = new Set(mechanics.keys());
+  const sliceIds = new Set(extractRefs(verticalSlices, 'VS'));
+
+  for (const row of taskRows) {
+    for (const id of extractRefs(row.targetRefs, 'M')) {
+      if (!mechanicIds.has(id)) {
+        error(`${row.id} references missing mechanic id: ${id}`);
+      }
+    }
+    for (const id of extractRefs(row.targetRefs, 'VS')) {
+      if (!sliceIds.has(id)) {
+        error(`${row.id} references missing vertical slice id: ${id}`);
+      }
+    }
+  }
+}
+
+function checkReadyDependencies(taskRows, mechanics) {
+  for (const row of taskRows) {
+    if (row.status !== 'Ready') continue;
+    if (row.type !== 'TASK-ARCH' && row.type !== 'TASK-SLICE') continue;
+
+    for (const id of extractRefs(row.targetRefs, 'M')) {
+      const mechanic = mechanics.get(id);
+      if (!mechanic) continue;
+      if (mechanic.reverseStatus === '未扒' || mechanic.reverseStatus === '暂缓') {
+        error(`${row.id} is Ready but depends on ${id} ${mechanic.name}, whose reverse status is ${mechanic.reverseStatus}.`);
+      } else if (mechanic.reverseStatus === '部分已扒') {
+        warn(`${row.id} is Ready but depends on ${id} ${mechanic.name}, whose reverse status is only 部分已扒.`);
+      }
+    }
+  }
+}
+
+function checkStartupRules(agents, outline) {
+  if (!agents.includes('默认不要读取 `docs/tasks/task-history.md`')) {
+    error('AGENTS.md must state that task-history.md is not read by default.');
+  }
+  const startupRule = agents.match(/1\.\s+先读[^\n]+/u)?.[0] ?? '';
+  if (startupRule.includes('task-history.md')) {
+    error('AGENTS.md startup rule must not require reading task-history.md.');
+  }
+  if (!outline.includes('默认不读') || !outline.includes('docs/tasks/task-history.md')) {
+    error('TASK_OUTLINE.md should state that task-history.md is not read by default.');
+  }
+  if (!agents.includes('冷启动阅读分流')) {
+    error('AGENTS.md should contain the cold-start reading decision table.');
+  }
+}
+
+function readingRouteErrors({ agents, claude, outline, readme, workflowReadme, documentMap, agentProtocol }) {
+  const missing = [];
+  const required = [
+    ['AGENTS.md', agents, '若客户端已经注入 `AGENTS.md`，视为已读，不再通过 shell 全文读取'],
+    ['AGENTS.md', agents, '轻量请求、局部评审、局部排错和脚手架局部讨论默认不读'],
+    ['AGENTS.md', agents, '无关输出、重复输出和多个大型全文聚合'],
+    ['AGENTS.md', agents, 'LSP 可用时优先用 LSP 定位'],
+    ['CLAUDE.md', claude, '已注入则视为已读，不再 shell 全文读取'],
+    ['CLAUDE.md', claude, '脚手架局部讨论默认不读 `TASK_OUTLINE.md`'],
+    ['CLAUDE.md', claude, 'TypeScript 定义、引用、符号和诊断优先使用可用的 LSP'],
+    ['TASK_OUTLINE.md', outline, '轻量请求、局部评审/排错和脚手架局部讨论默认不读'],
+    ['README.md', readme, '客户端已注入 `AGENTS.md` 时不再 shell 全文读取'],
+    ['docs/workflow/README.md', workflowReadme, '禁止用一次聚合全文替代数次窄读'],
+    ['docs/workflow/README.md', workflowReadme, '结果不足或不可用时降级为 `rg`'],
+    ['docs/workflow/document-map.md', documentMap, '脚手架局部讨论默认不读'],
+    ['docs/workflow/agent-protocol.md', agentProtocol, '客户端已注入 `AGENTS.md` 时视为已读'],
+  ];
+  for (const [name, text, requiredText] of required) {
+    if (!text.includes(requiredText)) missing.push(`${name}: ${requiredText}`);
+  }
+
+  if (/TASK_OUTLINE\.md[^\n|]*\|\s*每次对话/u.test(claude)) {
+    missing.push('CLAUDE.md must not mark TASK_OUTLINE.md as 每次对话.');
+  }
+  if (/AGENTS\.md[^\n|]*\|\s*每次对话/u.test(claude)) {
+    missing.push('CLAUDE.md must not require a shell reread of injected AGENTS.md every conversation.');
+  }
+  const lightweightSection = section(agents, '任务分级').match(/### 轻量请求[\s\S]*?(?=\n### )/u)?.[0] ?? '';
+  if (lightweightSection.includes('TASK_OUTLINE.md')) {
+    missing.push('AGENTS.md lightweight-request rules must not require TASK_OUTLINE.md.');
+  }
+  return missing;
+}
+
+function checkReadingRoutes(routeDocs) {
+  for (const routeError of readingRouteErrors(routeDocs)) {
+    error(`Reading-route contract failed: ${routeError}`);
+  }
+
+  const negativeCases = [
+    { ...routeDocs, agents: routeDocs.agents.replace('若客户端已经注入 `AGENTS.md`，视为已读，不再通过 shell 全文读取', '客户端注入状态未知') },
+    { ...routeDocs, claude: routeDocs.claude.replace('| 按需 | [TASK_OUTLINE.md](./TASK_OUTLINE.md) | 正式游戏 task、`/goal`、游戏任务生成/重排或路线判断时 |', '| 必须 | [TASK_OUTLINE.md](./TASK_OUTLINE.md) | 每次对话 |') },
+    { ...routeDocs, agents: routeDocs.agents.replace('轻量请求、局部评审、局部排错和脚手架局部讨论默认不读', '轻量请求默认读取') },
+    { ...routeDocs, workflowReadme: routeDocs.workflowReadme.replace('禁止用一次聚合全文替代数次窄读', '允许聚合全文') },
+    { ...routeDocs, agents: routeDocs.agents.replace('LSP 可用时优先用 LSP 定位', '直接逐文件搜索') },
+  ];
+  negativeCases.forEach((negativeCase, index) => {
+    if (readingRouteErrors(negativeCase).length === 0) {
+      error(`Reading-route negative case ${index + 1} must fail validation.`);
+    }
+  });
+}
+
+function checkFeatureLineRouting(agents, claude, outline, workflowReadme, documentMap, agentProtocol, taskGeneration) {
+  for (const [name, text] of [
+    ['AGENTS.md', agents],
+    ['CLAUDE.md', claude],
+    ['TASK_OUTLINE.md', outline],
+    ['docs/workflow/README.md', workflowReadme],
+    ['docs/workflow/document-map.md', documentMap],
+    ['docs/workflow/agent-protocol.md', agentProtocol],
+    ['docs/workflow/task-generation.md', taskGeneration],
+  ]) {
+    if (!text.includes('feature-lines.md')) {
+      error(`${name} must route formal game work through docs/tasks/feature-lines.md.`);
+    }
+  }
+  if (!agentProtocol.includes('WIP=1') || !agentProtocol.includes('阻塞')) {
+    error('agent-protocol.md must enforce strict feature-line WIP=1 and same-line blocker handling.');
+  }
+  if (!taskGeneration.includes('WIP=1') || !taskGeneration.includes('不得切线')) {
+    error('task-generation.md must enforce strict WIP=1 and prohibit cross-line task generation.');
+  }
+  for (const [name, text] of [
+    ['AGENTS.md', agents],
+    ['CLAUDE.md', claude],
+    ['TASK_OUTLINE.md', outline],
+    ['docs/workflow/README.md', workflowReadme],
+    ['docs/workflow/document-map.md', documentMap],
+    ['docs/workflow/agent-protocol.md', agentProtocol],
+    ['docs/workflow/task-generation.md', taskGeneration],
+  ]) {
+    if (!text.includes('/goal') || !text.includes('Ready')) {
+      error(`${name} must route /goal work through the unique Ready task.`);
+    }
+  }
+}
+
+function globalExecutionRoutingErrors(routeDocs) {
+  const routingErrors = [];
+  for (const [name, text] of Object.entries(routeDocs)) {
+    if (!text.includes('execution-queue.md')) {
+      routingErrors.push(`${name} must route execution through docs/tasks/execution-queue.md.`);
+    }
+  }
+  if (!routeDocs.agents.includes('存在 `Ready` 或 `Blocked` 治理执行项时只处理该项')
+    || !routeDocs.agentProtocol.includes('禁止在同一次 `/goal` 继续游戏 task')
+    || !routeDocs.outline.includes('实际调度先看 `execution-queue.md`')) {
+    routingErrors.push('Global execution routing must make governance Ready/Blocked preempt game Ready and stop the turn.');
+  }
+  return routingErrors;
+}
+
+function checkGlobalExecutionRouting(routeDocs) {
+  for (const message of globalExecutionRoutingErrors(routeDocs)) error(message);
+  const negativeCases = [
+    { ...routeDocs, agents: routeDocs.agents.replaceAll('execution-queue.md', 'task-board.md') },
+    { ...routeDocs, agentProtocol: routeDocs.agentProtocol.replace('禁止在同一次 `/goal` 继续游戏 task', '可以继续游戏 task') },
+    { ...routeDocs, outline: routeDocs.outline.replace('实际调度先看 `execution-queue.md`', '实际调度先看 `task-board.md`') },
+  ];
+  negativeCases.forEach((negativeCase, index) => {
+    if (globalExecutionRoutingErrors(negativeCase).length === 0) {
+      error(`Global execution routing negative case ${index + 1} must fail validation.`);
+    }
+  });
+}
+
+function checkTargetedReadingRules(agents) {
+  if (!agents.includes('rg -n') || !agents.includes('Select-Object -First/-Skip/-Last')) {
+    error('AGENTS.md must require targeted snippet reads instead of broad full-document reads.');
+  }
+}
+
+function checkRegimaRouting(agents, outline, taskBlockList, workflowReadme, documentMap) {
+  const visualRoot = 'local-resources/regima/source/restored-swfs/';
+  for (const [name, text] of [
+    ['AGENTS.md', agents],
+    ['TASK_OUTLINE.md', outline],
+    ['docs/workflow/README.md', workflowReadme],
+    ['docs/workflow/document-map.md', documentMap],
+  ]) {
+    if (!text.includes(visualRoot)) {
+      error(`${name} must route visual resource research through ${visualRoot}.`);
+    }
+  }
+
+  const craftingVisualTasks = taskBlockList.filter((task) =>
+    task.text.includes('crafting-ui-index.md'),
+  );
+  for (const task of craftingVisualTasks) {
+    if (!task.text.includes(visualRoot)) {
+      error(`${task.id} must use ${visualRoot} as its visual source entry.`);
+    }
+  }
+
+  const craftingUiResearchTask = taskBlockList
+    .find((task) => task.id === 'TASK-SETTINGS-044')?.text ?? '';
+  if (craftingUiResearchTask && !craftingUiResearchTask.includes('只作旧提取交叉对照')) {
+    error('TASK-SETTINGS-044 must mark local-resources/regima/legacy-extraction visual exports as legacy cross-check evidence.');
+  }
+}
+
+function checkRetiredLegacyRootName() {
+  const retiredName = ['extracted', 'flash'].join('_');
+  try {
+    const matches = execFileSync('git', ['grep', '-n', '-I', '-e', retiredName], {
+      cwd: root,
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'pipe'],
+    }).trim();
+    if (matches) {
+      error(`Retired legacy root name is still referenced by tracked files:\n${matches}`);
+    }
+  } catch (caught) {
+    if (caught?.status !== 1) {
+      error(`Unable to verify retired legacy root references: ${caught?.message ?? caught}`);
+    }
+  }
+}
+
+function checkWorkflowSeparation(mechanics) {
+  if (/任务生成规范|task-generation|工作流脚手架/.test(mechanics)) {
+    error('mechanics-index.md should not contain workflow scaffolding entries.');
+  }
+}
+
+function checkGovernanceLog(workflowFiles, governanceLog) {
+  const latestDate = workflowFiles
+    .map((relativePath) => statSync(filePath(relativePath)).mtime)
+    .sort((a, b) => b.getTime() - a.getTime())[0]
+    ?.toISOString()
+    .slice(0, 10);
+
+  if (latestDate && !governanceLog.includes(latestDate)) {
+    warn(`workflow files were modified on ${latestDate}, but governance-log.md has no matching date entry.`);
+  }
+}
+
+function checkCodeQualityGates(packageJsonText, codeQualityGates, claude) {
+  let packageJson;
+  try {
+    packageJson = JSON.parse(packageJsonText);
+  } catch {
+    error('package.json must be valid JSON.');
+    return;
+  }
+
+  const scripts = packageJson.scripts ?? {};
+  for (const scriptName of ['test:systems', 'check:code', 'check:structure', 'check:system-design', 'check:all']) {
+    if (typeof scripts[scriptName] !== 'string') {
+      error(`package.json is missing required script: ${scriptName}`);
+    }
+  }
+
+  for (const requiredText of [
+    'stable ID',
+    'Visual testing',
+    'npm run test:systems',
+    'npm run build',
+    'npm run check:structure',
+    'npm run check:system-design',
+    'npm run check:all',
+    'Structural Gates',
+    'File size limits',
+    'Shared definition ownership',
+    'Problem Governance Feedback Gate',
+  ]) {
+    if (!codeQualityGates.includes(requiredText)) {
+      error(`code-quality-gates.md must mention: ${requiredText}`);
+    }
+  }
+
+  if (!claude.includes('npm run test:systems') || !claude.includes('code-quality-gates.md')) {
+    error('CLAUDE.md must point agents at system tests and code-quality-gates.md.');
+  }
+  if (!claude.includes('check:structure')) {
+    error('CLAUDE.md must reference npm run check:structure for structural gates.');
+  }
+
+  if (!existsSync(filePath(files.structureCheck))) {
+    error(`Missing structural check script: ${files.structureCheck}`);
+  }
+  try {
+    execFileSync(process.execPath, [filePath(files.systemDesignCheck), '--self-test'], {
+      cwd: root,
+      stdio: 'pipe',
+    });
+  } catch {
+    error('System design hard-gate self-test failed.');
+  }
+}
+
+function checkReviewProtocol(reviewProtocol, agents, claude, workflowReadme, documentMap) {
+  for (const requiredText of [
+    '适用范围',
+    '评审原则',
+    '必读资料',
+    '评审流程',
+    '输出格式',
+    '严重程度',
+    '评分维度',
+    '整改落点',
+    'UI 原生化评审门禁',
+  ]) {
+    if (!reviewProtocol.includes(requiredText)) {
+      error(`review-protocol.md must mention: ${requiredText}`);
+    }
+  }
+
+  for (const [name, text] of [
+    ['AGENTS.md', agents],
+    ['CLAUDE.md', claude],
+    ['docs/workflow/README.md', workflowReadme],
+    ['docs/workflow/document-map.md', documentMap],
+  ]) {
+    if (!text.includes('review-protocol.md')) {
+      error(`${name} must reference docs/workflow/review-protocol.md.`);
+    }
+  }
+}
+
+const uiNativeContractFields = [
+  'UI 原生化合同：',
+  '显示列表清单：',
+  '原版视觉基准：',
+  '允许的现代视觉例外：',
+  '逐状态验收：',
+  '差异证据：',
+];
+
+function uiNativeContractErrors(text) {
+  return uiNativeContractFields.filter((requiredText) => !text.includes(requiredText));
+}
+
+const uiComponentContractFields = [
+  '组件化合同：',
+  '组件家族：',
+  '权威 owner：',
+  '共享行为：',
+  '页面保留项：',
+  '消费者迁移矩阵：',
+  '防复发门禁：',
+];
+
+function uiComponentContractErrors(text) {
+  return uiComponentContractFields.filter((requiredText) => !text.includes(requiredText));
+}
+
+function checkUiNativeWorkflowGate(
+  taskGeneration,
+  taskRows,
+  taskBlockList,
+  codeQualityGates,
+  reverseEngineeringProtocol,
+  reverseEngineeringAgent,
+  implementationAgent,
+  reviewAgent,
+) {
+  for (const requiredText of [
+    '## UI 原生化 task 门禁',
+    ...uiNativeContractFields,
+    '## 共享 UI 组件化 task 门禁',
+    ...uiComponentContractFields,
+  ]) {
+    if (!taskGeneration.includes(requiredText)) {
+      error(`task-generation.md must include UI native contract text: ${requiredText}`);
+    }
+  }
+
+  for (const row of taskRows) {
+    const summary = [row.type, row.goal, row.output].join(' ');
+    if (!/(?:UI|HUD|菜单|页面|按钮|overlay|原生化)/iu.test(summary)) continue;
+    const block = taskBlockList.find((candidate) => candidate.id === row.id)?.text ?? '';
+    for (const missingText of uiNativeContractErrors(block)) {
+      error(`${row.id} UI task is missing native-fidelity contract text: ${missingText}`);
+    }
+  }
+
+  const positiveSample = uiNativeContractFields.join('\n');
+  if (uiNativeContractErrors(positiveSample).length > 0) {
+    error('UI native contract positive sample failed.');
+  }
+  uiNativeContractFields.forEach((field, index) => {
+    const negativeSample = positiveSample.replace(field, `field-${index}-removed`);
+    if (uiNativeContractErrors(negativeSample).length === 0) {
+      error(`UI native contract negative sample ${index + 1} must fail validation.`);
+    }
+  });
+
+  for (const row of taskRows) {
+    if (row.status === 'Split') continue;
+    const summary = [row.type, row.goal, row.output].join(' ');
+    if (!/(?:组件化|共享组件|组件家族)/u.test(summary)) continue;
+    const block = taskBlockList.find((candidate) => candidate.id === row.id)?.text ?? '';
+    for (const missingText of uiComponentContractErrors(block)) {
+      error(`${row.id} shared UI component task is missing component contract text: ${missingText}`);
+    }
+  }
+
+  const componentPositiveSample = uiComponentContractFields.join('\n');
+  if (uiComponentContractErrors(componentPositiveSample).length > 0) {
+    error('Shared UI component contract positive sample failed.');
+  }
+  uiComponentContractFields.forEach((field, index) => {
+    const negativeSample = componentPositiveSample.replace(field, `component-field-${index}-removed`);
+    if (uiComponentContractErrors(negativeSample).length === 0) {
+      error(`Shared UI component contract negative sample ${index + 1} must fail validation.`);
+    }
+  });
+
+  for (const [name, text, requiredText] of [
+    ['docs/workflow/code-quality-gates.md', codeQualityGates, 'UI Native Fidelity Gate'],
+    ['docs/workflow/reverse-engineering-protocol.md', reverseEngineeringProtocol, 'UI 显示列表与视觉基准门禁'],
+    ['.claude/agents/reverse-engineering-researcher.md', reverseEngineeringAgent, 'display-list manifest'],
+    ['.claude/agents/modern-implementation-engineer.md', implementationAgent, 'display-list manifest'],
+    ['.claude/agents/engineering-reviewer.md', reviewAgent, 'display-list evidence'],
+  ]) {
+    if (!text.includes(requiredText)) {
+      error(`${name} must include UI native-fidelity gate text: ${requiredText}`);
+    }
+  }
+}
+
+function problemFeedbackContractErrors(text) {
+  const requiredFeedbackText = [
+    '## 7. 适用触发与反馈记录',
+    '触发条件：',
+    '效果检查：',
+  ];
+  return requiredFeedbackText.filter((requiredText) => !text.includes(requiredText));
+}
+
+function checkProblemGovernance(
+  problemGovernance,
+  problemRecords,
+  agents,
+  claude,
+  workflowReadme,
+  documentMap,
+  agentProtocol,
+) {
+  for (const requiredText of [
+    '适用范围',
+    '问题定义',
+    '证据',
+    '解决方案',
+    '测试方案',
+    '测试结果',
+    '关闭标准',
+    '效果反馈闭环',
+    '问题适用性扫描',
+    '适用触发与反馈记录',
+    '治理流程',
+    '状态机',
+    '关闭出清与归档',
+    '复盘与方案更换',
+    '活跃问题索引',
+    '问题归档索引',
+    '模板',
+  ]) {
+    if (!problemGovernance.includes(requiredText)) {
+      error(`problem-governance.md must mention: ${requiredText}`);
+    }
+  }
+
+  if (problemRecords.length === 0) {
+    error('docs/workflow/problems must contain at least one PG-*.md record.');
+  }
+
+  const activeProblemIndex = section(problemGovernance, '活跃问题索引');
+  const archivedProblemIndex = section(problemGovernance, '问题归档索引');
+  const activeIds = extractRefs(activeProblemIndex, 'PG');
+  const archivedIds = extractRefs(archivedProblemIndex, 'PG');
+  const indexedIds = [...new Set([...activeIds, ...archivedIds])];
+  const discoveredIds = problemRecords.map(({ id }) => id);
+  for (const indexedId of indexedIds) {
+    if (!discoveredIds.includes(indexedId)) {
+      error(`problem-governance.md indexes missing problem record: ${indexedId}`);
+    }
+  }
+
+  for (const { id, path: recordPath, text } of problemRecords) {
+    if (!activeProblemIndex.includes(recordPath.replace('docs/workflow/', ''))
+      && !archivedProblemIndex.includes(recordPath.replace('docs/workflow/', ''))) {
+      error(`problem-governance.md must index ${recordPath}.`);
+    }
+    if (!text.includes(`# ${id} `)) {
+      error(`${recordPath} must start with its stable id ${id}.`);
+    }
+    for (const requiredHeading of [
+      '## 1. 问题定义',
+      '## 2. 证据',
+      '## 3. 解决方案',
+      '## 4. 测试方案',
+      '## 5. 测试结果',
+      '## 6. 关闭标准',
+      '## 7. 适用触发与反馈记录',
+    ]) {
+      if (!text.includes(requiredHeading)) {
+        error(`${recordPath} must include: ${requiredHeading}`);
+      }
+    }
+    for (const missingFeedbackText of problemFeedbackContractErrors(text)) {
+      error(`${recordPath} must include feedback contract text: ${missingFeedbackText}`);
+    }
+
+    const status = text.match(/^\u72b6\u6001\uff1a(.+)\u3002$/m)?.[1];
+    const activeIndexRow = activeProblemIndex
+      .split(/\r?\n/)
+      .find((line) => line.startsWith(`| ${id} `));
+    const archivedIndexRow = archivedProblemIndex
+      .split(/\r?\n/)
+      .find((line) => line.startsWith(`| ${id} `));
+    const indexRow = activeIndexRow ?? archivedIndexRow;
+    const indexedStatus = indexRow?.split('|')[2]?.trim();
+    if (!status || indexedStatus !== status) {
+      error(`${recordPath} status must match problem-governance.md index (${indexedStatus ?? 'missing'}).`);
+    }
+    if (status === '已归档') {
+      if (activeIndexRow || !archivedIndexRow) {
+        error(`${recordPath} archived record must appear only in the archive index.`);
+      }
+      if (!text.includes('归档信息：')) {
+        error(`${recordPath} archived record must include 归档信息：.`);
+      }
+    } else if (!activeIndexRow) {
+      error(`${recordPath} non-archived record must appear in the active problem index.`);
+    }
+  }
+
+  const feedbackSample = problemRecords[0]?.text ?? '';
+  const negativeFeedbackCases = [
+    feedbackSample.replace(/\n## 7\. \u9002\u7528\u89e6\u53d1\u4e0e\u53cd\u9988\u8bb0\u5f55[\s\S]*$/, ''),
+    feedbackSample.replace('触发条件：', '触发已删除：'),
+    feedbackSample.replace('效果检查：', '效果已删除：'),
+  ];
+  negativeFeedbackCases.forEach((negativeCase, index) => {
+    if (problemFeedbackContractErrors(negativeCase).length === 0) {
+      error(`problem feedback negative case ${index + 1} must fail validation.`);
+    }
+  });
+
+  for (const [name, text] of [
+    ['AGENTS.md', agents],
+    ['CLAUDE.md', claude],
+    ['docs/workflow/README.md', workflowReadme],
+    ['docs/workflow/document-map.md', documentMap],
+    ['docs/workflow/agent-protocol.md', agentProtocol],
+  ]) {
+    if (!text.includes('problem-governance.md')) {
+      error(`${name} must reference docs/workflow/problem-governance.md.`);
+    }
+  }
+  if (!agents.includes('npm run audit:problems') || !agents.includes('活跃问题索引')
+    || !agentProtocol.includes('npm run audit:problems')
+    || !agentProtocol.includes('归档索引不参与常规扫描')
+    || !agentProtocol.includes('集中记录一次')) {
+    error('Agent entry and protocol must enforce problem-governance feedback scanning.');
+  }
+}
+
+function checkProblemAudit(
+  problemAudit,
+  problemGovernance,
+  methodObservation,
+  packageJsonText,
+  agents,
+  claude,
+  workflowReadme,
+  documentMap,
+  agentProtocol,
+) {
+  for (const requiredText of [
+    '职责边界',
+    '任务收尾审计',
+    'PG 归档评估',
+    '集中审计记录',
+    'MO-002',
+    'npm run audit:problems',
+    '| 日期 | 任务/变更 | 变更范围 | 命中 PG | 结论与证据 | 归档评估 | MO-002 指标/后续动作 |',
+  ]) {
+    if (!problemAudit.includes(requiredText)) error(`problem-audit.md must mention: ${requiredText}`);
+  }
+
+  for (const requiredText of ['problem-audit.md', 'npm run audit:problems']) {
+    if (!problemGovernance.includes(requiredText)) error(`problem-governance.md must mention: ${requiredText}`);
+  }
+  for (const requiredText of ['PG 关闭样本', '同一份证据']) {
+    if (!methodObservation.includes(requiredText)) error(`method-observation.md must mention: ${requiredText}`);
+  }
+
+  let packageJson;
+  try {
+    packageJson = JSON.parse(packageJsonText);
+  } catch {
+    return;
+  }
+  if (packageJson.scripts?.['audit:problems'] !== 'node tools/run-problem-audit.mjs') {
+    error('package.json must expose audit:problems through tools/run-problem-audit.mjs.');
+  }
+  const workflowScript = packageJson.scripts?.['check:workflow'] ?? '';
+  const harnessScript = packageJson.scripts?.['check:harness'] ?? '';
+  const auditViaHarness = workflowScript.startsWith('npm run check:harness && ')
+    && harnessScript.endsWith('&& node tools/run-problem-audit.mjs --validate');
+  if (!workflowScript.includes('run-problem-audit.mjs --validate') && !auditViaHarness) {
+    error('check:workflow must validate the centralized PG audit contract.');
+  }
+
+  for (const [name, text] of [
+    ['AGENTS.md', agents],
+    ['CLAUDE.md', claude],
+    ['docs/workflow/README.md', workflowReadme],
+    ['docs/workflow/document-map.md', documentMap],
+    ['docs/workflow/agent-protocol.md', agentProtocol],
+  ]) {
+    if (!text.includes('problem-audit.md')) error(`${name} must reference docs/workflow/problem-audit.md.`);
+  }
+}
+
+function checkMethodObservation(
+  methodObservation,
+  methodRecords,
+  taskBlocks,
+  agents,
+  claude,
+  workflowReadme,
+  documentMap,
+  agentProtocol,
+  taskGeneration,
+) {
+  for (const requiredText of [
+    '与问题治理的边界',
+    '适用门槛',
+    '记录结构',
+    '状态机',
+    '执行与采样规则',
+    '活跃方法索引',
+    '方法归档索引',
+    '模板',
+    '最迟复核点',
+    '采纳',
+    '修订',
+    '停止',
+  ]) {
+    if (!methodObservation.includes(requiredText)) {
+      error(`method-observation.md must mention: ${requiredText}`);
+    }
+  }
+
+  if (methodRecords.length === 0) error('docs/workflow/methods must contain at least one MO-*.md record.');
+  const activeIndex = section(methodObservation, '活跃方法索引');
+  const archivedIndex = section(methodObservation, '方法归档索引');
+  const indexedIds = [...new Set([...extractRefs(activeIndex, 'MO'), ...extractRefs(archivedIndex, 'MO')])];
+  const discoveredIds = methodRecords.map(({ id }) => id);
+  const allowedStatuses = new Set(['候选', '试验中', '待裁决', '修订中', '已采纳待归档', '已停止待归档', '已归档']);
+  for (const indexedId of indexedIds) {
+    if (!discoveredIds.includes(indexedId)) error(`method-observation.md indexes missing method record: ${indexedId}`);
+  }
+
+  for (const { id, path: recordPath, text } of methodRecords) {
+    const relativeRecordPath = recordPath.replace('docs/workflow/', '');
+    const activeRow = activeIndex.split(/\r?\n/).find((line) => line.startsWith(`| ${id} `));
+    const archivedRow = archivedIndex.split(/\r?\n/).find((line) => line.startsWith(`| ${id} `));
+    if (!activeIndex.includes(relativeRecordPath) && !archivedIndex.includes(relativeRecordPath)) {
+      error(`method-observation.md must index ${recordPath}.`);
+    }
+    if (!text.includes(`# ${id} `)) error(`${recordPath} must start with its stable id ${id}.`);
+    for (const requiredHeading of [
+      '## 1. 方法与假设',
+      '## 2. 基线与指标',
+      '## 3. 试验设计',
+      '## 4. 采纳标准',
+      '## 5. 观测记录',
+      '## 6. 裁决与沉淀',
+    ]) {
+      if (!text.includes(requiredHeading)) error(`${recordPath} must include: ${requiredHeading}`);
+    }
+    for (const requiredText of ['提出者/来源：', '负责人：', '最迟复核点：', '| 日期 | 任务/场景 | 方法版本 | 样本证据 | 指标结果 | 副作用 | 阶段结论/后续动作 |']) {
+      if (!text.includes(requiredText)) error(`${recordPath} must include observation contract text: ${requiredText}`);
+    }
+    const status = text.match(/^状态：(.+)。$/m)?.[1];
+    const indexRow = activeRow ?? archivedRow;
+    const indexedStatus = indexRow?.split('|')[2]?.trim();
+    if (!status || indexedStatus !== status) {
+      error(`${recordPath} status must match method-observation.md index (${indexedStatus ?? 'missing'}).`);
+    }
+    if (status && !allowedStatuses.has(status)) error(`${recordPath} has unsupported method status: ${status}.`);
+    if (activeRow && archivedRow) error(`${recordPath} must not appear in both active and archived method indexes.`);
+    if (status === '已归档') {
+      if (activeRow || !archivedRow) error(`${recordPath} archived method must appear only in the archive index.`);
+    } else if (!activeRow) {
+      error(`${recordPath} active method must appear in the active method index.`);
+    }
+  }
+
+  for (const block of taskBlocks) {
+    if (!block.text.includes('协作计划：')) continue;
+    for (const methodId of extractRefs(block.text.slice(block.text.indexOf('协作计划：'), block.text.indexOf('输入资料：')), 'MO')) {
+      if (!discoveredIds.includes(methodId)) error(`${block.path} references missing method observation: ${methodId}.`);
+    }
+  }
+
+  for (const [name, text] of [
+    ['AGENTS.md', agents],
+    ['CLAUDE.md', claude],
+    ['docs/workflow/README.md', workflowReadme],
+    ['docs/workflow/document-map.md', documentMap],
+    ['docs/workflow/agent-protocol.md', agentProtocol],
+    ['docs/workflow/task-generation.md', taskGeneration],
+  ]) {
+    if (!text.includes('method-observation.md')) error(`${name} must reference docs/workflow/method-observation.md.`);
+  }
+  for (const requiredText of ['单 task 多 agent 协作协议', '写入 owner', '归并检查点']) {
+    if (!agentProtocol.includes(requiredText)) error(`agent-protocol.md must include subagent contract text: ${requiredText}`);
+  }
+  if (!taskGeneration.includes('协作计划：') || !taskGeneration.includes('方法观测：')) {
+    error('task-generation.md must include collaboration-plan and method-observation template fields.');
+  }
+}
+
+function checkDelegatedAgentContracts(reverseAgent, implementationAgent, reviewAgent, workflowAgent) {
+  for (const [name, text] of [
+    ['reverse-engineering-researcher', reverseAgent],
+    ['modern-implementation-engineer', implementationAgent],
+    ['engineering-reviewer', reviewAgent],
+    ['workflow-steward', workflowAgent],
+  ]) {
+    if (!text.includes('bounded brief') || !text.includes('do not reselect')) {
+      error(`${name} must use the main agent bounded brief without reselecting delegated work.`);
+    }
+  }
+  for (const [name, text] of [
+    ['modern-implementation-engineer', implementationAgent],
+    ['workflow-steward', workflowAgent],
+  ]) {
+    if (!text.includes('unique writer') || !text.includes('main agent')) {
+      error(`${name} must enforce the delegated unique-writer contract.`);
+    }
+  }
+}
+
+function checkReverseEngineeringTaskModel(
+  reverseEngineeringTaskProtocol,
+  groundTruthGenerationPlan,
+  groundTruthCompletenessValidator,
+  pg017,
+  routeDocs,
+  taskBlockList,
+) {
+  const requiredProtocolText = [
+    '## 1. 任务模型与子类型',
+    '## 2. 渐进式读取顺序',
+    '## 3. Task definition 合同',
+    '任务模型：',
+    '逆向子类型：',
+    '逆向方案：',
+    '**代码逆向**',
+    '**视觉真值逆向**',
+    '不读取 `docs/reverse-engineering/plans/`',
+    '普通代码逆向和视觉真值逆向都不把 PG 当作任务手册',
+  ];
+  for (const requiredText of requiredProtocolText) {
+    if (!reverseEngineeringTaskProtocol.includes(requiredText)) {
+      error(`reverse-engineering-task-protocol.md must include: ${requiredText}`);
+    }
+  }
+
+  const requiredPlanText = [
+    '适用任务模型：`逆向任务`',
+    '适用逆向子类型：`视觉真值逆向`',
+    '## 2. 任务输入',
+    '## 3. 拆解步骤',
+    '## 4. 输出产物',
+    '## 5. 方案验收',
+    '状态 fixture × 根 Symbol/MovieClip × 目标帧或时间片 × 该时刻的递归可见显示列表',
+    '`gotoAndStop`',
+    '`gotoAndPlay`',
+    '本方案不研发或裁决全面性校验器',
+  ];
+  for (const requiredText of requiredPlanText) {
+    if (!groundTruthGenerationPlan.includes(requiredText)) {
+      error(`ground-truth-fine-grained-generation.md must include: ${requiredText}`);
+    }
+  }
+
+  for (const [name, text] of routeDocs) {
+    if (!text.includes('reverse-engineering-task-protocol.md')
+      || !text.includes('代码逆向')
+      || !text.includes('视觉真值逆向')) {
+      error(`${name} must progressively route reverse tasks through code-reverse and visual-ground-truth subtypes.`);
+    }
+  }
+
+  if (!pg017.includes('docs/reverse-engineering/plans/ground-truth-fine-grained-generation.md')
+    || !pg017.includes('不再承载逆向任务的详细拆解步骤')) {
+    error('PG-017 must link the independent generation plan without retaining the detailed reverse-task procedure.');
+  }
+  if (pg017.includes('### 3.2 生成逻辑的精细化合同')) {
+    error('PG-017 must not embed the fine-grained generation procedure; keep it in the linked reverse plan.');
+  }
+  if (!groundTruthCompletenessValidator.includes('当前 `视觉真值逆向` task 显式链接')
+    || !groundTruthCompletenessValidator.includes('代码逆向不读取该方案或本文')
+    || !groundTruthCompletenessValidator.includes('不得要求任何逆向任务通过读取 PG 恢复执行步骤')) {
+    error('The completeness-validator discussion must consume the task-linked generation plan without routing ordinary reverse tasks through PG-017.');
+  }
+
+  for (const block of taskBlockList) {
+    if (!block.text.includes('任务模型：') || !block.text.includes('逆向任务')) continue;
+    const subtypeStart = block.text.indexOf('逆向子类型：');
+    const planStart = block.text.indexOf('逆向方案：', subtypeStart);
+    if (subtypeStart === -1 || planStart === -1) {
+      error(`${block.id} declares 逆向任务 but lacks 逆向子类型 or 逆向方案 fields.`);
+      continue;
+    }
+    const subtypeText = block.text.slice(subtypeStart, planStart);
+    const isCodeReverse = subtypeText.includes('代码逆向');
+    const isVisualTruthReverse = subtypeText.includes('视觉真值逆向');
+    if (isCodeReverse === isVisualTruthReverse) {
+      error(`${block.id} must select exactly one reverse subtype: 代码逆向 or 视觉真值逆向.`);
+      continue;
+    }
+    const inputStart = block.text.indexOf('输入资料：', planStart);
+    const planText = block.text.slice(planStart, inputStart === -1 ? block.text.length : inputStart);
+    const planMatches = [...planText.matchAll(/`(docs\/reverse-engineering\/plans\/[^`]+\.md)`/g)]
+      .map((match) => match[1]);
+    const uniquePlans = [...new Set(planMatches)];
+    if (isCodeReverse && uniquePlans.length !== 0) {
+      error(`${block.id} is 代码逆向 and must not load a visual ground-truth plan.`);
+      continue;
+    }
+    if (isCodeReverse) {
+      if (block.text.includes('docs/workflow/reverse-engineering-task-protocol.md')) {
+        error(`${block.id} is 代码逆向 and must keep the existing route without the visual reverse-task protocol.`);
+      }
+      continue;
+    }
+    if (!block.text.includes('docs/workflow/reverse-engineering-task-protocol.md')) {
+      error(`${block.id} is 视觉真值逆向 but does not reference reverse-engineering-task-protocol.md.`);
+    }
+    if (uniquePlans.length !== 1) {
+      error(`${block.id} is 视觉真值逆向 and must reference exactly one docs/reverse-engineering/plans/*.md plan; found ${uniquePlans.length}.`);
+      continue;
+    }
+    if (!existsSync(filePath(uniquePlans[0]))) {
+      error(`${block.id} references missing reverse plan: ${uniquePlans[0]}`);
+    }
+  }
+}
+
+function reverseEngineeringProtocolErrors(text) {
+  const requiredText = [
+    '## 六段证据链',
+    '1. **关卡/对象局部证据**',
+    '2. **共享运行时调用链**',
+    '3. **SWF 几何与坐标语义**',
+    '4. **可观察行为合同**',
+    '5. **现代实现映射**',
+    '6. **双重验证**',
+    '## 证据分级',
+    '- `确认事实`：',
+    '- `交叉确认`：',
+    '- `推断`：',
+    '- `未知`：',
+    '- `现代设计选择`：',
+    '| 行为合同项 | 局部证据 | 共享调用链 | 几何/坐标证据 | 证据等级 | 未知与反证条件 | 验证方式 |',
+    'local/world/screen',
+    '## 上下文与交接规则',
+    '## 状态与关闭门禁',
+    '## 逆向完成检查',
+    '## UI 显示列表与视觉基准门禁',
+    '## 原版机器真值 JSON 生成流程',
+    'docs/reverse-engineering/ground-truth/',
+    'ui-ground-truth.schema.json',
+    '来源证明',
+    '完整性核对',
+    '自动消费与回测',
+    '显示列表清单',
+    '原版视觉基准',
+    '像素差异',
+    '确定性测试',
+    '运行时',
+  ];
+  return requiredText.filter((required) => !text.includes(required));
+}
+
+function checkReverseEngineeringProtocol(
+  reverseEngineeringProtocol,
+  agents,
+  claude,
+  workflowReadme,
+  documentMap,
+  agentProtocol,
+  taskGeneration,
+  codeQualityGates,
+  reverseEngineeringAgent,
+) {
+  for (const missingText of reverseEngineeringProtocolErrors(reverseEngineeringProtocol)) {
+    error(`reverse-engineering-protocol.md must include: ${missingText}`);
+  }
+
+  const negativeCases = [
+    reverseEngineeringProtocol.replace('2. **共享运行时调用链**', '2. **共享调用链已删除**'),
+    reverseEngineeringProtocol.replace(
+      '| 行为合同项 | 局部证据 | 共享调用链 | 几何/坐标证据 | 证据等级 | 未知与反证条件 | 验证方式 |',
+      '| 证据矩阵已删除 |',
+    ),
+    reverseEngineeringProtocol.replace('- `推断`：', '- `推断分类已删除`：'),
+    reverseEngineeringProtocol.replace('## UI 显示列表与视觉基准门禁', '## UI 视觉门禁已删除'),
+    reverseEngineeringProtocol.replaceAll('原版视觉基准', '原版参考已删除'),
+    reverseEngineeringProtocol.replace('## 原版机器真值 JSON 生成流程', '## 机器真值流程已删除'),
+  ];
+  negativeCases.forEach((negativeCase, index) => {
+    if (reverseEngineeringProtocolErrors(negativeCase).length === 0) {
+      error(`reverse-engineering protocol negative case ${index + 1} must fail validation.`);
+    }
+  });
+
+  for (const [name, text] of [
+    ['AGENTS.md', agents],
+    ['CLAUDE.md', claude],
+    ['docs/workflow/README.md', workflowReadme],
+    ['docs/workflow/document-map.md', documentMap],
+    ['docs/workflow/agent-protocol.md', agentProtocol],
+    ['docs/workflow/task-generation.md', taskGeneration],
+    ['docs/workflow/code-quality-gates.md', codeQualityGates],
+    ['.claude/agents/reverse-engineering-researcher.md', reverseEngineeringAgent],
+  ]) {
+    if (!text.includes('reverse-engineering-protocol.md')) {
+      error(`${name} must reference docs/workflow/reverse-engineering-protocol.md.`);
+    }
+  }
+
+  if (!agentProtocol.includes('证据矩阵') || !taskGeneration.includes('双重验证')) {
+    error('Execution and task-generation protocols must enforce reverse-engineering evidence handoff and dual validation.');
+  }
+  if (!codeQualityGates.includes('Reverse Engineering Evidence Gate')) {
+    error('code-quality-gates.md must include the reverse-engineering evidence gate.');
+  }
+  if (!reverseEngineeringAgent.includes('Evidence matrix') || !reverseEngineeringAgent.includes('shared runtime call path')) {
+    error('reverse-engineering-researcher must output an evidence matrix and shared runtime call path.');
+  }
+}
+
+function checkMachineTruthWorkflow(
+  groundTruthReadme,
+  uiGroundTruthSchemaText,
+  agents,
+  claude,
+  workflowReadme,
+  documentMap,
+  reverseEngineeringProtocol,
+  taskGeneration,
+  agentProtocol,
+  codeQualityGates,
+  reviewProtocol,
+  reverseEngineeringAgent,
+  implementationAgent,
+  reviewAgent,
+) {
+  const requiredReadmeText = [
+    '## 生成流程',
+    'schema/ui-ground-truth.schema.json',
+    'manifests/<task-or-scope>.json',
+    '锁定一手来源',
+    '归一化坐标',
+    'Schema 与完整性校验',
+    '自动消费与回测',
+    '`verified`',
+  ];
+  for (const requiredText of requiredReadmeText) {
+    if (!groundTruthReadme.includes(requiredText)) {
+      error(`ground-truth/README.md must include: ${requiredText}`);
+    }
+  }
+
+  let schema;
+  try {
+    schema = JSON.parse(uiGroundTruthSchemaText);
+  } catch (parseError) {
+    error(`ui-ground-truth.schema.json must be valid JSON: ${parseError.message}`);
+    return;
+  }
+
+  if (schema.$schema !== 'https://json-schema.org/draft/2020-12/schema') {
+    error('ui-ground-truth.schema.json must use JSON Schema draft 2020-12.');
+  }
+  const requiredTopLevel = [
+    'schemaVersion',
+    'truthId',
+    'status',
+    'scope',
+    'generatedBy',
+    'provenance',
+    'stage',
+    'states',
+    'displayObjects',
+    'baselines',
+    'completeness',
+  ];
+  for (const key of requiredTopLevel) {
+    if (!schema.required?.includes(key) || !schema.properties?.[key]) {
+      error(`ui-ground-truth.schema.json must require and define top-level field: ${key}`);
+    }
+  }
+  for (const definition of ['provenanceEntry', 'matrix', 'bounds', 'state', 'displayObject', 'baseline']) {
+    if (!schema.$defs?.[definition]) {
+      error(`ui-ground-truth.schema.json must define: ${definition}`);
+    }
+  }
+  const statuses = schema.properties?.status?.enum ?? [];
+  for (const status of ['draft', 'blocked', 'verified']) {
+    if (!statuses.includes(status)) {
+      error(`ui-ground-truth.schema.json must support status: ${status}`);
+    }
+  }
+  const verifiedRule = JSON.stringify(schema.allOf ?? []);
+  for (const requiredVerifiedRule of ['verified', 'displayListMatched', 'stateSetMatched', 'maxItems']) {
+    if (!verifiedRule.includes(requiredVerifiedRule)) {
+      error(`ui-ground-truth.schema.json must enforce verified completeness rule: ${requiredVerifiedRule}`);
+    }
+  }
+
+  for (const [name, text, requiredText] of [
+    ['AGENTS.md', agents, '原版机器真值 JSON'],
+    ['CLAUDE.md', claude, '原版机器真值 JSON'],
+    ['docs/workflow/README.md', workflowReadme, 'docs/reverse-engineering/ground-truth/'],
+    ['docs/workflow/document-map.md', documentMap, 'docs/reverse-engineering/ground-truth/'],
+    ['docs/workflow/reverse-engineering-protocol.md', reverseEngineeringProtocol, '原版机器真值 JSON 生成流程'],
+    ['docs/workflow/task-generation.md', taskGeneration, '原版机器真值 JSON：'],
+    ['docs/workflow/agent-protocol.md', agentProtocol, 'docs/reverse-engineering/ground-truth/'],
+    ['docs/workflow/code-quality-gates.md', codeQualityGates, 'original machine-truth JSON'],
+    ['docs/workflow/review-protocol.md', reviewProtocol, '原版机器真值 JSON'],
+    ['.claude/agents/reverse-engineering-researcher.md', reverseEngineeringAgent, 'original machine-truth JSON'],
+    ['.claude/agents/modern-implementation-engineer.md', implementationAgent, 'original machine-truth JSON'],
+    ['.claude/agents/engineering-reviewer.md', reviewAgent, 'original machine-truth JSON'],
+  ]) {
+    if (!text.includes(requiredText)) {
+      error(`${name} must enforce machine-truth workflow text: ${requiredText}`);
+    }
+  }
+}
+
+function checkSourceBoundaryDocs(tsconfig, srcBoundaries, mechanics, inputSystem) {
+  if (tsconfig.includes('"noUnusedParameters": true')) {
+    if (!srcBoundaries.includes('_time') || !srcBoundaries.includes('noUnusedParameters')) {
+      error('src-boundaries.md must document the Phaser unused-parameter convention while noUnusedParameters is enabled.');
+    }
+  }
+
+  const directionMechanic = [...parseMechanics(mechanics).values()].find((mechanic) => mechanic.id === 'M-009');
+  if (directionMechanic?.reproductionStatus === '已复现' && /cursors\.left|cursors\.right/.test(inputSystem)) {
+    warn('M-009 is marked 已复现, but InputSystem.ts still appears to read cursor arrows in the current single-player path.');
+  }
+}
+
+function checkDomainLanguage(glossary, languageProcess, srcTexts) {
+  const entries = parseGlossary(glossary);
+  const recommendedNames = new Set();
+
+  if (entries.length === 0) {
+    error('glossary.md must contain at least one unified-language table row.');
+  }
+
+  for (const entry of entries) {
+    if (!entry.concept || !entry.recommendedName || !entry.type || !entry.context || !entry.description) {
+      error(`glossary.md has an incomplete row for concept: ${entry.concept || '(missing concept)'}`);
+    }
+    if (recommendedNames.has(entry.recommendedName)) {
+      error(`glossary.md has duplicate recommended code name: ${entry.recommendedName}`);
+    }
+    recommendedNames.add(entry.recommendedName);
+  }
+
+  if (!languageProcess.includes('更新流程') || !languageProcess.includes('禁止规则')) {
+    error('ubiquitous-language-process.md must document update flow and forbidden-name rules.');
+  }
+
+  const combinedSrc = srcTexts.join('\n');
+  for (const entry of entries) {
+    for (const alias of entry.forbiddenAliases) {
+      if (!alias) continue;
+      const aliasPattern = new RegExp(`\\b${alias}\\b`);
+      if (aliasPattern.test(combinedSrc)) {
+        warn(`Forbidden alias appears in src/: ${alias}. Preferred name: ${entry.recommendedName}`);
+      }
+    }
+  }
+}
+
+assertRequiredFiles();
+checkRetiredLegacyRootName();
+
+const agents = read(files.agents);
+const readme = read(files.readme);
+const claude = read('CLAUDE.md');
+const outline = read(files.outline);
+const executionQueue = read(files.executionQueue);
+const board = read(files.board);
+const history = read(files.history);
+const featureLinesText = read(files.featureLines);
+const taskGeneration = read(files.taskGeneration);
+const mechanicsText = read(files.mechanics);
+const verticalSlices = read(files.verticalSlices);
+const governanceLog = read(files.governanceLog);
+const workflowReadme = read(files.workflowReadme);
+const documentMap = read(files.documentMap);
+const packageJsonText = read(files.packageJson);
+const codeQualityGates = read(files.codeQualityGates);
+const reviewProtocol = read(files.reviewProtocol);
+const problemGovernance = read(files.problemGovernance);
+const problemAudit = read(files.problemAudit);
+const methodObservation = read(files.methodObservation);
+const reverseEngineeringProtocol = read(files.reverseEngineeringProtocol);
+const reverseEngineeringTaskProtocol = read(files.reverseEngineeringTaskProtocol);
+const groundTruthGenerationPlan = read(files.groundTruthGenerationPlan);
+const groundTruthCompletenessValidator = read(files.groundTruthCompletenessValidator);
+const groundTruthReadme = read(files.groundTruthReadme);
+const uiGroundTruthSchemaText = read(files.uiGroundTruthSchema);
+const problemDirectory = 'docs/workflow/problems';
+const problemRecordPaths = readdirSync(filePath(problemDirectory))
+  .filter((name) => /^PG-\d{3}-.+\.md$/.test(name))
+  .sort()
+  .map((name) => `${problemDirectory}/${name}`);
+const problemRecords = problemRecordPaths.map((recordPath) => ({
+  id: path.basename(recordPath).match(/^(PG-\d{3})-/)?.[1] ?? '',
+  path: recordPath,
+  text: read(recordPath),
+}));
+const methodDirectory = 'docs/workflow/methods';
+const methodRecordPaths = existsSync(filePath(methodDirectory))
+  ? readdirSync(filePath(methodDirectory))
+    .filter((name) => /^MO-\d{3}-.+\.md$/.test(name))
+    .sort()
+    .map((name) => `${methodDirectory}/${name}`)
+  : [];
+const methodRecords = methodRecordPaths.map((recordPath) => ({
+  id: path.basename(recordPath).match(/^(MO-\d{3})-/)?.[1] ?? '',
+  path: recordPath,
+  text: read(recordPath),
+}));
+const agentProtocol = read(files.agentProtocol);
+const reverseEngineeringAgent = read(files.reverseEngineeringAgent);
+const implementationAgent = read(files.implementationAgent);
+const reviewAgent = read(files.reviewAgent);
+const workflowAgent = read(files.workflowAgent);
+const tsconfig = read(files.tsconfig);
+const srcBoundaries = read(files.srcBoundaries);
+const inputSystem = read(files.inputSystem);
+const glossary = read(files.glossary);
+const languageProcess = read(files.languageProcess);
+
+const executionQueueRows = parseExecutionQueueRows(executionQueue);
+const taskRows = parseTaskRows(board);
+const featureLines = parseFeatureLineRows(featureLinesText);
+const boardIds = taskRows.map((row) => row.id);
+const taskDefinitionDirectory = 'docs/tasks/task-definitions';
+const taskDefinitionPaths = existsSync(filePath(taskDefinitionDirectory))
+  ? readdirSync(filePath(taskDefinitionDirectory))
+    .filter((name) => /^TASK-(?:[A-Z]+-)?\d+[A-Z]?\d?\.md$/.test(name))
+    .sort()
+    .map((name) => `${taskDefinitionDirectory}/${name}`)
+  : [];
+const taskBlockList = taskDefinitionPaths.map((definitionPath) => ({
+  id: path.basename(definitionPath, '.md'),
+  path: definitionPath,
+  text: read(definitionPath),
+}));
+const boardDefinitionIds = taskBlockList.map((block) => block.id);
+const mechanics = parseMechanics(mechanicsText);
+
+checkBoardShape(board, taskRows, boardDefinitionIds, taskBlockList);
+const recommendedIds = checkRecommendations(board, taskRows);
+checkFeatureLines(featureLinesText, featureLines, taskRows, recommendedIds);
+const currentExecution = checkGlobalExecutionQueue(
+  executionQueue,
+  executionQueueRows,
+  problemRecords,
+  recommendedIds,
+);
+const { historyRows, historyDefinitionIds } = checkHistory(history, boardIds);
+checkRefs(taskRows, mechanics, verticalSlices);
+checkReadyDependencies(taskRows, mechanics);
+checkStartupRules(agents, outline);
+checkReadingRoutes({ agents, claude, outline, readme, workflowReadme, documentMap, agentProtocol });
+checkGlobalExecutionRouting({ agents, claude, outline, readme, workflowReadme, documentMap, agentProtocol, taskGeneration });
+checkFeatureLineRouting(agents, claude, outline, workflowReadme, documentMap, agentProtocol, taskGeneration);
+checkTargetedReadingRules(agents);
+checkRegimaRouting(agents, outline, taskBlockList, workflowReadme, documentMap);
+checkWorkflowSeparation(mechanicsText);
+checkGovernanceLog([
+  files.executionQueue,
+  files.taskGeneration,
+  files.featureLines,
+  files.workflowReadme,
+  files.documentMap,
+  files.codeQualityGates,
+  files.reviewProtocol,
+  files.problemGovernance,
+  files.problemAudit,
+  files.methodObservation,
+  files.reverseEngineeringProtocol,
+  files.reverseEngineeringTaskProtocol,
+  files.groundTruthGenerationPlan,
+  files.groundTruthCompletenessValidator,
+  ...problemRecordPaths,
+  ...methodRecordPaths,
+  files.agentProtocol,
+], governanceLog);
+checkCodeQualityGates(packageJsonText, codeQualityGates, claude);
+checkReviewProtocol(reviewProtocol, agents, claude, workflowReadme, documentMap);
+checkUiNativeWorkflowGate(
+  taskGeneration,
+  taskRows,
+  taskBlockList,
+  codeQualityGates,
+  reverseEngineeringProtocol,
+  reverseEngineeringAgent,
+  implementationAgent,
+  reviewAgent,
+);
+checkProblemGovernance(
+  problemGovernance,
+  problemRecords,
+  agents,
+  claude,
+  workflowReadme,
+  documentMap,
+  agentProtocol,
+);
+checkProblemAudit(
+  problemAudit,
+  problemGovernance,
+  methodObservation,
+  packageJsonText,
+  agents,
+  claude,
+  workflowReadme,
+  documentMap,
+  agentProtocol,
+);
+checkMethodObservation(
+  methodObservation,
+  methodRecords,
+  taskBlockList,
+  agents,
+  claude,
+  workflowReadme,
+  documentMap,
+  agentProtocol,
+  taskGeneration,
+);
+checkDelegatedAgentContracts(reverseEngineeringAgent, implementationAgent, reviewAgent, workflowAgent);
+checkReverseEngineeringTaskModel(
+  reverseEngineeringTaskProtocol,
+  groundTruthGenerationPlan,
+  groundTruthCompletenessValidator,
+  problemRecords.find((record) => record.id === 'PG-017')?.text ?? '',
+  [
+    ['AGENTS.md', agents],
+    ['CLAUDE.md', claude],
+    ['TASK_OUTLINE.md', outline],
+    ['docs/workflow/README.md', workflowReadme],
+    ['docs/workflow/document-map.md', documentMap],
+    ['docs/workflow/agent-protocol.md', agentProtocol],
+    ['docs/workflow/task-generation.md', taskGeneration],
+  ],
+  taskBlockList,
+);
+checkReverseEngineeringProtocol(
+  reverseEngineeringProtocol,
+  agents,
+  claude,
+  workflowReadme,
+  documentMap,
+  agentProtocol,
+  taskGeneration,
+  codeQualityGates,
+  reverseEngineeringAgent,
+);
+checkMachineTruthWorkflow(
+  groundTruthReadme,
+  uiGroundTruthSchemaText,
+  agents,
+  claude,
+  workflowReadme,
+  documentMap,
+  reverseEngineeringProtocol,
+  taskGeneration,
+  agentProtocol,
+  codeQualityGates,
+  reviewProtocol,
+  reverseEngineeringAgent,
+  implementationAgent,
+  reviewAgent,
+);
+checkSourceBoundaryDocs(tsconfig, srcBoundaries, mechanicsText, inputSystem);
+checkDomainLanguage(glossary, languageProcess, [inputSystem]);
+
+if (agentProtocol && !agentProtocol.includes('check:structure')) {
+  error('agent-protocol.md must include structural gate rules (check:structure before adding to existing files).');
+}
+
+if (warnings.length > 0) {
+  console.warn('Workflow validation warnings:');
+  for (const message of warnings) {
+    console.warn(`- ${message}`);
+  }
+}
+
+if (errors.length > 0) {
+  console.error('Workflow validation failed:');
+  for (const message of errors) {
+    console.error(`- ${message}`);
+  }
+  process.exit(1);
+}
+
+console.log('Workflow validation passed.');
+console.log(`- task-board: ${taskRows.length} unfinished tasks, ${boardDefinitionIds.length} definitions`);
+console.log(`- task-history: ${historyRows.length} completed tasks, ${historyDefinitionIds.length} definitions`);
+console.log(`- current recommendations: ${recommendedIds.join(', ')}`);
+console.log(`- current execution: ${currentExecution.id} (${currentExecution.scope})`);

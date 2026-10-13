@@ -1,0 +1,292 @@
+import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import path from 'node:path';
+import {
+  petNativeHeadAssets,
+} from '../src/assets/AssetManifest';
+import { petCombatHudHeadAssets } from '../src/assets/PetCombatHudHeadAssets';
+import {
+  runtimeAssetBundleOwners,
+  sceneAssetBundles,
+  sceneBundleBySceneKey,
+  validateSceneAssetBundles,
+  type BundleAssetDefinition,
+} from '../src/assets/SceneAssetBundles';
+import {
+  AssetBundleCoordinator,
+  requireRuntimeAssetOwner,
+  type AssetBundleLoadAdapter,
+} from '../src/systems/AssetBundleCoordinator';
+
+const repoRoot = process.cwd();
+const requiredBundles = [
+  'shell',
+  'heaven-map',
+  'inventory-items-immortality',
+  'map-service-immortality',
+  'inventory-items-shop',
+  'map-service-shop',
+  'map-service-tasks',
+  'feature-ui',
+  'feature-ui-backpack',
+  'feature-ui-skills-common',
+  'feature-ui-skills-hero-1',
+  'feature-ui-skills-hero-5',
+  'pet-native-heads',
+  'pet-combat-hud-heads',
+  'combat-hero-1',
+  'combat-hero-5',
+  'combat-hero-1-skills',
+  'combat-hero-5-skills',
+  'stage-11',
+  'monster-family-3-30',
+  'monster-family-2-4-7-8',
+  'monster-5',
+  'monster-family-6-9-10-19',
+  'monster-16',
+  'stage-12',
+  'stage-13',
+  'stage-21',
+  'stage-22',
+] as const;
+
+for (const bundleId of requiredBundles) assert.ok(sceneAssetBundles[bundleId]);
+// Native manifests store public-relative file paths; runtime URLs must retain
+// the same resource when the document lives below a nested diagnostic route.
+for (const asset of sceneAssetBundles['pet-monkey-horse'].assets) {
+  const root = new URL(asset.path, 'https://game.example/index.html');
+  const nested = new URL(asset.path, 'https://game.example/__turtle_combat/index.html');
+  assert.equal(nested.pathname, root.pathname, `${asset.key}: document-relative asset URL`);
+  assert.ok(root.pathname.startsWith('/assets/'), asset.key);
+  assert.ok(readFileSync(path.join(repoRoot, 'public', root.pathname)).length > 0, asset.key);
+}
+assert.equal(sceneAssetBundles.shell.assets.length, 3);
+assert.equal(sceneAssetBundles.shell.dependencies.length, 0);
+assert.equal(sceneBundleBySceneKey.SaveSlotScene, 'shell');
+assert.equal(sceneBundleBySceneKey.HeavenMapScene, 'heaven-map');
+assert.equal(sceneBundleBySceneKey.ImmortalityScene, 'map-service-immortality');
+assert.equal(sceneBundleBySceneKey.ShopScene, 'map-service-shop');
+assert.equal(sceneBundleBySceneKey.TaskScene, 'map-service-tasks');
+assert.equal(sceneBundleBySceneKey.FeatureUiScene, 'feature-ui');
+assert.equal(sceneAssetBundles['feature-ui'].assets.length, 2);
+assert.equal(sceneAssetBundles['feature-ui-backpack'].assets.length, 439);
+assert.equal(sceneAssetBundles['inventory-items-immortality'].assets.length, 25);
+assert.equal(sceneAssetBundles['inventory-items-shop'].assets.length, 49);
+assert.deepEqual(
+  sceneAssetBundles['feature-ui-backpack'].dependencies,
+  [
+    'feature-ui',
+    'inventory-items-immortality',
+    'inventory-items-shop',
+    'combat-hero-1',
+    'combat-hero-2',
+    'combat-hero-3',
+    'combat-hero-4',
+    'combat-hero-5',
+  ],
+);
+assert.deepEqual(
+  sceneAssetBundles['map-service-immortality'].dependencies,
+  ['shell', 'inventory-items-immortality'],
+);
+assert.deepEqual(
+  sceneAssetBundles['map-service-shop'].dependencies,
+  ['shell', 'inventory-items-shop', 'feature-ui'],
+);
+assert.deepEqual(
+  sceneAssetBundles['map-service-tasks'].dependencies,
+  ['shell', 'heaven-map', 'feature-ui-backpack'],
+);
+assert.equal(
+  sceneAssetBundles.shell.assets.some((asset) => asset.key.startsWith('inventory-item.')),
+  false,
+);
+assert.equal(requireRuntimeAssetOwner('inventory-item.ptdcz'), 'feature-ui-backpack');
+assert.equal(requireRuntimeAssetOwner('inventory-ui.operation.simple.default'), 'feature-ui-backpack');
+assert.equal(requireRuntimeAssetOwner('inventory-ui.exp.frame-30'), 'feature-ui-backpack');
+assert.equal(requireRuntimeAssetOwner('inventory-item.wpsmd1'), 'inventory-items-immortality');
+assert.equal(requireRuntimeAssetOwner('inventory-item.wpqhs1'), 'inventory-items-shop');
+assert.ok(sceneAssetBundles['feature-ui-skills-common'].assets.length < 80);
+assert.equal(sceneAssetBundles['feature-ui-skills-hero-1'].assets.length, 30);
+assert.equal(sceneAssetBundles['feature-ui-skills-hero-5'].assets.length, 30);
+assert.equal(sceneAssetBundles['pet-native-heads'].assets.length, Object.keys(petNativeHeadAssets).length);
+assert.equal(
+  sceneAssetBundles['pet-combat-hud-heads'].assets.length,
+  Object.keys(petCombatHudHeadAssets).length,
+);
+// Native reception bodies must be ready before the first synchronous hit render.
+assert.deepEqual(sceneAssetBundles['combat-common'].dependencies, ['pet-combat-hud-heads', 'pet-reception-body']);
+for (const characterId of [597, 608]) {
+  for (let frame = 1; frame <= 5; frame += 1) {
+    assert.ok(
+      sceneAssetBundles['feature-ui-skills-common'].assets.some(
+        (asset) => asset.key === `full-ui.skill-native.sprite-${characterId}-${frame}`,
+      ),
+      `Missing heart-method selector ${characterId} frame ${frame}.`,
+    );
+  }
+}
+assert.deepEqual(
+  sceneAssetBundles['feature-ui-skills-hero-1'].dependencies,
+  ['feature-ui-skills-common'],
+);
+assert.equal(sceneBundleBySceneKey.TestScene, 'stage-11');
+assert.equal(sceneBundleBySceneKey.Stage22DevScene, 'stage-22');
+assert.ok(runtimeAssetBundleOwners.size > 250);
+assert.equal(requireRuntimeAssetOwner('save-slots.start-menu'), 'shell');
+assert.equal(requireRuntimeAssetOwner('monster.monster30.atlas'), 'monster-family-3-30');
+assert.equal(requireRuntimeAssetOwner('monster.monster5.atlas'), 'monster-5');
+assert.equal(requireRuntimeAssetOwner('monster.family-3-30.attack-geometry'), 'monster-family-3-30');
+assert.equal(requireRuntimeAssetOwner('monster.family-2-4-7-8.attack-geometry'), 'monster-family-2-4-7-8');
+assert.equal(requireRuntimeAssetOwner('monster.monster5.attack-geometry'), 'monster-5');
+assert.equal(requireRuntimeAssetOwner('stage.stage1-1.transfer-door.frame-01'), 'stage-11');
+assert.equal(requireRuntimeAssetOwner('stage.stage1-3.transfer-door'), 'stage-13');
+assert.equal(requireRuntimeAssetOwner('monster.monster6.atlas'), 'monster-family-6-9-10-19');
+assert.equal(requireRuntimeAssetOwner('monster.monster16.atlas'), 'monster-16');
+assert.equal(requireRuntimeAssetOwner('combat-hud.pet.shell'), 'combat-common');
+assert.equal(requireRuntimeAssetOwner('full-ui.pet-native.head-monkey1'), 'pet-native-heads');
+assert.throws(
+  () => requireRuntimeAssetOwner('ready-but-unowned'),
+  /has no bundle owner/,
+);
+
+assert.throws(
+  () => validateSceneAssetBundles({
+    shell: {
+      dependencies: [],
+      assets: [{ kind: 'image', key: 'duplicate', path: '/a.png' }],
+    },
+    'save-party': {
+      dependencies: [],
+      assets: [{ kind: 'image', key: 'duplicate', path: '/b.png' }],
+    },
+  }),
+  /multiple bundle owners/,
+);
+
+{
+  const coordinator = new AssetBundleCoordinator();
+  const loadedKeys = new Set<string>();
+  const calls: string[] = [];
+  const adapter: AssetBundleLoadAdapter = {
+    has: (asset) => loadedKeys.has(asset.key),
+    load: async (bundleId, assets) => {
+      calls.push(bundleId);
+      for (const asset of assets) loadedKeys.add(asset.key);
+    },
+  };
+  await coordinator.ensure('stage-12', adapter);
+  assert.deepEqual(calls, ['pet-combat-hud-heads', 'pet-reception-body', 'combat-common', 'stage-1-common', 'monster-family-2-4-7-8', 'stage-12']);
+  await coordinator.ensure('combat-hero-2', adapter);
+  assert.equal(calls.at(-1), 'combat-hero-2');
+  assert.equal(loadedKeys.has('hero-animation.hero2.body'), true);
+  assert.equal(loadedKeys.has('skill-projectile.role2.sgq.hit5.frame1'), false);
+  await coordinator.ensure('combat-hero-2-skills', adapter);
+  assert.equal(loadedKeys.has('skill-projectile.role2.sgq.hit5.frame1'), true);
+  assert.equal(coordinator.isLoaded('stage-12'), true);
+  await coordinator.ensure('stage-12', adapter);
+  assert.deepEqual(
+    calls,
+    [
+      'pet-combat-hud-heads', 'pet-reception-body', 'combat-common', 'stage-1-common', 'monster-family-2-4-7-8', 'stage-12',
+      'combat-hero-2', 'combat-hero-2-skills',
+    ],
+  );
+}
+
+{
+  const coordinator = new AssetBundleCoordinator();
+  const loadedKeys = new Set<string>();
+  const adapter: AssetBundleLoadAdapter = {
+    has: (asset) => loadedKeys.has(asset.key),
+    load: async (_bundleId, assets) => {
+      for (const asset of assets) loadedKeys.add(asset.key);
+    },
+  };
+  await coordinator.ensure('stage-11', adapter);
+  assert.equal(
+    loadedKeys.has('stage.stage1-1.transfer-door.frame-01'),
+    true,
+    'Stage 1-1 must load its own character 45/41/44 transfer-door frames',
+  );
+}
+
+{
+  const coordinator = new AssetBundleCoordinator();
+  const loadedKeys = new Set<string>();
+  let releaseLoad: (() => void) | undefined;
+  let loadCalls = 0;
+  const adapter: AssetBundleLoadAdapter = {
+    has: (asset) => loadedKeys.has(asset.key),
+    load: async (_bundleId, assets) => {
+      loadCalls += 1;
+      await new Promise<void>((resolve) => {
+        releaseLoad = () => {
+          for (const asset of assets) loadedKeys.add(asset.key);
+          resolve();
+        };
+      });
+    },
+  };
+  const first = coordinator.ensure('shell', adapter);
+  const second = coordinator.ensure('shell', adapter);
+  assert.strictEqual(first, second);
+  releaseLoad?.();
+  await Promise.all([first, second]);
+  assert.equal(loadCalls, 1);
+}
+
+{
+  const retryAsset: BundleAssetDefinition = {
+    kind: 'image',
+    key: 'retry.asset',
+    path: '/retry.png',
+  };
+  const coordinator = new AssetBundleCoordinator({
+    shell: { dependencies: [], assets: [retryAsset] },
+  } as ConstructorParameters<typeof AssetBundleCoordinator>[0]);
+  let attempts = 0;
+  let loaded = false;
+  const adapter: AssetBundleLoadAdapter = {
+    has: () => loaded,
+    load: async () => {
+      attempts += 1;
+      if (attempts === 1) throw new Error('planned failure');
+      loaded = true;
+    },
+  };
+  await assert.rejects(coordinator.ensure('shell', adapter), /planned failure/);
+  assert.equal(coordinator.getStatus('shell'), 'failed');
+  await coordinator.ensure('shell', adapter);
+  assert.equal(coordinator.getStatus('shell'), 'loaded');
+  assert.equal(attempts, 2);
+}
+
+const source = (relativePath: string): string =>
+  readFileSync(path.join(repoRoot, relativePath), 'utf8');
+const bootSource = source('src/scenes/BootScene.ts');
+assert.match(bootSource, /queueSceneAssetBundleForPreload\(this, 'shell'\)/);
+assert.doesNotMatch(
+  bootSource,
+  /stage11Assets|stage12Assets|stage13Assets|stage21Assets|stage22Assets|heavenMapAssets|fullFeatureUiAssets/,
+);
+assert.doesNotMatch(bootSource, /Object\.values\(/);
+const bridgeSource = source('src/scenes/SceneAssetBundleBridge.ts');
+const stage11WorldSource = source('src/scenes/test-scene/TestSceneStage11Bridge.ts');
+assert.match(stage11WorldSource, /sourceCharacterIds: \[45, 41, 44\]/);
+assert.doesNotMatch(stage11WorldSource, /Stage13AssetKeys\.transferDoor/);
+assert.ok(
+  sceneAssetBundles['stage-11'].dependencies.includes('stage-1-common'),
+  'Stage 1-1 must still load the shared Stage 1 floor owner',
+);
+assert.match(bridgeSource, /Phaser\.Scenes\.Events\.SHUTDOWN/);
+assert.match(bridgeSource, /FILE_LOAD_ERROR/);
+assert.match(source('src/scenes/SaveSlotScene.ts'), /ensureSceneAssetBundle\(this, 'save-party'/);
+assert.match(source('src/scenes/SaveSlotScene.ts'), /startSceneWithBundle\(this, 'HeavenMapScene'/);
+assert.match(source('src/scenes/HeavenMapScene.ts'), /startSceneWithBundle\(this, node\.routeKey/);
+assert.match(
+  source('src/scenes/feature-ui/FormalFeatureUiEntryBridge.ts'),
+  /getFeatureUiAssetBundleId\(page, heroId\)/,
+);
+
+console.log('Asset bundle catalog, coordinator, retry, route, and Boot boundary tests passed.');

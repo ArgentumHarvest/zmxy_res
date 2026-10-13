@@ -1,0 +1,109 @@
+﻿import { PetTuning } from './PetTuning';
+import { DefaultGlobalSettings } from './GlobalSettingsSystem';
+import type { PetOwnerSnapshot, PetRoster, PetRuntimeModel, PetSkillTarget, PetState } from './PetTypes';
+export function createPetRuntime(
+  pet: PetState,
+  owner: PetOwnerSnapshot,
+): PetRuntimeModel {
+  return {
+    petId: pet.id,
+    runtimeKey: getPetRuntimeKey(pet),
+    x: owner.x - owner.facingX * PetTuning.followOffsetX,
+    y: owner.y + PetTuning.warpOffsetY,
+    facingX: owner.facingX,
+    state: 'idle',
+  };
+}
+
+export function syncPetRuntimeWithRoster(
+  roster: PetRoster,
+  runtime: PetRuntimeModel | undefined,
+  owner: PetOwnerSnapshot,
+): PetRuntimeModel | undefined {
+  const activePet = getActivePet(roster);
+  if (!activePet) {
+    return undefined;
+  }
+
+  if (!runtime || runtime.petId !== activePet.id || runtime.runtimeKey !== getPetRuntimeKey(activePet)) {
+    return createPetRuntime(activePet, owner);
+  }
+
+  return runtime;
+}
+
+export function updatePetRuntime(
+  runtime: PetRuntimeModel,
+  pet: PetState,
+  owner: PetOwnerSnapshot,
+  deltaMs: number,
+  hostFps: number = DefaultGlobalSettings.frameRate,
+): void {
+  validateMovementClock(hostFps, deltaMs);
+  const desiredX = owner.x - owner.facingX * PetTuning.followOffsetX;
+  const desiredY = owner.y - PetTuning.followOffsetY;
+  const dx = desiredX - runtime.x;
+  const dy = desiredY - runtime.y;
+  const distance = Math.hypot(dx, dy);
+
+  runtime.facingX = dx < 0 ? -1 : dx > 0 ? 1 : owner.facingX;
+
+  if (distance >= PetTuning.warpDistance) {
+    runtime.x = owner.x;
+    runtime.y = owner.y + PetTuning.warpOffsetY;
+    runtime.state = 'warp';
+    return;
+  }
+
+  if (distance <= PetTuning.followMinDistance) {
+    runtime.state = 'idle';
+    return;
+  }
+
+  const speedPxPerSecond = pet.moveSpeed * hostFps;
+  const step = Math.min(distance, speedPxPerSecond * (deltaMs / 1000));
+  runtime.x += (dx / distance) * step;
+  runtime.y += (dy / distance) * step;
+  runtime.state = 'follow';
+}
+
+export function chasePetRuntimeTarget(
+  runtime: PetRuntimeModel,
+  pet: PetState,
+  target: Readonly<PetSkillTarget>,
+  stopDistance: number,
+  deltaMs: number,
+  hostFps: number = DefaultGlobalSettings.frameRate,
+): void {
+  validateMovementClock(hostFps, deltaMs);
+  const dx = target.x - runtime.x;
+  const dy = target.y - runtime.y;
+  const distance = Math.hypot(dx, dy);
+  if (distance <= 0) {
+    runtime.state = 'idle';
+    return;
+  }
+
+  runtime.facingX = dx < 0 ? -1 : 1;
+  const speedPxPerSecond = pet.moveSpeed * hostFps;
+  const step = Math.min(Math.max(0, distance - stopDistance), speedPxPerSecond * (deltaMs / 1000));
+  runtime.x += (dx / distance) * step;
+  runtime.y += (dy / distance) * step;
+  runtime.state = 'follow';
+}
+
+
+function getPetRuntimeKey(pet: PetState): string {
+  return `${pet.id}:${pet.species}:${pet.form}`;
+}
+
+function getActivePet(roster: PetRoster): PetState | undefined {
+  return roster.pets.find((pet) => pet.isActive && pet.lifetime > 0);
+}
+
+// AS3 horizenSpeed is pixels per host tick, not pixels per 1/90 second.
+function validateMovementClock(hostFps: number, deltaMs: number): void {
+  if (!Number.isFinite(hostFps) || hostFps <= 0 || !Number.isFinite(deltaMs) || deltaMs < 0) {
+    throw new Error('Pet movement requires positive hostFps and non-negative deltaMs.');
+  }
+}

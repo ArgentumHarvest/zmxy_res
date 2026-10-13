@@ -1,0 +1,329 @@
+import assert from 'node:assert/strict';
+import { existsSync, readFileSync } from 'node:fs';
+import path from 'node:path';
+import {
+  stageSettingsAssets,
+  stageFeatureEntryButtonAssets,
+} from '../src/assets/AssetManifest';
+import {
+  activateGlobalSettingsForTests,
+  DefaultGlobalSettings,
+} from '../src/systems/GlobalSettingsSystem';
+import {
+  closeStageHelp,
+  createStageSettingsModel,
+  cycleStageSpawnSpeed,
+  isStageSoundEnabled,
+  openStageHelp,
+  showStageHelpFrame,
+  toggleStageSound,
+} from '../src/systems/StageSettingsSystem';
+import {
+  findStageFeaturePointerTarget,
+  routeStageFeatureEntry,
+} from '../src/systems/StageFeatureEntryRouterSystem';
+import {
+  closeFeatureUi,
+  createFeatureUiHostModel,
+  openFeatureUi,
+} from '../src/systems/FeatureUiHostSystem';
+
+const root = process.cwd();
+const source = (relativePath: string): string =>
+  readFileSync(path.join(root, relativePath), 'utf8');
+
+const p1PointerTargets = [
+  ['settings', 63.65, 563.15],
+  ['backpack', 32.9, 540.5],
+  ['skills', 28.5, 504.85],
+  ['magic-weapon', 55.15, 475.4],
+  ['pets', 91.35, 472.65],
+] as const;
+for (const [entry, x, y] of p1PointerTargets) {
+  assert.deepEqual(findStageFeaturePointerTarget({ x, y }, 1), { entry, owner: 'p1' });
+  assert.deepEqual(findStageFeaturePointerTarget({ x: 920 - x, y }, 2), { entry, owner: 'p2' });
+}
+assert.equal(findStageFeaturePointerTarget({ x: 470, y: 295 }, 2), undefined);
+
+const entryBridgeSource = source('src/scenes/feature-ui/FormalFeatureUiEntryBridge.ts');
+const entryRouterSource = source('src/systems/StageFeatureEntryRouterSystem.ts');
+const roleInfoShellSource = source('public/assets/ui/combat-hud/role-info.svg');
+for (const entry of ['settings', 'backpack', 'skills', 'magic-weapon', 'pets']) {
+  assert.match(entryBridgeSource, new RegExp(`entry: '${entry}'`), `${entry} must have a native HUD button`);
+  assert.match(
+    entryBridgeSource,
+    new RegExp(`stage-feature-entry-hit-\\$\\{owner\\}-\\$\\{spec\\.entry\\}`),
+    `${entry} must share the pointer hit-zone path`,
+  );
+}
+assert.match(entryBridgeSource, /setDepth\(116\)[\s\S]*setInteractive\(\{ useHandCursor: true \}\)/);
+assert.match(entryBridgeSource, /bindPointer\(button\)[\s\S]*bindPointer\(hit\)/);
+assert.match(entryBridgeSource, /findStageFeaturePointerTarget\(pointer, config\.party\.playerCount\)[\s\S]*routeFeatureEntry\(scene, target\.entry, target\.owner, 'pointer', config\)[\s\S]*Phaser\.Input\.Events\.POINTER_UP/);
+assert.match(entryRouterSource, /Math\.abs\(point\.x - x\) <= 15\.5[\s\S]*Math\.abs\(point\.y - position\.y\) <= 17\.5/);
+assert.match(entryBridgeSource, /scene\.input\.off\(Phaser\.Input\.Events\.POINTER_UP, binding\.handler\)/);
+for (const embeddedButtonId of ['btn_set', 'btn_bb', 'btn_study', 'btn_fb', 'btn_cw']) {
+  assert.doesNotMatch(
+    roleInfoShellSource,
+    new RegExp(`id="${embeddedButtonId}"`),
+    `${embeddedButtonId} must not be baked into the shell and drawn a second time`,
+  );
+}
+
+for (const [entry, states] of Object.entries(stageFeatureEntryButtonAssets)) {
+  assert.deepEqual(Object.keys(states), ['up', 'over', 'down', 'hit']);
+  for (const asset of Object.values(states)) {
+    assert.equal(asset.status, 'ready');
+    assert.equal(asset.source, 'extracted-flash');
+    assert.equal(asset.sourcePackage, 'assets/OtherMat1.swf');
+    assert.ok([549, 555, 561, 567, 573].includes(asset.sourceCharacterId));
+    assert.ok(existsSync(path.join(root, 'public', asset.path)), `${entry}:${asset.path}`);
+  }
+}
+
+for (const asset of [
+  stageSettingsAssets.root,
+  ...stageSettingsAssets.helpFrames,
+  ...stageSettingsAssets.spawnSpeedFrames,
+  ...Object.values(stageSettingsAssets.buttons).flatMap((states) => Object.values(states)),
+  ...Object.values(stageSettingsAssets.helpButtons).flatMap((states) => Object.values(states)),
+]) {
+  assert.equal(asset.status, 'ready');
+  assert.equal(asset.sourcePackage, 'assets/OtherMat1.swf');
+  assert.ok(existsSync(path.join(root, 'public', asset.path)), asset.path);
+}
+
+activateGlobalSettingsForTests(DefaultGlobalSettings);
+const settingsModel = createStageSettingsModel();
+assert.equal(isStageSoundEnabled(), true);
+assert.equal(toggleStageSound(), false);
+assert.equal(isStageSoundEnabled(), false);
+assert.deepEqual(
+  [cycleStageSpawnSpeed(settingsModel), cycleStageSpawnSpeed(settingsModel), cycleStageSpawnSpeed(settingsModel)],
+  [2, 4, 1],
+);
+openStageHelp(settingsModel);
+assert.equal(settingsModel.page, 'help-action');
+showStageHelpFrame(settingsModel, 'pet');
+assert.equal(settingsModel.page, 'help-pet');
+closeStageHelp(settingsModel);
+assert.equal(settingsModel.page, 'settings');
+
+const ready = {
+  playerCount: 2 as const,
+  ownerAlive: true,
+  magicWeaponEquipped: true,
+};
+const formalStageScenePaths = [
+  'src/scenes/PlayableLevelRuntime.ts',
+] as const;
+
+for (const stage of ['12', '13', '21', '22']) {
+  assert.match(source(`src/scenes/Stage${stage}Scene.ts`), /createPlayableLevelRuntime\(/);
+}
+
+assert.deepEqual(
+  routeStageFeatureEntry(
+    { entry: 'backpack', owner: 'p2', source: 'pointer' },
+    ready,
+  ),
+  {
+    status: 'open-page',
+    page: 'backpack',
+    owner: 'p2',
+    request: { entry: 'backpack', owner: 'p2', source: 'pointer' },
+  },
+);
+assert.equal(
+  routeStageFeatureEntry(
+    { entry: 'skills', owner: 'p2', source: 'keyboard' },
+    ready,
+  ).status,
+  'open-page',
+);
+assert.equal(
+  routeStageFeatureEntry(
+    { entry: 'skills', owner: 'p2', source: 'keyboard' },
+    ready,
+  ).owner,
+  'p1',
+);
+assert.deepEqual(
+  routeStageFeatureEntry(
+    { entry: 'settings', owner: 'p2', source: 'pointer' },
+    ready,
+  ),
+  {
+    status: 'settings-pending',
+    owner: 'p1',
+    request: { entry: 'settings', owner: 'p2', source: 'pointer' },
+  },
+);
+assert.equal(
+  routeStageFeatureEntry(
+    { entry: 'backpack', owner: 'p2', source: 'pointer' },
+    { ...ready, playerCount: 1 },
+  ).status,
+  'blocked',
+);
+assert.equal(
+  routeStageFeatureEntry(
+    { entry: 'backpack', owner: 'p1', source: 'keyboard' },
+    { ...ready, ownerAlive: false },
+  ).status,
+  'blocked',
+);
+assert.equal(
+  routeStageFeatureEntry(
+    { entry: 'magic-weapon', owner: 'p1', source: 'pointer' },
+    { ...ready, magicWeaponEquipped: false },
+  ).status,
+  'blocked',
+);
+assert.equal(
+  routeStageFeatureEntry(
+    { entry: 'pets', owner: 'p1', source: 'pointer' },
+    { ...ready, ownerAlive: false },
+  ).status,
+  'open-page',
+);
+assert.equal(
+  routeStageFeatureEntry(
+    { entry: 'backpack', owner: 'p1', source: 'pointer' },
+    { ...ready, blocksInventoryPages: true },
+  ).status,
+  'blocked',
+);
+
+const bridge = source('src/scenes/feature-ui/FormalFeatureUiEntryBridge.ts');
+for (const contract of [
+  "KeyCodes.ESC, 'settings', 'p1'",
+  "P2_BACKPACK_KEY_CODE, 'backpack', 'p2'",
+  "P2_SKILLS_KEY_CODE, 'skills', 'p2'",
+  "KeyCodes.NUMPAD_SUBTRACT, 'pets', 'p2'",
+  "createStageFeatureEntryButtons(scene, 'p2'",
+  'routeStageFeatureEntry(',
+  'setStageFeatureEntryOwnerAlive',
+  'StageFeatureSettingsRequestedEvent',
+  'launchStageSettings(scene, config)',
+  '.setScrollFactor(0)',
+]) {
+  assert.ok(bridge.includes(contract), contract);
+}
+assert.doesNotMatch(bridge, /syncHitToCamera|scene\.cameras\.main\.scroll[XY]/);
+assert.doesNotMatch(bridge, /P2_.*MAGIC|P2_.*SETTINGS/);
+
+for (const scenePath of formalStageScenePaths) {
+  const scene = source(scenePath);
+  assert.equal(
+    scene.match(/installFormalFeatureUiEntries\(/g)?.length,
+    1,
+    `${scenePath}: shared feature-entry installation`,
+  );
+  assert.match(scene, /originKind:\s*'combat'/, `${scenePath}: combat origin`);
+  assert.match(scene, /party:\s*(?:this\.)?(?:formalPartyRuntime|partyRuntime)\.party/, `${scenePath}: formal party`);
+  assert.doesNotMatch(source(scenePath), /keydown-ESC/);
+}
+
+for (const originSceneKey of [
+  'TestScene',
+  'Stage12Scene',
+  'Stage13Scene',
+  'Stage21Scene',
+  'Stage22Scene',
+]) {
+  const host = createFeatureUiHostModel();
+  const p1Backpack = routeStageFeatureEntry(
+    { entry: 'backpack', owner: 'p1', source: 'keyboard' },
+    ready,
+  );
+  assert.equal(p1Backpack.status, 'open-page');
+  if (p1Backpack.status !== 'open-page') throw new Error('Expected P1 backpack route');
+  assert.equal(openFeatureUi(host, {
+    page: p1Backpack.page,
+    owner: p1Backpack.owner,
+    originSceneKey,
+    originKind: 'combat',
+    playerCount: 2,
+  }).status, 'opened');
+
+  const p2Pet = routeStageFeatureEntry(
+    { entry: 'pets', owner: 'p2', source: 'pointer' },
+    ready,
+  );
+  assert.equal(p2Pet.status, 'open-page');
+  if (p2Pet.status !== 'open-page') throw new Error('Expected P2 pet route');
+  assert.equal(openFeatureUi(host, {
+    page: p2Pet.page,
+    owner: p2Pet.owner,
+    originSceneKey,
+    originKind: 'combat',
+    playerCount: 2,
+  }).status, 'busy');
+  assert.equal(host.active?.page, 'backpack');
+  assert.equal(host.active?.owner, 'p1');
+  assert.equal(closeFeatureUi(host)?.originSceneKey, originSceneKey);
+
+  const p2Skills = routeStageFeatureEntry(
+    { entry: 'skills', owner: 'p2', source: 'keyboard' },
+    ready,
+  );
+  assert.equal(p2Skills.status, 'open-page');
+  assert.equal(p2Skills.owner, 'p1');
+
+  const settings = routeStageFeatureEntry(
+    { entry: 'settings', owner: 'p2', source: 'pointer' },
+    ready,
+  );
+  assert.equal(settings.status, 'settings-pending');
+  assert.equal(settings.owner, 'p1');
+}
+
+const settingsScene = source('src/scenes/StageSettingsScene.ts');
+assert.match(settingsScene, /replaceBlackBaseFrame/);
+assert.match(settingsScene, /centeredRegistration/);
+assert.match(settingsScene, /button\.width, button\.height, 0x000000/);
+assert.match(settingsScene, /rectangle\(396, 130, 155, 250, 0x000000\)/);
+assert.match(settingsScene, /spawnSpeedFrames\[speedIndex\]/);
+assert.doesNotMatch(settingsScene, /button\.setAlpha\(0\.001\)/);
+assert.match(
+  entryBridgeSource,
+  /scene\.scene\.pause\(scene\.scene\.key\);[\s\S]*scene\.scene\.launch\('StageSettingsScene'/,
+  'the combat origin must pause before StageSettingsScene validates its session',
+);
+for (const contract of [
+  'stageSettingsAssets.root.key',
+  'stageSettingsAssets.helpFrames',
+  'toggleStageSound',
+  'cycleStageSpawnSpeed',
+  "this.routeAway('HeavenMapScene')",
+  "this.routeAway('SaveSlotScene')",
+  "this.input.keyboard?.on('keydown-ESC'",
+]) {
+  assert.ok(settingsScene.includes(contract), contract);
+}
+
+const featureScene = source('src/scenes/FeatureUiScene.ts');
+assert.ok(featureScene.includes('assertVerifiedStageFeatureHostTruth'));
+assert.ok(featureScene.includes("binding.page === this.session?.page"));
+assert.match(
+  featureScene,
+  /if \(this\.session\.originKind === 'combat'\)[\s\S]*binding\.page === this\.session\?\.page/,
+);
+assert.doesNotMatch(featureScene, /switchFeatureUi\(|keydown-ESC|createMapHostChrome/);
+assert.doesNotMatch(featureScene, /正式功能页面主机|关闭并返回|装备工坊.*跨页/);
+assert.match(entryBridgeSource, /if \(keyboard && config\.originKind === 'combat'\)/);
+assert.ok(source('src/main.ts').includes('StageSettingsScene'));
+
+const assetBundles = source('src/assets/SceneAssetBundles.ts');
+assert.ok(assetBundles.includes("from './MonsterAssetCatalog'"));
+assert.ok(assetBundles.includes('const monsterResourceBundleAssets ='));
+assert.match(
+  assetBundles,
+  /'monster-family-6-9-10-19': \{[\s\S]*assets: monsterResourceBundleAssets\('monster-family-6-9-10-19'\)/,
+);
+assert.match(
+  assetBundles,
+  /'stage-22': \{[\s\S]*'monster-family-6-9-10-19',[\s\S]*'monster-16'/,
+);
+
+console.log('stage-feature-entry-tests: ok');

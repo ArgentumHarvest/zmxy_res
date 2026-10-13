@@ -1,0 +1,139 @@
+import assert from 'node:assert/strict';
+import { existsSync, readFileSync } from 'node:fs';
+import path from 'node:path';
+import { saveSlotAssets } from '../src/assets/AssetManifest';
+import {
+  ActiveSaveSlotStorageKey,
+  createDefaultGameSave,
+  createSaveSlot,
+  deleteSaveSlot,
+  getActiveSaveSlotId,
+  getSaveSlotStorageKey,
+  inspectSaveSlot,
+  listSaveSlots,
+  loadActiveGame,
+  saveActiveGame,
+  saveActiveLevelUnlockProgress,
+  selectSaveSlot,
+} from '../src/systems/SaveSlotSystem';
+import {
+  GameSaveVersion,
+  type SaveStorage,
+} from '../src/systems/SaveSystem';
+
+const repoRoot = process.cwd();
+
+function createMemoryStorage(initial: Record<string, string> = {}): SaveStorage & { values: Map<string, string> } {
+  const values = new Map(Object.entries(initial));
+  return {
+    values,
+    getItem: (key) => values.get(key) ?? null,
+    setItem: (key, value) => { values.set(key, value); },
+    removeItem: (key) => { values.delete(key); },
+  };
+}
+
+{
+  const storage = createMemoryStorage();
+  const slots = listSaveSlots(storage);
+  assert.equal(slots.length, 6);
+  assert.deepEqual(slots.map((slot) => slot.status), Array(6).fill('empty'));
+  assert.deepEqual(slots.map((slot) => slot.displayNumber), [1, 2, 3, 4, 5, 6]);
+
+  assert.equal(createSaveSlot(storage, 2, createDefaultGameSave(new Date('2026-07-22T01:02:03.000Z'))), true);
+  assert.equal(getActiveSaveSlotId(storage), 2);
+  assert.equal(inspectSaveSlot(storage, 2).status, 'valid');
+  assert.equal(inspectSaveSlot(storage, 1).status, 'empty');
+  assert.equal(createSaveSlot(storage, 2), false, 'valid slots must not be silently overwritten');
+  assert.equal(loadActiveGame(storage)?.savedAt, '2026-07-22T01:02:03.000Z');
+  const currentRawBeforeSelection = storage.getItem(getSaveSlotStorageKey(2));
+  assert.ok(selectSaveSlot(storage, 2));
+  assert.equal(
+    storage.getItem(getSaveSlotStorageKey(2)),
+    currentRawBeforeSelection,
+    'selecting a valid current slot must not rewrite its save body',
+  );
+
+  const updated = loadActiveGame(storage)!;
+  updated.player1.level = 7;
+  assert.equal(saveActiveGame(storage, updated), true);
+  assert.equal(inspectSaveSlot(storage, 2).save?.player1.level, 7);
+  assert.equal(inspectSaveSlot(storage, 1).status, 'empty');
+
+  deleteSaveSlot(storage, 2);
+  assert.equal(inspectSaveSlot(storage, 2).status, 'empty');
+  assert.equal(storage.getItem(ActiveSaveSlotStorageKey), null);
+}
+
+{
+  const corruptKey = getSaveSlotStorageKey(4);
+  const storage = createMemoryStorage({ [corruptKey]: '{broken-json' });
+  assert.equal(inspectSaveSlot(storage, 4).status, 'corrupt');
+  assert.equal(selectSaveSlot(storage, 4), undefined);
+  assert.equal(createSaveSlot(storage, 4), false, 'corrupt slots require explicit deletion');
+  assert.equal(storage.getItem(corruptKey), '{broken-json');
+  deleteSaveSlot(storage, 4);
+  assert.equal(createSaveSlot(storage, 4), true);
+}
+
+for (const sourceVersion of [1, 2, 3, 4, 5, 6, GameSaveVersion + 1]) {
+  const save = createDefaultGameSave(new Date('2026-07-21T00:00:00.000Z'));
+  const incompatible = { ...save, version: sourceVersion };
+  const key = getSaveSlotStorageKey(0);
+  const raw = JSON.stringify(incompatible);
+  const storage = createMemoryStorage({ [key]: raw });
+  assert.equal(inspectSaveSlot(storage, 0).status, 'corrupt');
+  assert.equal(selectSaveSlot(storage, 0), undefined);
+  assert.equal(createSaveSlot(storage, 0), false, 'incompatible slots require explicit deletion');
+  assert.equal(storage.getItem(key), raw, 'rejected old slots must not be rewritten');
+}
+
+{
+  const storage = createMemoryStorage();
+  assert.equal(createSaveSlot(storage, 3), true);
+  assert.equal(saveActiveLevelUnlockProgress(storage, { unlockedStage: 1, unlockedLevel: 3 }, new Date('2026-07-22T04:05:06.000Z')), true);
+  assert.equal(loadActiveGame(storage)?.levelUnlockProgress.unlockedLevel, 3);
+  assert.equal(loadActiveGame(storage)?.savedAt, '2026-07-22T04:05:06.000Z');
+}
+
+for (const asset of Object.values(saveSlotAssets)) {
+  assert.equal(asset.status, 'ready');
+  assert.equal(asset.source, 'extracted-flash');
+  assert.match(asset.sourcePackage, /\.swf$/);
+  const assetPath = path.join(repoRoot, 'public', asset.path);
+  assert.ok(existsSync(assetPath));
+  assert.match(readFileSync(assetPath, 'utf8'), /<svg\b/);
+}
+
+const bootSource = readFileSync(path.join(repoRoot, 'src/scenes/BootScene.ts'), 'utf8');
+assert.match(bootSource, /this\.scene\.start\('SaveSlotScene'\)/);
+const mainSource = readFileSync(path.join(repoRoot, 'src/main.ts'), 'utf8');
+assert.match(mainSource, /BootScene, SaveSlotScene, HeavenMapScene/);
+const sceneSource = readFileSync(path.join(repoRoot, 'src/scenes/SaveSlotScene.ts'), 'utf8');
+assert.match(sceneSource, /createPartySaveSlot\(/);
+assert.match(sceneSource, /openDeleteConfirmation\(snapshot\.id\)/);
+assert.match(sceneSource, /deleteSaveSlot\(this\.storage!, slotId\)/);
+assert.match(sceneSource, /status === 'corrupt'/);
+assert.match(sceneSource, /saveSlotAssets\.slotPanel\.key/);
+assert.match(sceneSource, /saveSlotAssets\.confirmDialog\.key/);
+assert.match(sceneSource, /startSceneWithBundle\(this, 'HeavenMapScene'/);
+assert.match(sceneSource, /this\.slotCloseZone\.on\('pointerdown', \(\) => this\.closeSlotPanel\(\)\)/);
+assert.match(sceneSource, /newGame\.on\('pointerdown', \(\) => this\.openSlotPanel\(\)\)/);
+assert.match(sceneSource, /continueGame\.on\('pointerdown', \(\) => this\.openSlotPanel\(\)\)/);
+
+for (const relativePath of [
+  'src/scenes/Stage11EntryScene.ts',
+  'src/scenes/stage12/Stage12GameplayBridge.ts',
+  'src/scenes/stage13/Stage13GameplayBridge.ts',
+]) {
+  assert.match(readFileSync(path.join(repoRoot, relativePath), 'utf8'), /loadActiveGame\(storage\)/);
+}
+assert.match(
+  readFileSync(path.join(repoRoot, 'src/scenes/LevelResultView.ts'), 'utf8'),
+  /saveActiveLevelUnlockProgress\(storage, progress\)/,
+);
+const saveBridgeSource = readFileSync(path.join(repoRoot, 'src/scenes/test-scene/TestSceneSaveBridge.ts'), 'utf8');
+assert.match(saveBridgeSource, /loadActiveGame\(storage\)/);
+assert.match(saveBridgeSource, /saveActiveGame\(activeStorage/);
+
+console.log('Save slot system tests passed.');

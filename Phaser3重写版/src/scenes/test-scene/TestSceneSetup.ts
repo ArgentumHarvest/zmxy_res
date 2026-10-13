@@ -1,0 +1,464 @@
+﻿// boundary: setup helpers create scene views and debug controls; they do not
+// own runtime combat, drop, pet, or magic weapon rules.
+import Phaser from 'phaser';
+import { AssetKeys } from '../../assets/AssetManifest';
+import {
+  STAGE11_GROUND_TOP_Y,
+} from '../../systems/Stage11Layout';
+import {
+  canLearnSkill,
+  canUpgradeSkill,
+  canUpgradeTree,
+  defaultClimbTuning,
+  getPassiveSkillMaxLevel,
+  getSkillMaxLevel,
+  getSkillTreeForHero,
+  getTotalLearnedSkillCount,
+  MAX_TREE_LEVEL,
+  InventoryOwnerKeyCodes,
+  PetUiKeyCodes,
+  SKILL_LEARN_LIMIT,
+  SkillSlotKeyLabels,
+  TREE_UPGRADE_COSTS,
+  type HeroId,
+  type HeroSkillLearningState,
+  type PlayerSlot,
+  type PlayerSoulOwner,
+  type SkillUIState,
+} from './TestSceneSystems';
+import { createTestSceneDebugKeys } from './TestSceneDebugKeys';
+import { createHeroCombatVisual } from '../HeroCombatVisualBridge';
+
+type SkillBarView = {
+  container: Phaser.GameObjects.Container;
+  slotBgs: Phaser.GameObjects.Rectangle[];
+  slotLabels: Phaser.GameObjects.Text[];
+  highlight: Phaser.GameObjects.Rectangle;
+  panelIndicator: Phaser.GameObjects.Text;
+};
+
+type SkillPanelView = {
+  container: Phaser.GameObjects.Container;
+  bg: Phaser.GameObjects.Graphics;
+  texts: Phaser.GameObjects.Text[];
+};
+
+type InventoryPanelView = {
+  container: Phaser.GameObjects.Container;
+  bg: Phaser.GameObjects.Graphics;
+  text: Phaser.GameObjects.Text;
+};
+
+export type TestScenePlayerMarkerView = Readonly<{
+  slot: PlayerSlot;
+  sprite: Phaser.GameObjects.Image;
+  label: Phaser.GameObjects.Text;
+}>;
+
+export function createPlayerMarkerViews(
+  this: any,
+  playerCount: 1 | 2,
+  heroIds: readonly HeroId[] = [],
+): TestScenePlayerMarkerView[] {
+    const groundY = STAGE11_GROUND_TOP_Y;
+    const p1 = createPlayerMarkerView.call(
+      this,
+      'p1',
+      heroIds[0] ?? 1,
+      defaultClimbTuning.worldWidth * (playerCount === 1 ? 0.5 : 0.34),
+      groundY,
+    );
+
+    if (playerCount === 1) {
+      return [p1];
+    }
+
+    const p2 = createPlayerMarkerView.call(
+      this,
+      'p2',
+      heroIds[1] ?? 3,
+      defaultClimbTuning.worldWidth * 0.58,
+      groundY,
+    );
+
+    return [p1, p2];
+  }
+
+function createPlayerMarkerView(this: any,
+    slot: PlayerSlot,
+    heroId: HeroId,
+    x: number,
+    y: number,
+  ): TestScenePlayerMarkerView {
+    const sprite = this.add.image(x, y, AssetKeys.playerPlaceholder);
+    sprite.setOrigin(0.5, 1);
+    sprite.setTint(getHeroTint(heroId));
+    createHeroCombatVisual(this, sprite, heroId);
+
+    const label = this.add.text(x - 18, y + 14, slot.toUpperCase(), {
+      color: '#f3f6ff',
+      fontFamily: 'Arial, sans-serif',
+      fontSize: '15px',
+    });
+
+    sprite.setData('heroId', heroId);
+    label.setText(slot.toUpperCase());
+    return { slot, sprite, label };
+  }
+
+export function createHeroDebugKeys(this: any): void {
+    const keyboard = this.input.keyboard;
+    if (!keyboard) {
+      return;
+    }
+
+    this.p1HeroSelectKeys = {
+      1: keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ONE),
+      2: keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TWO),
+      3: keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.THREE),
+      4: keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.FOUR),
+      5: keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.FIVE),
+    };
+    this.p2HeroSelectKeys = {
+      1: keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SIX),
+      2: keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SEVEN),
+      3: keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.EIGHT),
+      4: keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NINE),
+      5: keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ZERO),
+    };
+    this.p1WeaponToggleKey = keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
+    this.p2WeaponToggleKey = keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
+  }
+
+export function createSkillUIKeys(this: any): void {
+    const keyboard = this.input.keyboard;
+    if (!keyboard) {
+      return;
+    }
+
+    this.p1SkillPanelKey = keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.V);
+    this.p2SkillPanelKey = keyboard.addKey(PetUiKeyCodes.p2SkillPanel);
+    this.p1LoadoutCycleKey = keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
+    this.p2LoadoutCycleKey = keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_ADD);
+    this.panelTabKey = keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TAB);
+    this.panelBindKey = keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.B);
+    this.panelUpgradeKey = keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.U);
+    this.panelLearnKey = keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.L);
+    this.panelTreeUpgradeKey = keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.G);
+    this.panelPassiveKey = keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
+    this.panelSkillSelectKeys = [
+      keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ONE),
+      keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TWO),
+      keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.THREE),
+      keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.FOUR),
+      keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.FIVE),
+    ];
+  }
+
+export function createInventoryUIKeys(this: any): void {
+    const keyboard = this.input.keyboard;
+    if (!keyboard) {
+      return;
+    }
+
+    this.inventoryToggleKey = keyboard.addKey(InventoryOwnerKeyCodes.p1Panel);
+    this.p2InventoryToggleKey = keyboard.addKey(InventoryOwnerKeyCodes.p2Panel);
+    this.inventoryTabKey = keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TAB);
+    this.inventoryUpKey = keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
+    this.inventoryDownKey = keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
+    this.inventoryLeftKey = keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
+    this.inventoryRightKey = keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+    this.inventoryConfirmKey = keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
+    this.inventoryBackspaceKey = keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.BACKSPACE);
+    this.inventoryDeleteKey = keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DELETE);
+    this.inventoryMagicWeaponUpgradeKey = keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.U);
+    this.inventoryCraftKey = keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
+    this.inventoryCraftStageKey = keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.X);
+    this.inventoryCraftRemoveKey = keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
+  }
+
+export function createDebugKeys(this: any): void {
+    const keyboard = this.input.keyboard;
+    if (!keyboard) {
+      return;
+    }
+
+    this.debugKeys = createTestSceneDebugKeys(keyboard);
+  }
+
+export function createInventoryPanel(this: any): InventoryPanelView {
+    const container = this.add.container(0, 0);
+    container.setVisible(false);
+
+    const bg = this.add.graphics();
+    bg.fillStyle(0x101724, 0.96);
+    bg.fillRoundedRect(24, 54, 560, 480, 8);
+    bg.lineStyle(1, 0x72d2b1, 0.85);
+    bg.strokeRoundedRect(24, 54, 560, 480, 8);
+    container.add(bg);
+
+    const text = this.add.text(40, 68, '', {
+      color: '#dfe8f5',
+      fontFamily: 'Courier New, monospace',
+      fontSize: '12px',
+      lineSpacing: 3,
+    });
+    container.add(text);
+
+    return { container, bg, text };
+  }
+
+export function createSkillBar(this: any, slot: PlayerSlot, x: number, y: number): SkillBarView {
+    const keyLabels = SkillSlotKeyLabels[slot];
+    const container = this.add.container(x, y);
+    const slotBgs: Phaser.GameObjects.Rectangle[] = [];
+    const slotLabels: Phaser.GameObjects.Text[] = [];
+
+    for (let i = 0; i < 5; i += 1) {
+      const sx = i * 88;
+      const bg = this.add.rectangle(sx, 0, 84, 34, 0x182233, 0.9);
+      bg.setStrokeStyle(1, 0x3a4d6b);
+      bg.setOrigin(0, 0);
+      container.add(bg);
+      slotBgs.push(bg);
+
+      const label = this.add.text(sx + 4, 2, `${keyLabels[i]}: -`, {
+        color: '#8a9bb5',
+        fontFamily: 'Arial, sans-serif',
+        fontSize: '13px',
+      });
+      container.add(label);
+      slotLabels.push(label);
+    }
+
+    const highlight = this.add.rectangle(0, 0, 84, 34, 0x000000, 0);
+    highlight.setStrokeStyle(2, 0xf2c14e);
+    highlight.setOrigin(0, 0);
+    container.add(highlight);
+
+    const panelIndicator = this.add.text(x + 410, y - 16, '', {
+      color: '#f2c14e',
+      fontFamily: 'Arial, sans-serif',
+      fontSize: '14px',
+    });
+
+    return { container, slotBgs, slotLabels, highlight, panelIndicator };
+  }
+
+export function createSkillPanel(this: any, slot: PlayerSlot): SkillPanelView {
+    const panelX = slot === 'p1' ? 40 : 490;
+    const panelY = 50;
+    const container = this.add.container(0, 0);
+    container.setDepth(50);
+    container.setVisible(false);
+
+    const bg = this.add.graphics();
+    bg.fillStyle(0x101724, 0.95);
+    bg.fillRoundedRect(panelX, panelY, 460, 470, 8);
+    bg.lineStyle(1, 0x597a9e, 0.8);
+    bg.strokeRoundedRect(panelX, panelY, 460, 470, 8);
+    container.add(bg);
+
+    const panelText = this.add.text(panelX + 12, panelY + 10, '', {
+      color: '#c8d3e2',
+      fontFamily: 'Courier New, monospace',
+      fontSize: '12px',
+    });
+    container.add(panelText);
+
+    return { container, bg, texts: [panelText] };
+  }
+
+export function updateSkillPanel(this: any,
+    panel: SkillPanelView,
+    slot: PlayerSlot,
+    player: any | undefined,
+    ui: SkillUIState,
+    learning: HeroSkillLearningState,
+    soulOwner: PlayerSoulOwner,
+  ): void {
+    if (!ui.skillPanelOpen) {
+      panel.container.setVisible(false);
+      return;
+    }
+
+    panel.container.setVisible(true);
+    const heroId = player?.normalAttack.heroId ?? 2;
+    const lines = this.buildSkillPanelLines(slot, heroId, ui, learning, soulOwner);
+    panel.texts[0].setText(lines.join('\n'));
+  }
+
+export function buildSkillPanelLines(this: any,
+    slot: PlayerSlot,
+    heroId: number,
+    ui: SkillUIState,
+    learning: HeroSkillLearningState,
+    soulOwner: PlayerSoulOwner,
+  ): string[] {
+    const heroName = ['', '悟空', '唐僧', '八戒', '沙僧', '白龙'][heroId] ?? `R${heroId}`;
+    const lines: string[] = [];
+    const totalLearned = getTotalLearnedSkillCount(learning);
+
+    lines.push(`══ SKILLS: ${heroName} R${heroId} Lv.${learning.heroLevel} ══  Souls: ${soulOwner.soulCount}`);
+    lines.push(`Learned: ${totalLearned}/${SKILL_LEARN_LIMIT}`);
+    lines.push('');
+
+    for (let t = 0; t < 2; t += 1) {
+      const tree = learning.trees[t];
+      const treeConfig = getSkillTreeForHero(heroId, t);
+      if (!treeConfig) continue;
+
+      const isActive = (ui.activeTab === 'tree1' && t === 0) || (ui.activeTab === 'tree2' && t === 1);
+      const prefix = isActive ? '▶' : ' ';
+      const canUpT = canUpgradeTree(learning, soulOwner, t);
+      const upCost = tree.treeLevel < MAX_TREE_LEVEL ? TREE_UPGRADE_COSTS[tree.treeLevel] : 0;
+      const upInfo = tree.treeLevel >= MAX_TREE_LEVEL
+        ? 'MAX'
+        : canUpT === true ? `[G]Upgrade(${upCost})` : `[G]${canUpT}`;
+
+      lines.push(`${prefix} Tree${t + 1}: ${treeConfig.name}  Lv.${tree.treeLevel}/${MAX_TREE_LEVEL}  ${upInfo}`);
+
+      for (let s = 0; s < 5; s += 1) {
+        const skillName = treeConfig.skills[s];
+        const unlocked = s < tree.treeLevel;
+        const learned = tree.learnedSkills.find((ls) => ls.skillName === skillName);
+        const isSelected = isActive && ui.selectedSkillIndex === s;
+        const sel = isSelected ? '★' : ' ';
+        const num = s + 1;
+
+        if (learned) {
+          const maxLv = getSkillMaxLevel(skillName);
+          const canUp = canUpgradeSkill(learning, soulOwner, skillName);
+          const upStatus = canUp === true ? `[U]↑` : `[U]${canUp}`;
+          lines.push(`  ${sel}${num}.✓ ${skillName.padEnd(5)} Lv.${String(learned.level).padStart(2)}/${String(maxLv).padStart(2)} ${upStatus}`);
+        } else if (!unlocked) {
+          lines.push(`  ${sel}${num}.○ ${skillName.padEnd(5)} (need tree Lv.${s + 1})`);
+        } else {
+          const canLearn = canLearnSkill(learning, heroId, t, s);
+          const learnInfo = canLearn === true ? '[L]learn' : `[L]${canLearn}`;
+          lines.push(`  ${sel}${num}.○ ${skillName.padEnd(5)} ${learnInfo}`);
+        }
+      }
+      lines.push('');
+    }
+
+    const keyLabels = SkillSlotKeyLabels[slot];
+    const player = this.getPlayer(slot);
+    const loadout = player?.skill.loadout;
+    const bindParts: string[] = [];
+    if (loadout) {
+      for (let i = 0; i < 5; i += 1) {
+        const binding = loadout.slots[i];
+        const isSel = i === ui.selectedSlotIndex;
+        const label = binding
+          ? `${binding.skillName}.${binding.level}`
+          : '-';
+        bindParts.push(isSel ? `[▶${keyLabels[i]}:${label}]` : `[${keyLabels[i]}:${label}]`);
+      }
+    }
+    lines.push(`BIND: ${bindParts.join(' ')}`);
+
+    const passiveMax = Math.min(getPassiveSkillMaxLevel(learning.heroLevel), 5);
+    const passiveParts: string[] = [];
+    for (let p = 0; p < 5; p += 1) {
+      passiveParts.push(`[${learning.passiveSkills[p]}]`);
+    }
+    lines.push(`PASSIVE: ${passiveParts.join(' ')}  cap:${passiveMax}`);
+
+    lines.push('');
+    lines.push('[1-5]pick [B]bind [U]upgrade [L]learn [G]tree [P]passive [Tab]switch');
+    lines.push(`[Z]slot▶${ui.selectedSlotIndex} [V]close | ${ui.message || 'Ready'}`);
+
+    return lines;
+  }
+
+export function updateSkillBars(this: any): void {
+    if (this.p1SkillBar) {
+      this.updateSkillBar(
+        this.p1SkillBar,
+        this.getPlayer('p1'),
+        this.p1SkillUI,
+        'p1',
+      );
+    }
+
+    if (this.p2SkillBar) {
+      this.updateSkillBar(
+        this.p2SkillBar,
+        this.getPlayer('p2'),
+        this.p2SkillUI,
+        'p2',
+      );
+    }
+  }
+
+export function updateSkillPanels(this: any): void {
+    if (this.p1SkillPanel) {
+      this.updateSkillPanel(
+        this.p1SkillPanel,
+        'p1',
+        this.getPlayer('p1'),
+        this.p1SkillUI,
+        this.p1SkillLearning,
+        this.p1SoulOwner,
+      );
+    }
+
+    if (this.p2SkillPanel) {
+      this.updateSkillPanel(
+        this.p2SkillPanel,
+        'p2',
+        this.getPlayer('p2'),
+        this.p2SkillUI,
+        this.p2SkillLearning,
+        this.p2SoulOwner,
+      );
+    }
+  }
+
+export function updateSkillBar(this: any,
+    bar: SkillBarView,
+    player: any | undefined,
+    ui: SkillUIState,
+    slot: PlayerSlot,
+  ): void {
+    if (!player) {
+      return;
+    }
+
+    const keyLabels = SkillSlotKeyLabels[slot];
+    const loadout = player.skill.loadout;
+
+    for (let i = 0; i < 5; i += 1) {
+      const binding = loadout.slots[i];
+      const name = binding?.skillName ?? '-';
+      const lvl = binding ? `.${binding.level}` : '';
+      bar.slotLabels[i].setText(`${keyLabels[i]}: ${name}${lvl}`);
+      bar.slotLabels[i].setColor(i === ui.selectedSlotIndex ? '#f3f6ff' : '#8a9bb5');
+      bar.slotBgs[i].setStrokeStyle(1, i === ui.selectedSlotIndex ? 0x597a9e : 0x3a4d6b);
+    }
+
+    const hx = ui.selectedSlotIndex * 88;
+    bar.highlight.setPosition(hx, 0);
+    bar.highlight.setAlpha(1);
+
+    bar.panelIndicator.setText(ui.skillPanelOpen ? '[V] panel open' : '');
+  }
+
+function getHeroTint(heroId: HeroId): number {
+  switch (heroId) {
+    case 1:
+      return 0xf4d35e;
+    case 2:
+      return 0xf3f6ff;
+    case 3:
+      return 0xee8f55;
+    case 4:
+      return 0x74c0fc;
+    case 5:
+      return 0x91f5d6;
+  }
+}
+
+
+

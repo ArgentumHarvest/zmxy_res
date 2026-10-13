@@ -1,0 +1,495 @@
+# 总机制表
+
+2026-10-05 / TASK-SLICE-260B及父260完成：正式Stage1-2同一owner消费M2-01..09、两独立hit1与无伤害聚拢；648/45360身体、8480接收/6804世界态、392768碰撞、96态严格显示、九组自然/生命周期及真实宠物增量通过。15系统/2浏览器/2显示生产变异与260A坐标顺序反证保留，最终P1GS 79组/build/核心通过。262唯一Ready补Monster4行为输入；其他类型/人偶、完整家族、204/all/194/VS-067和Active线保持未完成。验收见 `docs/reverse-engineering/monster2-runtime-acceptance.md`。
+
+2026-10-05 / TASK-SLICE-260A完成：同一movement消费有限原运动与聚拢，正式Stage1-2有序接缝、九组受控矩阵及退出旅程通过。260B唯一Ready继续自然Monster2完整联合验收；父260/204/all/194/VS-067与Active线不关闭。证据见 `docs/reverse-engineering/monster2-coordinate-runtime-acceptance.md`。
+
+2026-10-04 / TASK-SETTINGS-261完成：普通Role1..4为6/10、Role5默认7/11每host步，构造false分支与运行时切形明确分开；原根/现代脚点差50。原方法35334世界态/47112英雄态重复一致、两次各54场自然运行和7源变异通过。源输入sidecar已verified，260A恢复唯一Ready接实际movement/有序接缝，260B仍Planned；不关闭父260/204/all/194/VS-067或Active功能线。见 `docs/reverse-engineering/hero-gather-motion-contract.md`。
+
+2026-10-04 / 260A在制输入反例：原Tween4832态经新控制器对账通过，但真实HeroParty三fps×双slot水平步进为18/15/12px而257B受控原输入为5px；正式角色参数/根坐标不能由fixture或现代常量假定。260A保留全部合同并Blocked，261唯一Ready补有限运动输入，260B仍Planned。控制器尚未接Scene，不关闭父260/204/all/194/VS-067或整线；见 `docs/reverse-engineering/monster2-coordinate-runtime-acceptance.md`。
+
+2026-10-04 / TASK-SLICE-260执行前拆分：Stage1-2先英雄后怪物的生产顺序与257B已证Tween→怪物→英雄冲突。260保留全部合同并Split，260A唯一Ready交付既有坐标owner聚拢/有序接缝，260B Planned承担完整M2-01..09、257A/257B/258和正式自然双owner联合验收。本批未改src/public或原expected，不关闭204/all/194/VS-067或Active功能线。静态证据与裁决见 `docs/reverse-engineering/monster2-runtime-preflight.md`。
+
+2026-10-04 / TASK-SLICE-259完成：公共英雄实际致死同步释放当前slot的Session/兼容宠物及旧接收引用，不额外扣宠物HP/lifetime/命中次数。108原输入首检测+12盾/转移、私有树、6生产变异、两Scene×三fps×双owner共12受控组及两条自然失败重试/返回旅程通过；全量118组、pet P1GS 79组和build通过。260唯一Ready承接Monster2完整M2-01..09与257A/257B/258、234像素精确许可；不关闭204/all/194/VS-067、PG-017或Active功能线。验收见 `docs/reverse-engineering/monster-party-retirement-acceptance.md`。
+
+2026-10-04 / TASK-SETTINGS-258完成：8480原接收案例、162序列/6804世界态、正常重复与12编译变异/8数据负例通过；真实英雄destroy在同次弹体遍历前清宠。实际双owner诊断反证英雄致死后宠物仍1000→977、remaining97而非98，259唯一Ready先修同步退休，再生成Monster2实现。256M2-01..09、257A/257B与234像素精确许可完整保留；未改src/public，不关闭204/all/194/VS-067或Active功能线。见 `docs/reverse-engineering/monster2-reception-contract.md`。
+
+2026-10-04 / TASK-SETTINGS-257B及父257完成：原Tween ABC 4832态、真实共享坐标链5436世界态/7248英雄态独立零差异及重复一致；18场自然运行验证lazy起点、1秒终点、twip量化、活动覆盖、暂停恢复、死亡/destroy后继续与真实Scene退出，9类编译/运行变异拒绝。257A空间/392768碰撞及234像素精确许可、M2-01..09与无伤害producer完整保留。258唯一Ready补真实HP；未改src/public，不关闭204/all/194/VS-067或Active功能线。见 `docs/reverse-engineering/monster2-gather-coordinate-contract.md`。
+
+2026-10-04 / TASK-SETTINGS-257A完成：用户明确接受冻结234个单像素碰撞例外，精确hash绑定后两普攻392768例独立重验通过（布尔零差异）；96显示态/176对象、10368相位/780检测绑定及原生重复/负例齐备，空间真值verified。A归档，257B唯一Ready补原Tween与公共英雄坐标；父257仍Split、真实HP未知保留，无src/public修改，不关闭204/all/194/VS-067或整线。见 `docs/reverse-engineering/monster2-attack-space-contract.md`。
+
+2026-10-04 / TASK-SETTINGS-257A在制：96态/176显示对象原树与视觉核对、392768原生碰撞例（布尔零差异）、10368相位与780检测绑定完成，原生重复及负例通过；第一普攻234个单像素残差待明确裁决，第二普攻像素零差异。257A Blocked且真值blocked，257B仍Planned；未改src/public，不晋升父257、204/all/194/VS-067或整线。证据：`docs/reverse-engineering/monster2-attack-space-contract.md`。
+
+2026-10-04 / TASK-SETTINGS-257预检：原英雄move与原Tween公共坐标存在148对受控顺序差异，462态重复一致；40构造/4profile源hash核对通过。父257按明确触发Split，257A唯一Ready补空间/像素，257B Planned补真实调度；没有新增verified空间或生产改动，M-030/M-034/M-042复现状态不提升。见 `monster2-space-preflight.md`。
+
+2026-10-04 / TASK-SETTINGS-256完成：Monster2原方法648例/45360态、自然选择1764例/27936态及1344决策、原生3456相位/246检测、96玩家列表与6门例通过；19编译行为/2原生运行变异与7报告损坏拒绝，正常身体/决策/原生重复一致。确认hit1两独立对象、hit2仅裸MC与Tween请求，裸MC不受原暂停弹体列表控制且第14帧EXIT自移除。真实HP/像素/Tween插值未知保留；257唯一Ready补空间/显示及控制投影。未改src/public或原语料，其他类型/人偶、204/all/194/VS-067与整线不关闭。见 `docs/reverse-engineering/monster2-body-attack-contract.md`。
+
+2026-10-04 / TASK-SLICE-249B及父249完成：Monster3两owner独立攻击/真实P1/P2英雄宠物HP、140880空间case、两Scene原生30态与死亡留弹/失败重试核销；255兼容19形态完成，新增自然UFO双Scene旅程、105660当前profile样本及7 owner/4显示/1旧路径反证。117组全回归、build与架构检查通过。下一TASK-SETTINGS-256唯一Ready补Monster2有界行为输入；其余类型、人偶、204/all/194/VS-067及整线保持未完成。
+
+2026-10-04 / TASK-SLICE-255完成：19形态兼容受击owner复用实际HP，原时钟/保护/死亡与精确source清理接入双owner；两Scene三档受伤/重复hurt/死亡/暂停/退出重进通过。416态双底显示最大差0.498039/255，7时钟+7 owner+2显示生产反证通过。255归档，249B恢复唯一Ready继续原全部两Scene合同；父249/204/194/VS-067与整线不关闭。见 `docs/reverse-engineering/pet-reception-body-runtime-acceptance.md`。
+
+2026-10-04 / TASK-SETTINGS-254完成：19形态hurt/dead行为与416态原生视觉双JSON已verified，14编译源变异、3owner反序与8合同损坏反证通过，源hash/Schema/再生成一致。254归档；TASK-SLICE-255唯一Ready实现兼容受击身体owner，完成后恢复249B全部两Scene合同。父249/204/194/VS-067和整线未关闭。见 `docs/reverse-engineering/pet-reception-body-timing-contract.md`。
+
+2026-10-04 / 249B已完成两Scene普通三帧率、真实失败重试、火伤致死留弹、30态显示与默认hurt模型反证；兼容19形态仍缺两动作精确时序和A外动作owner。保留249B全部合同并Blocked，254唯一Ready补有界两动作原版输入，再接owner实现后恢复B；不关闭父249/VS-067/功能线。
+
+2026-10-03 / TASK-SLICE-253完成：正式两属性创建/逐级成长/存取、疾风原host边界与当前接收owner、双owner实际生命周期已验证；用户明确选A，原raw备份、缺项现代0、字段级历史未知来源和幂等迁移通过。32生产变异及3浏览器变异、16组回归通过，253归档、249B恢复唯一Ready，父249/VS-067及整线不关闭。见 `docs/reverse-engineering/pet-reception-input-runtime-acceptance.md`。
+
+2026-10-03 / TASK-SETTINGS-252完成：424属性case、162疾风时间线35996态、13原生源变异及5证据绑定反证通过；reference verified，完整观察本地保留。新宠/成长/存取与兔2五秒、兔3/4十秒的当前效果合同交253。253唯一Ready实现属性/效果owner与存档；旧档政策已询问待选择，不伪造历史值。249B保持Blocked及父249全部两Scene合同，其他公共责任不关闭。见 `docs/reverse-engineering/pet-reception-input-contract.md`。
+
+2026-10-03 / TASK-SLICE-249B实施中转输入阻塞：共享攻击/自然选择已实现，27936决策态、21312连续态、135检测phase、140880碰撞及42906767像素/精确451残差、12生产变异通过；两Scene尚未接入。正式PetState/升级/双owner恢复缺miss/mDef，兔疾风当前效果未映射；249B保留全合同并Blocked，252唯一Ready补有界生产来源，再生成owner/存档接入前置后恢复B。见 `docs/reverse-engineering/monster3-pet-input-preflight.md`，不关闭父249或整线。
+
+2026-10-03 / TASK-SLICE-249A完成：251全部16,960接收与64世界序列通过生产HP owner；70英雄实时属性入口、576真实宠物Session及11生产变异通过。现有HP/盾/死亡owner保持唯一，受控属性与正式接缝边界见 `docs/reverse-engineering/monster3-receiver-runtime-acceptance.md`。A归档、249B唯一Ready；两Scene攻击/空间/显示/生命周期仍待，父249及204/all/194/VS-067和整线未关闭。
+
+2026-10-03 / TASK-SLICE-249公共接收预检拆分：251独立fixture与生产HP owner四例对照，Role1双方960一致，Role5原970/现代960；pet同步接受结果缺失另经静态核查。新增公共owner机制独立交付，249保留全部合同并Split，249A唯一Ready、249B Planned承接原两owner联合验收。本次只重排，未改src/public或原真值，204/all/194/VS-067与整线仍未关闭。见 `docs/reverse-engineering/monster3-receiver-owner-preflight.md`。
+
+2026-10-03 / TASK-SETTINGS-251完成：Monster3目标接收有限原方法域16,960例、64世界序列、9真实编译源变异及正常重复通过；6报告/4reference损坏拒绝。原HP、闪避/保护、盾/转移、随机、ID间隔与returnvoid语义已交接。251归档，249恢复唯一Ready消费247/248/250/251；未改src/public或原语料，不关闭249、204/all、194、VS-067或整线。见 `docs/reverse-engineering/monster3-reception-contract.md`。
+
+2026-10-03 / TASK-SLICE-249接收预检：6组P1/P2生产观察确认英雄闪避/魔防未消费及保护拒绝提前登记ID；247/250实际HP仍为接受服务。249保留全部合同并Blocked，TASK-SETTINGS-251唯一Ready补Monster3来源/目标接收与HP/随机/ID间隔后恢复249。未改src/public或原真值，不关闭204/all/194/VS-067或整线。见 `docs/reverse-engineering/monster3-reception-preflight.md`。
+
+2026-10-02 / TASK-SETTINGS-250完成：Monster3自然选择/CD的1764组27936原方法态、1644决策/744自然发射通过；九真实编译源变异、六报告/四reference损坏拒绝，正常源重复一致。确认严格欧氏<200、技能不自动转向、CD选择后递减/忙态不停及难度概率。250归档，249恢复唯一Ready消费247/248/250全部输入；未改src/public，真实HP/显示/两owner旅程与204/all/194/VS-067及整线仍未关闭。见 `docs/reverse-engineering/monster3-natural-attack-contract.md`。
+
+2026-10-02 / TASK-SLICE-249输入预检：8组P1/P2实际生产观察确认Boss水平含等号判定/攻击中CD停计及Stage13伤害hit1与奇偶hit2显示分裂；247直接指定动作，239仅目标选择，缺自然选择/CD原生相位。249保留全合同并Blocked，TASK-SETTINGS-250唯一Ready补有界自然决策后恢复249。未改src/public或247/248真值，204/all/194/VS-067与整线不关闭。见 `docs/reverse-engineering/monster3-runtime-preflight.md`。
+
+2026-10-02 / TASK-SETTINGS-248完成：Monster3两攻击30原生态/190显示对象、4实际目标profile/40构造、140880原生HitTest与135真实检测相位已verified；用户仅批准428case/451像素精确残差，命中布尔零差异。原生case/树/PNG/位场和真值再生成一致，18查询反例、4真实编译/子树变异与Schema通过。248归档，TASK-SLICE-249唯一Ready承接两owner独立攻击/真实HP/显示与生命周期；未改src/public，不关闭其他类型/人偶、204/all/194/VS-067及整线。见 `docs/reverse-engineering/monster3-attack-collision-contract.md`。
+
+2026-10-02 / TASK-SETTINGS-247完成：Monster3两攻击648组45,360原方法态、288恢复SWF时钟态与1,620实时相位/135实际检测通过；9编译源变异、4报告/4reference/3相位损坏拒绝，源与原生重复一致。首次实际检测第1帧与受控goto第2帧明确分开；目标HP/像素仍为受控边界。247归档，248唯一Ready补两攻击空间/命中真值；未改src/public，不关闭两owner现代消费、其他类型/人偶、204/all/194/VS-067及整线。见 `docs/reverse-engineering/monster3-body-attack-contract.md`。
+
+2026-10-02 / TASK-SLICE-245B及父245完成：六原效果181正式PNG/2720原生pose及显示树/矩阵/滤镜元数据已接入既有数值owner与共享显示路径；Canvas/WebGL各65,280态通过，最大可见通道差2.266667/2.301961，保留≤3颜色舍入及域外≤0.5px/轴对齐例外。五关双owner完整旅程、首次/暂停及青龙玄龟补充共248层原PNG零差，11生产反证、原1717数值、五项pet gate、核心/build和工程检查通过。B与父245归档，TASK-SETTINGS-247唯一Ready补Monster3身体/两攻击生命周期；不外推其他类型/人偶、204/all/194/VS-067或整线完成。见 `docs/reverse-engineering/pet-passive-display-acceptance.md`。
+
+2026-10-02 / TASK-SETTINGS-246完成：原SWF局部实例采样1,093树/226种PNG，全部65,280状态与244独立舞台基准可见像素及裁切外alpha零差，重复一致，13项反证与Schema通过。恒等滤镜移除仍影响1,432态，保留原生局部栅格而不猜测Canvas采样。246归档、245B恢复唯一Ready；采样域包含原分数位置，不宣称任意重采样或现代双后端/五关通过。未改src/public、原语料或244，245/204/all/194/VS-067及功能线仍未关闭。合同见 `docs/reverse-engineering/pet-passive-local-projection-contract.md`。
+
+2026-10-02 / TASK-SLICE-245B投影预检：50原生位图与全部244状态的Canvas候选仍有未归因采样残差；试验src/public与数值接线已撤回，244/245A保持有效。245B全合同保留并Blocked，TASK-SETTINGS-246唯一Ready补局部原点/位图采样/滤镜投影输入，完成后恢复B。不是公共root重构，不提升245/204/all/194/VS-067或整线完成度。见 `docs/reverse-engineering/pet-passive-projection-preflight.md`。
+
+2026-10-02 / TASK-SLICE-245A完成：公共附属显示生命周期已接入猴/马实际adapter；身体立即销毁，附属显示独立推进、按原一秒量化easeOut退休，双runtimeKey及Scene退出/重启清理通过。5408原状态精确对账、7生产变异、Canvas/WebGL各64组5312态及2实际生命周期旅程通过；最大可见通道差2.2667/255，阈值3，保留轻微舍入差异。P1GS/P1R/P1H/P1G/P1T、核心系统/build及工程检查通过。A归档，245B唯一Ready承接全部六效果与五关合同；父245、204/all/194/VS-067和整线不关闭。详见 `docs/reverse-engineering/pet-attached-display-acceptance.md`。
+
+2026-10-02：245消费预检发现公共附属显示退休接缝缺口，父245 Split，245A Ready、245B Planned承接全合同。仅诊断和调度，未改src/public或244真值，不提高M-032/M-034/M-042复现状态。详见 `../tasks/task-history.md#task-slice-245`。
+
+2026-10-01 / TASK-SETTINGS-244完成：六公共增益107源定义/7时间轴、384fixture/65,280原生态与45,068归一化对象verified；原生重复完全一致，7运行变体/10字段变异、来源/Schema/生命周期/裁切通过。确认宠物100帧自移除与主人20/25帧独立显示、零时长/刷新/暂停/淡出差异。完整大manifest与原PNG仅本地，未改src/public；245唯一Ready消费六效果，204/all/194/VS-067及整线不关闭。合同见 `docs/reverse-engineering/pet-passive-visual-contract.md`。
+
+2026-10-01 / TASK-SLICE-242B及父242完成：235原720+243原997由公共生产数值owner消费，24双owner会话/保存往返、四家族8消费者、猴马4真实增益技能命中、14变异、五关940×590 HUD/暂停休息/重试返回通过。P1GS/P1G/P1T、核心系统、build及工程检查通过；B/父242归档，244唯一Ready补六效果视觉真值。数值完成不代表六特效、原84其余责任或完整家族/204/all/194/VS-067关闭，功能线保持Active。详见 `docs/reverse-engineering/pet-passive-runtime-acceptance.md`。
+
+2026-10-01 / TASK-SETTINGS-243完成：972正式整数域效果组合、16原getter/setter边界、9刷新组合共997原生例通过，5编译源变异/7损坏报告拒绝、重复一致；162双owner codec组合与0..8生产见证及5外部存档边界通过。零时长先入效果扣MP、首效果step清空且主人属性不变。235原720字节不变，独立pet-passive-input-contract.json交接；243归档，242B恢复唯一Ready消费两份expected与原完整五关合同。未改src/public，242/原84/六特效/204/all/194/VS-067及整线不关闭。
+
+2026-10-01 / TASK-SLICE-242B输入预检：真实捕获/洗练/还童P1/P2共8例确认资质/战力1/1、0/0、4/4、8/8，超出235固定3/1；零战力引入未采样的零时长效果/属性边界。B完整合同保留并Blocked，TASK-SETTINGS-243唯一Ready补证，完成后恢复B。未改src/public或235真值，不核销原720、原84、242/204/all/194/VS-067或六特效，功能线Active。证据：docs/tasks/evidence/TASK-SLICE-242B/input-preflight.json；复验：node tools/pet-passive-input-preflight.mjs。
+
+2026-10-01 / TASK-SLICE-242A完成：既有party拥有四项已加入主人效果与当前属性；复用slot host先主人效果/属性后主宠及private实体，无宠仍到期。12原effects/refresh/expiry、五角色双slot实际技能与承伤、共同五关调度/休息换宠/死亡退出共31组，10生产变异和10组映射身份通过；build、核心系统、工程检查及P1GS/P1G/P1T联合门禁退出0。A归档，242B唯一Ready承担原720expected、公共回复/六增益与正式五关联合。父242、原84、六特效、完整家族/204/all/194/VS-067未关闭，功能线Active。验收见 `docs/reverse-engineering/hero-pet-buff-owner-acceptance.md`；增长/装备中途重算组合仍属235未覆盖边界。
+
+2026-10-01 / TASK-SLICE-242执行前预检拆分：实际party/兼容映射10例确认主人攻击/防御输入分裂，既有hero owner不含PB-08的host-tick属性相位，命中新的owner迁移触发。父242保留全部合同并Split，242A唯一Ready先收敛属性/宿主接缝，242B Planned承担原720expected、回复/六增益与五关联合验收。无src/public或原真值变更，不核销原84、204/all/194/VS-067或六特效；功能线Active。证据见 `docs/tasks/evidence/TASK-SLICE-242/preflight.md`，诊断入口 `tools/pet-passive-owner-preflight.ts`。
+
+2026-10-01 / TASK-SETTINGS-235完成：公共回复fps+1周期、旧值刷新顺序、六项独立检查/MP/uint时长与主人int属性到期已交叉确认；720原生case、10编译源变异、4损坏报告及重复一致通过。46提取类静态清单与六恢复视觉符号仅定位，未宣称视觉完整或正式消费；242唯一Ready接共享数值，六特效视觉及原84其余公共责任、完整家族/204/all/VS-067与功能线仍未关闭。合同见 `docs/reverse-engineering/pet-passive-auto-buff-contract.md`。
+
+2026-09-28 / TASK-SLICE-234完成：公共捕获改为独立128位身份，运行roster派生owner并沿用P2单前缀；猴马双owner释放、同owner重捕、旧存档/三轮重载及正式保存通知后实际P2碰撞伤害通过。12组身份回归、3生产变异、22组相关回归与build通过；仅核销捕获身份责任，原84其余公共责任、完整家族/VS-067及整线不关闭。235唯一Ready。验收见 `docs/reverse-engineering/pet-capture-identity-acceptance.md`。
+
+2026-09-28 / TASK-SLICE-233完成：共享Canvas移除roundPixels目标宽高0.5扩张；原654/850反例保留，修正后Canvas/WebGL各850态alpha与预乘RGB残差均0。正式AUTO回退Stage12双人12组位置/滚动、888次绘制（含8组crop/flip/mask/resolution边界）通过；仅尺寸变化，坐标语义不变。234唯一Ready；235、其他怪物、原84其余责任、完整家族/VS-067与整线仍未完成。验收见 `docs/reverse-engineering/canvas-sprite-extent-acceptance.md`。
+
+2026-09-28 / TASK-SLICE-240完成：Monster30两条owner已消费232/241，身体先效果、独立攻击、英雄/宠物真实HP、死亡保留/destroy清理和只读显示闭合。93920命中零布尔差异、66生命周期、210宠物HP、216原生EXIT相位、七生产变异、12场景组合与六返回地图重入通过；20态显示保留精确栅格化残差。241碰撞批准清单不扩大。233恢复唯一Ready；其他11类型、人偶、原84其余责任、完整家族/all/VS-067与整线不关闭。详见monster30-runtime-acceptance.md。
+
+2026-09-27 / TASK-SETTINGS-241完成：Monster30Bullet1的10帧双向、4个真实colipse profile/40构造、20态显示树、93920原生命中与324相位观察已verified。8查询变异被拒绝，重复生成一致；用户仅批准379例382像素精确残差，命中布尔零差异。TASK-SLICE-240恢复唯一Ready，并按用户“授权继续241并恢复240”继续本目标；真实HP/双owner实现尚待240，其他11类型、原84其余责任、整族/all/VS-067不关闭。详见monster30-attack-collision-contract.md。
+
+2026-09-27 / TASK-SETTINGS-232完成：Monster30身体先效果、独立攻击下一世界步检测、HP死亡保留而destroy清弹已交叉确认。45组810原方法AIR态、三帧率66恢复SWF时钟态、6编译源变异和4损坏反例通过，baseline重复一致；五关12类型88源locator与实际伤害消费者已列明。保留碰撞/HP服务sink、效果到期注入及完整场景未重放边界。232归档，TASK-SLICE-240唯一Ready先消费Monster30两条owner；其他类型/233..235、原84组合、完整家族/VS-067及功能线仍未完成。合同见monster-body-attack-lifecycle-contract.md与reference/monster-body-attack-lifecycle-contract.json。
+
+2026-09-27 / TASK-SLICE-238完成：公共怪物经验对象、合法AI选择/尾部清理、首死分配与真实英雄/原宠roster/存档已接五关和TestScene普通怪/Boss。264独立源expected、612选择态、76实际进度/保存例、10生产变异、24组实际场景/双owner/重载通过；原宠物页经验文字按175A depth修正遮挡，P1/P2页面实测。238归档，TASK-SETTINGS-232唯一Ready；仅核销公共经验责任，232..235、原84其余组合、完整家族/VS-067与整线保持未完成。详见monster-death-experience-contract.md的238节与本地238/handoff.md。
+
+2026-09-26 / TASK-SETTINGS-239完成：612原包AIR选择态、180实际构造态、240真实模型/生产投影态、9源变异和4损坏报告反例通过；12类型警戒范围/Config候选顺序/特殊排序及既有218英雄根换算输入闭合。231的264经验态和完整XP-01..08保持；239归档，238恢复唯一Ready。未改src/public，不提升生产经验归属、原84/完整家族/VS-067完成度，232..235与功能线仍未关闭。交接见monster-death-experience-contract.md的239节与reference/monster-target-selection-contract.json。
+
+2026-09-26 / TASK-SLICE-238消费预检：6组原包AIR源选择诊断确认跨数量级排序与现代数值最近选择不同，二维距离及先选后警戒过滤也不能由现有一维helper代替。231的264有限样本与XP-01..08保留，但未覆盖实际12类型选择输入；238全合同保留并Blocked，TASK-SETTINGS-239唯一Ready补候选/排序/alertRange后恢复238。未改src/public或原真值，经验生产修复、232..235、原84/全族/VS-067与整线仍未完成。证据见 `docs/tasks/evidence/TASK-SLICE-238/preflight.md`，复验入口 `tools/monster-experience-target-preflight.py`。
+
+2026-09-26 / TASK-SETTINGS-231完成：公共怪物死亡经验XP-01..08已补证，264原包AIR样本、六源变异/四字段损坏拒绝、12实际类型继承与五关/TestScene消费者矩阵通过；P1宠火焰致死仍给P2的现代反例保留。英雄无宠100%、带宠各60%、宠物指定petInfo100%，效果/AI/目标清理相位和换宠对象分别核定。231归档，TASK-SLICE-238唯一Ready实施公共归属，232..235保持Planned；PG-006方案不充分转V2复盘中。未改src/public，不提升M-030/032/040或VS-067现代完成度，原84及整线仍未关闭。合同见 `docs/reverse-engineering/monster-death-experience-contract.md`。
+
+2026-09-26 / TASK-SLICE-236完成：公共击退已接入五关/TestScene真实owner，保留早晚结算相位、原host单位、Tween覆盖与边缘旧Tween。124650原生轨迹态、5184真实hit/physics态、432原方向、8生产变异及五关9201显示同步态/537旧Boss态通过；真实重试返回全部释放。237探针完成Tween反复force写末值的反例同次纠正并新增第8源变异。236归档，TASK-SETTINGS-231唯一Ready；仅核销公共击退责任，原84其余责任、身体/死亡、完整家族/all/VS-067与整线不关闭。合同与本地证据见 monster-pet-knockback-contract.md、TASK-SLICE-236/scene-verification.json。
+
+2026-09-26 / TASK-SETTINGS-237完成：12实际类型288构造profile、7560组/189000受控运动态及五关43墙3096组/77400态原方法输入重放通过，69120自由状态独立解析核对；七类编译源变异改变轨迹并被拒绝，正常源重复一致、8类Schema反例拒绝。实际BaseMonster行走谓词及越界覆盖同次补齐。237归档、236恢复唯一Ready；只解除实际profile输入阻塞，现代击退、231/232与原84公共责任仍待，M-030/032/042、VS-067及整线不提升。交接见 `docs/reverse-engineering/monster-pet-knockback-contract.md`。
+
+2026-09-26 / TASK-SLICE-236消费预检：230通用壳未应用实际构造profile，11类地面碰撞宽度与218不符，Monster30重力1.5与源构造0不符；可重复诊断与独立消费者核对确认。236保留全合同并Blocked，TASK-SETTINGS-237唯一Ready补实际profile原生轨迹；231..235保持Planned。未改src/public、230真值或原提取结果；217/218及230通用壳结论保留，M-030/032/042、VS-067与整线不提升。见 `docs/tasks/evidence/TASK-SLICE-236/preflight.md`。
+
+2026-09-26 / TASK-SETTINGS-230完成：原受击运动27000态/432方向、14入口/4去重/4调度及3原生Tween覆盖模式通过，5源变异拒绝、确定性重复生成一致；217/218空间引用与230行为sidecar交接。现代无位移反例仍存在，236唯一Ready实施公共击退，231..235保持Planned；原84组合责任、全族/204/VS-067与功能线均不关闭。合同见 `docs/reverse-engineering/monster-pet-knockback-contract.md`。
+
+2026-09-26 / TASK-SLICE-226本项整改完成：猴马连续host时序、资格/目标/地面/反击、真实碰撞伤害、奥义/冰火/显示及生命周期已补证修正；扩大P1R/P1H/P1G/P1T=0，新增正式目标投影后的P1R/P1H=0。原41/43责任保留于226合同承接矩阵，公共230..235仍未修复，猴马完整家族、204/all/194/VS-067均不关闭。下一执行项TASK-SETTINGS-230（Ready），功能线保持Active。
+
+2026-09-25 / M-032/M-034/M-042：正式宠物会话缺被动/自动增益公共入口，96例受控party反例已记录；Planned TASK-SETTINGS-235补原周期、多项触发、数值和生命周期合同后生成共享实现项，不提高复现完成度。
+
+2026-09-25 / M-032/M-042/M-044：真实捕获同种宠物产生跨slot重复ID，P1释放误删P2弹体动态反例已复现；共享修正列同线Planned234，226仍唯一Ready。唯一ID条件下双slot生命周期24例及寿命扣减修正通过，不提高整体完成度。
+
+2026-09-25 / M-042画布增量：226原生效果WebGL850态零残差（旧马资源302态失败已修），共享Canvas回退654态差异由同线Planned TASK-SLICE-233处理；不是战斗时序问题。原84合同/生命周期仍待，机制完成度不提升。
+
+2026-09-25 / 226普通暂停增量：猴马原生显示与逻辑寿命已分离，修复恢复碰撞/清理、注册点镜像及马延迟爆炸暂停期不可见和次帧提前；本批build/P1R/P1H通过。原84合同全面核销和实际逐状态画布未齐，M-032/M-042仍部分复现；源与现代边界见226进度记录，不提升整族状态。
+
+2026-09-25 / 226目标效果组合核查：新增同线Planned TASK-SETTINGS-232，补公共怪物身体回调、独立攻击对象与死亡顺序合同。现代Monster30火焰致死会吞掉显示回调，正式伤害又依赖死亡时清空的activeAttack；目前仅有源码与受控现代诊断，需原动态补证。226仍唯一Ready，原84合同和未核销组合边界保留，不提升整线或机制完成度。
+
+2026-09-25 / 226冰火反例：M-040宠物/持续伤害的怪物死亡归属未闭合，现代TestScene P1直接命中后火焰致死却按AI目标P2领奖。原版curAttackTarget还区分英雄/宠物，不能用owner slot等同对象身份。M-040恢复部分复现；同线Planned TASK-SETTINGS-231负责源合同与公共实现交接，已证普通成长公式不撤销。
+
+2026-09-24 / 229完成：马四形态/十主效果/Aoyi/冰效输入verified，665态/3190对象、387960独立碰撞、158912动态检测，43合同保留；真实TweenMax延迟与父清理已核对。226恢复唯一Ready，MH-01..07仍待生产整改；源完成不提升现代复现完成度。见 `docs/reverse-engineering/evidence/TASK-SETTINGS-229-horse-spatial-progress.md`。
+
+2026-09-21 / 228完成：猴四body/九主效果/继承显示及碰撞/host补充真值verified（41合同）；源输入未知在声明范围内清零。M-032/034/035/042现代复现状态不提升；229马Ready，完成后恢复226。见 `evidence/TASK-SETTINGS-228-monkey-spatial-progress.md`。
+
+2026-09-21 / 227完成补充代码输入：3,408原包AIR受控源场景、10变异、43现代反例和84合同映射；源索敌不预滤dead语义已确认。M-032/034/035/042复现状态不提升；228/229补空间/动态相位，226仍Blocked。证据见 `evidence/TASK-SETTINGS-227-monkey-horse-supplement.md`。
+
+2026-09-21 / 226预检：M-032/M-034/M-035/M-042补登记MH-01..07，猴马16例锁定目标远距命中、猴2/3/4未学技能抢占已复现；lyq距离/状态/移动/空间输入继续补证。226Blocked，227唯一Ready；原41/43合同与已证视觉保留，未改src，不提升复现状态。见 `pet-monkey-horse-gap-audit.md`。
+
+2026-09-21 TASK-SLICE-224C完成：玄龟全32合同通过完整P1T=0（组合A/B及资源全集），四形态×五关×P1/P2正式消费者、休息/替换、真实失败重试/返回/重载通过。修复TestScene同实例重试世界残留、会话释放后的主人链接引用与根宠弹体残留，删除旧玄龟技能分支。原视觉/碰撞精确例外不扩大。TASK-SLICE-226唯一Ready；猴马时序反证仍待重做，其余五家族与旧入口待闭合，204/VS-067/pet all未完成，功能线Active。交接见 `docs/tasks/evidence/TASK-SLICE-224C/handoff.md`。
+
+2026-09-21 M-032/M-042时序纠正：猴/马普攻的现代1000ms决策后倒计时不能代表原版BasePet连续timeCount取模；两族完整复现结论降级，旧P1R/P1H仍可能绿色。TASK-SLICE-226在224C后补相位反例、公共修正及两族全合同验收；其余已证资源/伤害事实保留。
+
+2026-09-20 TASK-SLICE-224B完成：玄龟三四阶SYBH、奥义8组合及受伤/反击/伤害结算13责任通过P1TB=0（组合完整P1TA）。60组双owner/多帧率技能、1,744原生caller、31,704动态世界碰撞、16类生产变异与20组双场景共871次实战图层对照通过；视觉捕获覆盖交集及原有精确许可如实保留。A的17项与B的13项已有批次证据，224C唯一Ready接两项生命周期及全32合同/五关联合；玄龟整族、204、VS-067、pet all未完成，功能线Active。交接见 `docs/tasks/evidence/TASK-SLICE-224B/handoff.md`。
+
+2026-09-20 TASK-SLICE-224A3及父224A完成：SLD链接治疗、TXLJ释放/盾后转嫁/双方治疗4项与A2的13项合并为17项，P1TA=0（同次组合P1TA1/P1TA0）。144原生结算数值、2,904原生buff态、9类链接源变异及Stage12/TestScene×二三四阶P1/P2共310实战图层对照通过；正式enemy盾后101伤害为hero95/pet6，101治疗双方106。沿用精确像素许可与显示根/camera各轴≤0.5px整数对齐，不量化碰撞/时序。224B唯一Ready、C Planned；玄龟全32合同/204/VS-067/pet all仍未完成，功能线Active。交接见 `docs/tasks/evidence/TASK-SLICE-224A3/handoff.md`。
+
+2026-09-20 TASK-SLICE-224A2完成：同一Registry/Runtime/EntitySession接四形态公共行为、真实普攻/SLD共13责任，P1TA1=0（组合P1TA0）。四形态×P1/P2、332原生caller、15,768世界碰撞、6类实现变异及正式/TestScene共304实战图层对照/重入退出通过；显示根与camera各轴各≤0.5px整数对齐按长期授权记录，原像素许可不扩大。A3链接治疗/TXLJ四项唯一Ready，父A仍Split，B/C Planned；玄龟整族/204/VS-067及pet all仍未完成，功能线Active。交接见 `docs/tasks/evidence/TASK-SLICE-224A2/handoff.md`。
+
+2026-09-18 TASK-SLICE-224A1完成：既有bundle/coordinator接入650文件与六包生产解码，11,572态只读owner/paintParts投影、61,424相位和157,704原生碰撞case通过P1TA0。原始RGBA保留28态308像素精确许可；碰撞保留20例70像素，命中布尔全同。真实Phaser WebGL逐态画布对照、9类实现变异及加载失败/退出/重入通过。224A2唯一Ready，父A的17责任及全族32合同仍待行为/正式消费者核销，224A保持Split，A3/B/C Planned；玄龟/204/VS-067未完成，功能线Active。交接见 `docs/tasks/evidence/TASK-SLICE-224A1/handoff.md`。
+
+2026-09-18 TASK-SLICE-224A执行前预检：223文件交付不含生产gzip加载、独立owner/paintParts投影及位平面适配；正式盾后转嫁/主人治疗也未接通。资源消费、公共行为/真实攻击、双owner结算及联合核销需三批独立验收，超出原两批预算。224A保留17责任并Split，224A1唯一Ready，224A2/A3与224B/C Planned；全32合同、13符号和P1TA/P1T不降低。未改src/public或原真值，不提高玄龟/204/VS-067及功能线完成度。证据见 `docs/tasks/evidence/TASK-SLICE-224A/preflight.md`。
+
+2026-09-18 TASK-SLICE-223完成：13符号/32合同资源准备闭合，11,572态、643独立PNG与6份数据包共650文件；61,424碰撞相位映射无损压为3,140位平面。视觉11,544态零差异，仅原批准28态308像素；157,704碰撞案例布尔全同，仅原20案例70像素。重复生成、12类元数据变异、独立PNG/位场解码与原生oracle、生产build及无本地证据的650文件交付检查通过。224A唯一Ready，224B/C Planned；尚未接入正式战斗Runtime，玄龟/204/VS-067及功能线保持未完成。交接见 `docs/tasks/evidence/TASK-SLICE-223/handoff.md`。
+
+2026-09-17 TASK-SETTINGS-225完成：11,572态独立资源投影verified，13符号/32合同保留；11,544态零差异，28态308像素仅按用户精确元组许可，包络失败0。effects冻结源码重放、原点输入、归档重复生成、21类变异与最终资源审计通过；223恢复唯一Ready，224A/B/C Planned。未改src/public或旧真值，玄龟/204/VS-067及功能线仍未完成。交接见 `docs/tasks/evidence/TASK-SETTINGS-225/handoff.md`。
+
+2026-09-17 TASK-SLICE-223消费预检：原生归档完整；local-RGBA nearest/flip候选在2,440效果状态中132态、65,664像素非零，不能沿用碰撞容差。signed/scale舞台基准存在，但SYBH双倍对象屏外部分及动态独立图层转换仍需补证。223保留全13符号/32合同并Blocked，TASK-SETTINGS-225唯一Ready；224A/B/C保持Planned。未改src/生产资源或222原真值，玄龟/204/VS-067仍未完成、功能线Active。证据见 `docs/tasks/evidence/TASK-SLICE-223/preflight.md`。
+
+2026-09-17 TASK-SETTINGS-222B及父222完成：完整家族真值verified，保留222A全部13符号视觉与221全部32行为合同；94,656静态、31,344绘制后及31,704攻击入口碰撞案例，命中布尔全部一致。静态20案例70像素仅按用户批准的精确列表接受，动态像素零差异。223资源准备唯一Ready，224A/B/C Planned；玄龟现代实现、204、VS-067及功能线仍未完成。见 `docs/tasks/evidence/TASK-SETTINGS-222B/handoff.md`。
+
+2026-09-15 TASK-SETTINGS-222A完成：13符号视觉verified，11,572状态/20,215显示对象，原生24fps、193源码方法指纹及独立递归时钟/遮罩变异通过；32合同完整交接。222B唯一Ready承接碰撞与父222联合核销；父222仍Split，玄龟现代实现/204/VS-067仍未完成，功能线Active。见 `docs/tasks/evidence/TASK-SETTINGS-222A/handoff.md`。
+
+2026-09-15 TASK-SETTINGS-222规模预检：恢复SWF确认SYBH根18/内部30帧；现有采样按根帧去重/末帧停止、effect单位缩放及青龙15帧mask假设不能直接覆盖玄龟动态/scale2。222保留全合同并Split，222A唯一Ready（全部视觉与原生动态组合），222B Planned（碰撞采样及联合核销）。未晋升真值，未改src/生产资源，玄龟/204/VS-067仍未完成，功能线Active。见 `docs/tasks/evidence/TASK-SETTINGS-222/preflight.md`。
+
+2026-09-15 TASK-SETTINGS-221完成代码证据：32合同、511受控原生AS3状态、12类语义变异、双包13符号定位；29合同含源片段执行，3项静态调用/跟随声明，全部现代消费者仍待。TASK-SETTINGS-222唯一Ready承接完整视觉/碰撞真值；玄龟未复现，TASK-ARCH-204与VS-067仍部分完成，功能线Active。见 `docs/tasks/evidence/TASK-SETTINGS-221/handoff.md`。
+
+2026-09-14 216C及父216完成：默认5173可发现全宠物档、显式点击/刷新保留/原存档进入地图、正式与损坏槽保护及4174/非本地/query隔离9浏览器状态通过。A/B完整证据核销，M-054当前producer已复现、VS-072已完成；TASK-SETTINGS-221玄龟完整行为证据唯一Ready，六族与194后续仍待，功能线Active。见 `docs/tasks/evidence/TASK-SLICE-216C/handoff.md`。
+
+2026-09-14 216B完成：当前hero/pet/environment/turtle producer同链，216实际TestScene adapter状态、五关双owner真实trace/清理、1-2实际英雄与宠物pnum和68原版显示对照通过。216C唯一Ready；父216/VS-072仍待默认5173入口，未实现家族不冒充覆盖。见 `docs/tasks/evidence/TASK-SLICE-216B/handoff.md`。
+
+2026-09-14 216B2解除环境结算反证，216B恢复唯一Ready。冰火真实来源/attack/time、入参int/盾/Role3和现有显式保护经20+24状态、保护重试/不同来源及13变异通过；不称完整isYourFather实现，不把输入16.5等当pnum结算值。M-054/VS-072仍待全部producer与正式数字，见 `docs/tasks/evidence/TASK-SLICE-216B2/handoff.md`。
+
+2026-09-14 环境producer预检：Stage21冰刺/Stage22火刺是真实当前消费者，不能判不适用；实际共享环境入口5项int/盾/Role3差异已复现。216B Blocked、216B2唯一Ready；直接reduceHp与普通碰撞保护语义需区别，未改215/B1结论或提升完整闭合。见 `docs/tasks/evidence/TASK-SLICE-216B/environment-preflight.md`。
+
+2026-09-14 216B1结算反证解除，216B恢复唯一Ready。M-054当前转嫁/保护/盾/int差异由共享结算与真实TestScene消费者验证，36+216状态及10变异通过；modern flat-defense保留且不称源公式。承伤producer/正式视觉和QA仍待216B/C，M-054/VS-072不提升完整闭合。见 `docs/tasks/evidence/TASK-SLICE-216B1/handoff.md`。
+
+2026-09-14 216B预检反证：现代101转嫁96+6、保护/满盾先扣pet和Role3整数赋回遗漏需先修复；216B Blocked，216B1唯一Ready。215源真值/216A显示不变，M-032/M-042全局仍部分复现，M-054/VS-072未闭合。见 `docs/tasks/evidence/TASK-SLICE-216B/preflight.md`。
+
+2026-09-14 216A完成pnum资源与生产显示API：十glyph与唯一bundle、68原版/Phaser态及27变异通过；只是显示输入验证，实际承伤producer尚待216B，故M-054/VS-072现代状态不提升。216B唯一Ready，父216仍Split。交接见 `docs/tasks/evidence/TASK-SLICE-216A/handoff.md`。
+
+2026-09-14 216规模预检：父216 Split，216A资源/显示唯一Ready，216B正式producer与216C本地QA入口Planned。215 verified保持；未改src或生产资源，不提升M-054/VS-072现代闭合状态。完整合同分配见 `docs/tasks/evidence/TASK-SLICE-216/preflight.md`。
+
+本文记录整个项目的机制总进度：什么还没扒、什么已经扒了、什么已经复现。它是事实和进度清单，不是实现方案。
+
+它与 `docs/tasks/vertical-slices.md` 的分工：
+
+- `mechanics-index.md`：按机制记录逆向状态和复现状态。
+- `vertical-slices.md`：按可玩切片记录实现队列和验收。
+
+## 状态定义
+
+逆向状态：
+
+- `不适用`：不是从 AS3 机制逆向来的事项。
+- `未扒`：知道有这个机制，但还没系统阅读源码。
+- `部分已扒`：大方向清楚，但细节不足以完整实现。
+- `已扒`：有明确 AS3 证据和机制说明，可作为实现依据。
+- `暂缓`：当前阶段不准备逆向。
+
+复现状态：
+
+- `不适用`：不是现代游戏功能。
+- `未复现`：现代版本还没实现。
+- `部分复现`：已有技术验证或局部实现，但不完整或不符合正式玩法。
+- `已复现`：现代版本已实现并有验证方式。
+- `暂缓`：当前阶段不准备实现。
+
+## 总览
+
+| ID | 机制 | 逆向状态 | 复现状态 | 证据/逆向文档 | 现代产物 | 下一步 |
+| --- | --- | --- | --- | --- | --- | --- |
+| M-001 | 提取资料状态 | 已扒 | 不适用 | `local-resources/regima/legacy-extraction/README_extract.md`、`evb-extraction-report.md` | Git 忽略的 `local-resources/regima/source/unpacked/` 与 `source/restored-swfs/` | RegiMA 已恢复 206 个文件；175 个 SWF 中 174 个可解析；视觉资源优先检索恢复语料库，后续按资源族选择性接入 |
+| M-002 | 主参考源码 | 已扒 | 不适用 | `local-resources/regima/legacy-extraction/resources_by_swf/[172845].swf/scripts` | 无 | 遇疑点再看 `local-resources/regima/legacy-extraction/resources_by_swf/[25034429].swf/scripts` |
+| M-003 | 现代目标 | 已扒 | 部分复现 | `AGENTS.md`、`TASK_OUTLINE.md` | 当前文档体系 | 后续任务持续遵守 |
+| M-004 | 技术脚手架 | 不适用 | 已复现 | `modern-architecture.md` | `package.json`、`src/`、Vite/Phaser 骨架、`src/scenes/test-scene/TestSceneViews.ts`、`src/scenes/test-scene/TestSceneUpdatePipeline.ts`、`src/core/GameContext.ts` | `TASK-ARCH-003/004/005` 已抽出首批 TestScene 视图工厂、update 调度层和薄查询上下文；下一步 `TASK-ARCH-006` 拆碰撞/命中桥接 |
+| M-005 | 主流程 | 已扒 | 已复现 | `gameplay-index.md`、`runtime-index.md`、`save-party-flow-index.md`、`task-settings-175i-party-creation.json` | 启动/活动槽/地图/五个已接入关卡/结果主循环与 `FormalPartyRuntimeSystem.ts` | 新建人数/选角已直接消费 20 对象/30 状态真值；读档分流、地图直接进关、返回/重试/重载和正式 party owner 已闭合，未接入关卡仍按各自内容线推进 |
+| M-006 | 单人/双人规则 | 已扒 | 已复现 | `controls-index.md`、`gameplay-index.md`、`save-party-flow-index.md`、`task-settings-175i-party-creation.json` | 当前 schema party、双玩家输入、正式关卡/HUD/功能页 | P1→P2、不同角色、selected/listener 门禁与 marker 已有 verified 真值并进入存档和正式消费者；中途换人、联网明确排除 |
+| M-007 | 玩家控制位 | 已扒 | 未复现 | `User.as`、`KeyBoardControl.as` | 无 | 实现 `PlayerSlot` |
+| M-008 | 基础键位 | 已扒 | 已复现 | `controls-index.md` | `src/systems/InputSystem.ts`、`src/scenes/TestScene.ts` 双玩家输入验证 | 后续角色控制器读取结构化 input state |
+| M-009 | 方向键归属 | 已扒 | 已复现 | `KeyBoardControl.as`、`controls-index.md` | `InputBindings.p2` 独占方向键，`TestScene` 同时显示 P1/P2 状态 | 后续移动切片继续保持方向键只属于 P2 |
+| M-010 | `keyarray` 四位 | 已扒 | 未复现 | `BaseHero.as`、`controls-index.md` | 无 | 角色控制器实现时转成结构化 input intent |
+| M-011 | 跑步 | 已扒 | 部分复现 | `movement-index.md`、`BaseHero.addDoubleCount()` | `src/systems/HeroMovementSystem.ts`、`src/scenes/TestScene.ts` | 261已核定6/10与默认7/11每host步；260A在Stage1-2消费有限普通运动/竞争，未外推五关完整动作或技能物理 |
+| M-012 | 跳跃 | 已扒 | 已复现 | `movement-index.md`、`KeyBoardControl.as`、Role1—Role5 `myKeyDown()`、`BaseHero.jump()`、`BaseHero.step()`、`BaseObject.getDownFloor()` | `src/systems/HeroMovementSystem.ts`、`src/scenes/TestScene.ts`、`Stage12GameplayBridge.ts` | Stage 1-2 已复用通用重力/落地/二段跳，P1 K 与 P2 小键盘 2 已有专项回归；水中重复跳与白龙特例继续后置 |
+| M-013 | 下落平台 | 已扒 | 已复现 | `movement-index.md`、`BaseObject.getFallDown()`、`PhysicsWorld.addSubObj()` | `src/systems/HeroMovementSystem.ts`、`src/scenes/TestScene.ts` | 后续补完整平台库并继续校准特殊平台类型 |
+| M-014 | 上/交互/通关 | 已扒 | 已复现 | `levels-index.md`、`level-result-ui-index.md`、`BaseHero.checkTransferDoor()`、`Role*.myKeyDown()`、`MainGame.levelClear()`、`GameWin.as`、`GameFail.as`、2026-07-26/30 用户试玩反馈 | `LevelLifecycleSystem.ts`、`LevelLifecycleBridge.ts`、`LevelResultView.ts`、五关 Flow/scenes | `TASK-ARCH-015` 统一真实 bounds 重叠 + 对应上键、全员判负、幂等解锁与结果终态；`TASK-SLICE-161` 补齐唯一原版 GameWin/GameFail presenter 并删除五关私有黑框，后续关卡必须同时消费生命周期与结果视图 |
+| M-015 | 技能槽输入 | 已扒 | 已复现 | `skills-input-index.md`、`BaseHero.sendSkill()`、`KeyBoardControl.as`、`User.returnSkillNameBySkillKey()`、`roles-index.md` | `src/systems/InputSystem.ts`、`src/systems/HeroSkillSystem.ts`、`src/scenes/TestScene.ts` | 现代测试场景已按 0..4 普通技能槽触发，Space/小键盘 0 与 H/小键盘 7 不接普通技能；后续 UI 任务只负责可视化与配置 |
+| M-016 | UI 快捷键 | 已扒 | 已复现 | `stage-feature-entry-index.md`、`task-settings-175c-stage-feature-host.json`、`skills-input-index.md`、`pets-index.md`、`KeyBoardControl.as`、`GameInfo.as`、`RoleInfo.as`、`magic-weapons-index.md` | `StageFeatureEntryRouterSystem.ts`、`StageSettingsSystem.ts`、`FormalFeatureUiEntryBridge.ts`、`StageSettingsScene.ts`、现有功能 systems | 574 五真 HUD、371/444 设置/帮助、P1 `C/V/B/N/Esc`、P2 `/ * -` 已有 25 对象/42 状态 verified 真值；176 移除重复常驻层，182 删除地图共享 chrome/跨页/Escape 通用关闭并恢复单页门，按钮 identity/命中/owner 未改 |
+| M-017 | 角色列表 | 已扒 | 未复现 | `roles-index.md`、`export/hero/Role1.as` 至 `Role5.as`、`User.getRoleName()` | 无 | 角色动作索引已够支撑选择首个角色，后续实现前先补移动和资源 |
+| M-018 | Role1 悟空 | 已扒 | 部分复现 | `roles-index.md`、`skills-input-index.md`、`projectiles-index.md`、`role1-combat-visuals-index.md`、`task-settings-173-role1-shadow.json`、`Role1.as`、`Role1Shadow.as`、`BaseRoleProperies.as` | Role1 技能 systems、`Role1CombatVisualBridge.ts`、`Role1ShadowVisualBridge.ts`、共享 `HeroPartyRuntime`、TestScene 薄适配、独立测试 | 173A 的影分身/正式行为证据保留；2026-08-17 用户报告五角色动作流畅度不一，本角色的帧时序/持帧/clock/解包完整性在 195 审计前不再维持“整体已复现”措辞 |
+| M-019 | Role2 唐僧 | 已扒 | 部分复现 | `roles-index.md`、`skills-input-index.md`、`projectiles-index.md`、`role2-combat-visuals-index.md`、`attack-effects-index.md`、`Role2.as`、`Role2Shadow.as` | `HeroNormalAttackSystem.ts`、`HeroNormalAttackGeometry.ts`、Role2 技能 systems、Role2视觉桥 | 163 的 Bullet1/2 空间/命中证据保留；2026-08-17 用户报告五角色动作流畅度不一，本角色的帧时序/持帧/clock/解包完整性待 195 同标准复核 |
+| M-020 | Role3 八戒 | 已扒 | 部分复现 | `roles-index.md`、`skills-input-index.md`、`projectiles-index.md`、`role3-combat-visuals-index.md`、`Role3.as`、`BaseAddEffect.as`、`BaseBitmapDataClip.as` | `Role3DefenseSkillSystem.ts`、`Role3ControlSkillSystem.ts`、`Role3ImpactSkillSystem.ts`、`Role3MobilitySkillSystem.ts`、`Role3UltimateSkillSystem.ts`、`Role3CombatVisualSystem.ts`、`Role3CombatVisualBridge.ts` | 技能行为与 069C/158C 视觉证据保留；2026-08-17 用户报告五角色动作流畅度不一，本角色的动作帧时序/转移/加载完整性待 195 复核 |
+| M-021 | Role4 沙僧 | 已扒 | 部分复现 | `role4-combat-index.md`、`role4-combat-visuals-index.md`、`attack-effects-index.md`、`Role4.as`、`MonsterRole4Hit5.as`、`BaseAddEffect.as` | `HeroNormalAttackSystem.ts`、`HeroNormalAttackGeometry.ts`、Role4六技能系统与视觉桥 | 163 的 Arrow/Follow 空间证据保留；2026-08-17 用户报告五角色动作流畅度不一，本角色的双形态帧时序/转移/加载完整性待 195 复核 |
+| M-022 | Role5 白龙 | 已扒 | 部分复现 | `role5-combat-index.md`、`role5-combat-visuals-index.md`、`attack-effects-index.md`、`Role5.as`、`BLMSkill5.as`、`JRJL.as` | `HeroNormalAttackSystem.ts`、`Role5SkillSystem.ts`、`Role5NormalAttackProjectileSystem.ts`、Role5视觉桥与专项测试 | 164/174 已闭合龙魂剑 hit18..20 三段 EnemyMove 轨迹、真资源、二维命中、共享结算与双 owner；未达遗留对象仍使角色机制保持部分复现 |
+| M-023 | 普攻总规则 | 已扒 | 已复现 | `roles-index.md`、`attack-effects-index.md`、`Role*.normalHit()` | `HeroNormalAttackSystem.ts`、`HeroNormalAttackGeometry.ts`、`Role5NormalAttackProjectileSystem.ts`、共享Hero Runtime与TestScene | 163/164已闭合Follow、固定world effect、moving-projectile与corpus-negative分类；五角色现有J行为缺口清零 |
+| M-024 | 角色组合键 | 已扒 | 已复现 | `roles-index.md`、`skills-input-index.md`、`role5-combat-index.md`、`Role*.myKeyDown()`、`controls-index.md` | `Role1BasicSkillSystem.ts`、`Role2PassiveSkillSystem.ts`、`Role3ImpactSkillSystem.ts`、`Role5SkillSystem.ts`、`HeroNormalAttackSystem.ts` | Role1 普攻+上 `slz`、跑动普攻 `hytj`、Role2 持续普攻蓄力、Role3 普攻+上 `hit8`、Role5 `0101 -> yyb` 均已复现并有系统测试 |
+| M-025 | 角色技能效果 | 已扒 | 已复现 | `skills-input-index.md`、`roles-index.md`、`projectiles-index.md`、`role5-combat-index.md`、`Role*.showSkill()`、`Config.allSklName` | `HeroSkillSystem.ts`、`HeroNormalAttackSystem.ts`、`Role1BasicSkillSystem.ts`、`Role1ShadowSkillSystem.ts`、`Role1FinisherSkillSystem.ts`、`Role2*SkillSystem.ts`、`Role3*SkillSystem.ts`、`Role4*SkillSystem.ts`、`Role5SkillSystem.ts`、`ProjectileSystem.ts`、角色场景桥接 | Role1、Role2、Role3、Role4 和 Role5 完整战斗技能均已复现；真实素材与完整动画表现仍按资源任务后置 |
+| M-026 | 关卡类命名 | 已扒 | 已复现 | `levels-index.md`、`gameplay-index.md`、`MainGame.newGame()`、`PhysicsWorld.pWorldInit()`、`PhysicsWorld.addSubObj()`、`BaseHero.checkTransferDoor()`、RegiMA 五关 SWF 与 `assets/1.swf` / `2.swf` | `PlayableLevelRuntime.ts`、五关 `PlayableLevelDefinition`、`TransferDoorView.ts`、`LevelLifecycleSystem.ts`、`LevelResultView.ts`、窄 adapters 与未来模板 | 016A..D 已迁移五关；1-1 使用自身 character 45/41/44 二十帧门，删除 1-3 门借用；PG-013 等首个新关卡观察样本后关闭 |
+| M-027 | 地图标记 | 已扒 | 部分复现 | `levels-index.md`、`BaseGameSence.as`、`PhysicsWorld.addSubObj()`、`StopPoint.as`、`MonsterAppearPoint.as`、`ViewControllor.as`、`BaseHero.as`、恢复 `sl12/sl13/sl21/sl22.as` | `src/systems/LevelSystem.ts`、Stage 1 layout/traversal systems、`Stage21Layout.ts`、`Stage21TraversalSystem.ts`、`Stage22Layout.ts`、`Stage22TraversalSystem.ts`、`Stage22FlowSystem.ts` | Stage 2-2 的 3+1 墙、3 单向平台、5 停点、25 刷怪点、9 火焰、左右边界、五批放行与 940×590 全程运行验收已闭合 |
+| M-028 | 第一个关卡 | 已扒 | 已复现 | `levels-index.md`、`Config.initData()`、`StageListener11.as`、`Monster3.as`、`BaseHero.as`、`GameWin.as`、`GameFail.as`、用户 2026-07-23/26 试玩反馈 | `Monster3System.ts`、`LevelLifecycleSystem.ts`、`Stage11FlowSystem.ts`、`Stage11EntryScene.ts`、Stage11 bridges | 既有 Boss、镜头和真门回归保持；`TASK-ARCH-015` 删除 1-1 私有坐标完成路径，改用五关共享的门 bounds + P1 W / P2 上键生命周期协议 |
+| M-029 | 世界主循环 | 已扒 | 部分复现 | `runtime-index.md`、五关 Scene/World/Gameplay/Flow、PG-013 | `PlayableLevelRuntime.ts`、`TestSceneStage11RuntimeAdapter.ts`、`TestSceneUpdatePipeline.ts`、`GameContext.ts`、`playable-level-runtime.md`、关卡 adapters | 五关初始化、队伍/玩家、镜头/HUD、结果/保存/路由和销毁已收进公共 Runtime；专属遭遇/机关仍为窄 adapter。整体仍部分复现，因为原版更广泛世界活动/联机主循环不在当前范围 |
+| M-030 | 怪物系统 | 已扒 | 部分复现 | `monster-body-attack-lifecycle-contract.md`、`monsters-index.md`、`levels-index.md`、`stage1-monster-visuals-index.md`、`stage21-monster-visuals-index.md`、`BaseMonster.as`、`BaseObject.as`、`BaseBullet.as`、`PhysicsWorld.as`、`MainGame.as`、`Monster2/3/4/5/6/7/8/9/10/16/19/30.as` | `MonsterPhysicsSystem.ts`、`MonsterDefeatRewardSystem.ts`、Stage 1/2 visual systems 与 bridges、五关正式 scenes | 五关实际怪物真视觉保持；通用架构仍待 010A/B，且复评确认 Registry spawn 写死 grounded/100、正式 configured item 未传递、Monster4/5/6 已证掉落缺表，分别并入 010A/B 与 010C |
+| M-031 | 第一个怪物 | 已扒 | 已复现 | `monsters-index.md`、`Monster30.as`、`StageListener11.as`、`SpecialEffectBullet.as` | `src/systems/Monster30System.ts`、`src/scenes/TestScene.ts` | `Monster30` 首切片已完成；后续在真实角色/关卡中复用 |
+| M-032 | 伤害/受击 | 已扒 | 部分复现 | `combat-rules-index.md`、`monsters-index.md`、`BaseBullet.as`、`BaseHero.as`、`BaseMonster.as`、`MagicFlower.as`、`MagicFlag.as`、`MagicPearl.as`、`MagicZLHummer.as`、`Ling.as`、`magic-weapons-index.md` | `src/systems/CombatSystem.ts`、`src/systems/CombatFeedbackSystem.ts`、`src/systems/HeroCombatSystem.ts`、`src/systems/Stage1CombatSystem.ts`、`src/systems/HeroNormalAttackSystem.ts`、`src/systems/PetMonkeyCombatSystem.ts`、`src/systems/PetHorseCombatSystem.ts`、`src/systems/MagicWeaponSystem.ts`、`src/systems/ProjectileSystem.ts`、五关怪物 visual systems | 英雄、猴系和马系已通过共享结算形成实际 HP decrease、lastHitBy、source-agnostic hurt/dead 及统一命中反馈；212 让成功 `DamageEvent` 产出原版普通/暴击数字与共享连击。全局仍为部分复现，因为其余七个宠物家族尚未按完整合同闭合；224C已闭合玄龟全32合同/P1T与五关生命周期；猴马226本地整改通过、公共230..235组合仍待，其余五家族及最终旧入口仍待 |
+| M-033 | 击退/硬直/保护 | 已扒 | 部分复现 | `combat-rules-index.md`、`BaseObject.setAttackBack()`、`BaseHero.beAttackDoing()`、`BaseObject.setYourFather()`、`magic-weapons-index.md`、`MagicUmbrella.as`、`MagicUmbrella2.as`、`MagicRing.as`、`MagicFlower.as`、`MagicFlag.as`、`MagicPearl.as`、`MagicBagua.as`、`MagicZLHummer.as`、`Ling.as` | `src/systems/HeroCombatSystem.ts`、`src/systems/Monster30System.ts`、`src/scenes/TestScene.ts`、`src/scenes/test-scene/TestSceneCombatBridge.ts`、`src/systems/MagicWeaponSystem.ts` | 已有玩家受击短保护、`Monster30 hit1` 击退占位、伞类护盾扣 HP 前吸收、铃铛无敌免伤、`jyhl/MagicFlower` 友方增益状态展示、`mdhf/MagicFlag` 10 秒护体反制状态、`xhmt/MagicPearl` 结束随机 Monster30 眩晕/中毒最小状态、`tjbg/MagicBagua` 全体 Monster30 眩晕最小状态、`zltc/MagicZLHummer` 命中后 4.5 秒 Monster30 眩晕最小状态，以及 `stlp/Ling` 命中后 3 秒 Monster30 `magicSnowIce` 冰冻最小状态；完整受击条、浮空、反弹吸血、命中/闪避系统、通用 AddEffect 和原版硬直校准后置 |
+| M-034 | 子弹/技能飞行物 | 已扒 | 部分复现 | `projectiles-index.md`、五角色战斗视觉索引、Stage 1/2怪物视觉索引、`BaseBullet.as`、`export/bullet/`、`Role1.as` 至 `Role5.as` | `ProjectileSystem.ts`、角色技能 systems、五角色/Stage 1/2 visual systems 与 bridges、`AssetManifest.ts` | 173A 已闭合 Role1Shadow 正式派生/结算/销毁；174 已让 Role5 移动普攻恢复二维命中并委托共享英雄命中结算。未达遗留对象、宠物和后续关卡仍使全局状态为部分复现；224A已闭合公共行为/普攻/SLD/TXLJ的17项与P1TA，整族仍待B/C |
+| M-035 | 资源加载策略 | 已扒 | 部分复现 | `README_extract.md`、`evb-extraction-report.md`、`modern-architecture.md`、`assets-index.md`、`projectiles-index.md`、`levels-index.md`、`level-result-ui-index.md`、`stage1-monster-visuals-index.md`、`stage21-monster-visuals-index.md`、`equipment-visual-resource-catalog.md`、资源标注批次、`PG-009` | `AssetManifest.ts` provenance、`SceneAssetBundles.ts` 唯一 owner、`AssetBundleCoordinator.ts`、`SceneAssetBundleBridge.ts`、`EquipmentPreviewAssets.ts`、场景路由与负向门禁 | 图片 bundle/按当前装备加载保持闭合；复评确认 JS 仍静态包含全部场景和全量目录，发布前由 177A/177B 固化预算、场景/vendor 拆包与运行时瘦目录；不含纹理淘汰或图片转码；224A已闭合公共行为/普攻/SLD/TXLJ的17项与P1TA，整族仍待B/C |
+| M-036 | 装备 | 已扒 | 部分复现 | `equipment-index.md`、`equipment-data-catalog.md`、`reference/equipment-data-catalog-1.1.json`、`equipment-visual-resource-catalog.md`、`reference/equipment-visual-resource-catalog-1.1.json`、`evidence/TASK-SETTINGS-170B1-equipment-page.md`、`evidence/TASK-SETTINGS-189-equipment-tooltip.md`、`task-settings-170b1-equipment-page.json`、`task-settings-189-equipment-tooltip.json`、`equipment-workshop-index.md`、`workshop-rules-completeness-audit.md`、`magic-weapons-index.md` 与 1.1 装备/背包/角色消费者 | `EquipmentCatalog.ts`、`EquipmentTooltipSystem.ts`、`EquipmentTooltipView.ts`、`EquipmentPreviewSystem.ts`、`EquipmentPageTruthSystem.ts`、`EquipmentPageQaFixtureSystem.ts`、`EquipmentSystem.ts`、正式背包/工坊/法宝页面、`Stage1CombatSystem.ts` | 190A/B1..B4 已闭合正式背包、强化、合成、分解、打造的全部原版装备 hover 消费者；各页直接使用当前实例与 verified 命中几何，非装备槽排除。商城 49 项零装备且时装禁用 hover，VS-066 已完成；装备机制其余范围仍按各自切片推进 |
+| M-037 | 背包 | 已扒 | 已复现 | `inventory-resource-catalog.md`、`reference/inventory-resource-catalog-1.1.json`、`evidence/TASK-SETTINGS-165B-backpack-review.md`、`equipment-index.md`、`user/User.as`、`export/pack/BackPackElement.as`、`export/pack/PackThings.as`、`config/Config.as` | `InventoryResourceCatalog.ts`、`InventorySystem.ts`、`FormalInventoryPageSystem.ts`、`InventoryGridProjection.ts`、`InventoryGridView.ts`、正式背包/工坊 view | 431 身份、428 真图标、3 原版缺陷排除、事务、P1/P2 与 V6 保持；166D/165D 闭合两宿主的同一四分类、25 格、五页与直接暂存投影；190C 又统一原生三态按钮、完整 `n/5` 和 pointer 生命周期，各页仅保留 verified 宿主几何 |
+| M-038 | 掉落 | 已扒 | 已复现 | `drops-index.md`、`BaseMonster.as`、`BaseAura.as`、`RoleInfo.addWarriors()`、`FallEquipObj.as`、药品类、恢复 `Common1/OtherMat1.swf` | `MonsterDefeatRewardSystem.ts`、`DropSystem.ts`、`Stage1RewardBridge.ts`、Stage 1 三关 bridges | Stage 1 三关死亡统一结算生命/魔法拾取、灵魂追踪、战意副收益、直接经验和配置化物品；5 个正式拾取资源已接入，颜色只留在资源映射；`cwzb` 继续 unsupported |
+| M-039 | 合成 | 已扒 | 已复现 | `crafting-index.md`、`crafting-ui-index.md`、`equipment-workshop-index.md`、`workshop-rules-completeness-audit.md`、`evidence/TASK-SETTINGS-167-workshop-left-pages.md`、四份 `task-settings-167-workshop-*.json`、`reference/crafting-recipes-1.1.json`、`Fusion.as`、`Making.as`、`AllEquipment.as` | `CraftingRecipeRegistry.ts`、`CraftingItemDefinitionRegistry.ts`、`CraftingSystem.ts`、`EquipmentMakingRegistry.ts`、`EquipmentMakingSystem.ts`、正式工坊页面与专项 | 171/171A 的 121 Fusion、78 打造、材料、事务与 UI 保持；171B 将经书继承值改为实例 `baseStatsOverride`，178 保留其当前 schema 两次保存和双 owner 回归，不再兼容旧档 |
+| M-040 | 等级/经验 | 已扒 | 部分复现 | `monster-death-experience-contract.md`、`progression-index.md`、`reference/hero-progression-catalog-1.1.json`、`reference/hero-progression-catalog.schema.json`、`User.as`、`BaseHero.as`、`BaseRoleProperies.as`、`Role1.as` 至 `Role5.as`、`BaseMonster.as`、`TaskInterface.as` | `ProgressionSystem.ts`、`Stage1CombatSystem.ts`、`HeroPartyRuntimeSystem.ts`、`Stage1RewardBridge.ts`、`SaveSystem.ts`、`hero-progression-runtime-tests.ts` | 172 的 5×90 目录已由 179 直接消费；Role5 `int`、7 转换向量、89/90 sentinel、正式五关普通怪明确 owner、装备派生回满、P1/P2 HUD 与当前 V7 往返均闭合；231核定公共死亡经验对象/比例/清理相位，现代宠物归属缺口交238；任务奖励旁路、宠物成长、Monster111/无尽和升级特效仍按证据合同排除 |
+| M-041 | 技能学习/绑定 | 已扒 | 已复现 | `skills-input-index.md`、`skill-ui-native-index.md`、`evidence/TASK-SETTINGS-175D-skill-pages.md`、`task-settings-175d-skill-pages.json`、`User.skillbykey`、`SkillControl.as`、`SkillSetControl.as`、`BuySkill.as`、`PassiveSkillControl.as` | `SkillUISystem.ts`、`FormalSkillPageSystem.ts`、`FormalSkillPageView.ts`、`FormalSkillRuntimeBridge.ts` | 技能学习/绑定规则和 175D/183 技能功能页的 250 对象/32 状态真值直接消费已闭合；2026-08-17 用户反证针对独立的战斗技能 HUD，该缺口由 M-049/M-052 与 197..199 承担，不回退技能功能页事实 |
+| M-042 | 宠物 | 已扒 | 部分复现 | `pets-index.md`、`BasePet`、`BaseHero.initPet()`、`User.petsAry`、`User.findCurrentPet()`、`User.catchNewPet()`、`PetInfo.as`、`PetInterface.as`、`PackThings.as`、`MagicBottle.as`、`MagicFlower.as`、`Monster70.as` 至 `Monster78.as` | `src/systems/PetSystem.ts`、`src/systems/ProjectileSystem.ts`、`src/scenes/TestScene.ts`、`tools/system-tests.ts` | 已复现 P1 预置宠物、B 键宠物面板、单只出战/休息、跟随/远距传送、宣花葫芦捕捉、宠物消耗品、`jyhl/MagicFlower` 对出战宠物的增益状态、`VS-015` 宠物经验/升级最小闭环、`VS-016` `monkey1/xj`、`VS-017` `monkey2/lj`、`VS-018` `monkey2/xj`、`VS-019` `monkey3/lyq`、`VS-020` `monkey3/xj`、`VS-021` `monkey3/lj` 和 `VS-022` `monkey4/jgaoyi` 宠物技能最小闭环：P1 可切换出战 `monkey2/monkey3/monkey4`；`monkey2` 持有已学 `lj/xj`，`lj` 满足 MP/冷却/目标门禁后扣 20 MP、重置 500ms 冷却，生成 `PetMonkey2Bullet2` 占位 projectile 并造成 `4.2 * pet.atk` 伤害，`xj` 在等价受击触发、MP/冷却/目标门禁满足后扣 20 MP、重置触发和 500ms 冷却，生成 `PetMonkey2Bullet3` / `hit3` 占位 projectile 并造成 `2.6 * pet.atk` 伤害；`monkey3` 持有已学 `lyq/xj/lj`，`lyq` 满足 MP/冷却/目标和距离 `<= 400` 门禁后扣 20 MP、重置 500ms 冷却，生成 `PetMonkey3Bullet2` / `hit2` 占位 projectile 并造成 `6.8 * pet.atk` 伤害，`xj` 满足 MP/冷却/目标门禁后扣 20 MP、重置 500ms 冷却，复用 `PetMonkey1Bullet2` / `hit3` 占位 projectile 并造成 `2.6 * pet.atk` 伤害，`lj` 在等价受击触发、MP/冷却/目标门禁满足后扣 20 MP、重置触发和 500ms 冷却，生成 `PetMonkey3Bullet3_2` / `hit4` 占位 projectile 并造成 `4.2 * pet.atk` 伤害；`monkey4` 持有已学 `xj/lj/lyq/jgaoyi`，`jgaoyi` 满足已学习、MP `>= 30`、冷却和目标门禁后扣 30 MP、重置 500ms 冷却，生成 `PetMonkey4Hit5` / `hit5` 占位反馈；AS3 `getRealPower("hit5")` 为 0，本切片固定无直接伤害。`VS-023` 已完成宠物技能存档/面板最小闭环：`PetState.skills` 可字段级编解码为 `sname~sname`，空技能保存为空字符串，未知 key 可安全保留但不会释放；宠物面板展示 8 个技能槽；背包种子新增 `cwjnxld`，当前出战宠物可按等级/种类/形态重算技能并消耗 1 个，道具无出战宠物时不消耗，随机源可注入并由系统测试固定。`TASK-SETTINGS-028` 已补清基础属性被动 `tsml/zrsh/smzf/mfby`、受击反击 `qlfj`、六个自动 buff `sxkb/fsnl/smjc/mfjc/gjjc/fyjc` 的入口、MP、计数器、持续和数值公式，并列出其他宠物形态专属技能仍未复现。`VS-024` 已完成首个基础自动 buff：当前出战宠物已学 `gjjc` 且 MP/计数器满足时自动扣 20 MP，为 P1 主人按 `form * 6 * technique * 1.05` 增加攻击，到期恢复，并在宠物面板展示状态。`VS-025` 已完成 `qlfj` 强力反击：当前出战宠物已学、受击且存活时按可注入随机概率触发，命中对最近 `Monster30` 造成 `pet.atk` 等价物理反击且不消耗 MP。`VS-026` 已完成 `smjc` 生命加成：自动扣 20 MP，给主人按 `form * 70 * technique * 1.05` 增加 HP 上限并按比例同步当前 HP，到期恢复。`VS-027` 已完成 `mfjc` 魔法加成：自动扣 20 MP，给主人按 `form * 70 * technique * 1.05` 增加 MP 上限并按比例同步当前 MP，到期恢复。`VS-028` 已完成 `fyjc` 防御加成：自动扣 20 MP，给主人按 `form * 5 * technique * 1.05` 增加防御，到期恢复。`VS-029` 已完成 `sxkb` 嗜血狂暴：自动扣 20 MP，按 `form * 0.07 * technique * 0.27 * 1.05` 增加宠物自身暴击加成，到期恢复，重触发计数使用 4320 帧。`VS-030` 已完成 `fsnl` 法术能量：自动扣 20 MP，按 `form * 30 * technique * 1.05` 增加宠物自身技能伤害加值，到期恢复。`VS-031` 已完成 `fsnl` 技能伤害加值接入：已复现宠物主动技能在原倍率伤害上增加 `skillDamageBonus`，`qlfj` 与 `jgaoyi/hit5` 边界保持不变。`VS-032` 已完成 `sxkb` 暴击率接入：已复现宠物主动技能可注入随机源，暴击命中时对包含 `skillDamageBonus` 的技能伤害应用 2 倍最小暴击倍率，暴击未命中和无暴击率时旧伤害不变；`qlfj` 与 `jgaoyi/hit5` 边界保持不变。`TASK-SETTINGS-029` 已扒清马系 `sp/bd/bz/tmaoyi` 专属技能链，`TASK-SLICE-058` 已完成首个马系技能 `horse1/sp`：P1 可切换出战 `horse1`，按已学习、MP、目标距离 `50..100`、2 秒 CD 门禁释放 `PetHorse1Bullet2` 占位 projectile，伤害接入 `fsnl/sxkb` 并命中附加 2 秒冰冻；`TASK-SLICE-059` 已完成 `horse2/bd`：P1 可切换出战 `horse2`，主人受击等价触发后按已学习、MP、目标、触发 ready 和 2 秒 CD 门禁释放 `PetHorse2Bullet2` / `hit2` 占位 projectile，伤害接入 `fsnl/sxkb`，释放后清除触发并命中附加 2 秒冰冻；`TASK-SLICE-060` 已完成 `horse3/bz`：P1 可切换出战 `horse3`，按已学习、MP、目标距离 `<= 250`、目标和约 6 秒 CD 门禁释放 `PetHorse3Bullet4` / `hit4` 占位 projectile，伤害接入 `fsnl/sxkb` 并命中附加 2 秒冰冻；`TASK-SLICE-061` 已完成 `horse4/tmaoyi`：P1 可切换出战 `horse4`，按已学习、MP、目标和奥义 CD 门禁释放 `PetHorse4Bullet5` 占位 projectile，`sp` 记录追踪目标，`bd` 让首段附加 2.4 秒冰冻并记录 1 秒爆炸延迟，`bz` 生成 `PetHorse4Bullet5Explode` 爆炸段并按 `6.6 * pet.atk + skillDamageBonus` 接入 `fsnl/sxkb` 造成伤害，`tmaoyi` 本体直接伤害保持 0；`TASK-SETTINGS-030` 已补清青龙 `fs/sdcc/ltwj/qlaoyi` 专属技能链，`TASK-SLICE-062` 已完成 `dragon1/fs`：P1 可切换出战 `dragon1`，按已学习、MP 和约 10 秒 CD 门禁释放 10 秒分身占位反馈，直接伤害保持 0；`TASK-SLICE-063` 已完成 `dragon2/sdcc`：P1 可切换出战 `dragon2`，按已学习、MP、目标、距离 `<= 300` 和约 3.6 秒 CD 门禁释放 `PetDragon2Bullet2` 占位 projectile，接入混合伤害、`fsnl/sxkb` 和命中治疗记录；`TASK-SLICE-064` 已完成 `dragon3/ltwj`：P1 可切换出战 `dragon3`，按已学习、MP、目标、距离 `<= 500` 和约 5 秒 CD 门禁释放 4 段 `PetDragon3Bullet3` 占位 projectile，接入混合伤害、`fsnl/sxkb` 和命中治疗记录；`TASK-SLICE-065` 已完成 `dragon4/qlaoyi`：P1 可切换出战 `dragon4`，按已学习、MP `>= 30`、目标、距离 `<= 200` 和约 24 秒 CD 门禁释放 `PetDragonBullet4` / `hit4` 奥义占位 projectile，直接伤害保持 0，并按已学 `fs/sdcc/ltwj` 记录 `fs-clone/sdcc-charge/ltwj-multi` 组合反馈；`TASK-SLICE-070` 已完成 `ufo1/pms` 魔破杀首段；`TASK-SLICE-071` 已完成 `ufo2/ss` 瞬闪第二段；`TASK-SLICE-072` 已完成 `ufo3/kmsk` 狂魔闪空第三段：P1 可切换出战 `ufo3`，按已学 `kmsk`、MP `>= 20`、约 5 秒 CD 和目标门禁释放，先进入约 600ms 上升（`hit4_1`），后生成 `PetKabu3Bullet4` / `hit4` 占位 projectile 于宠物下方 `y + 30`，按 `6 * pet.atk + skillDamageBonus` 接入 `sxkb` 暴击造成下方/范围伤害；UFO/卡布三条技能链（`pms/ss/kmsk`）已全部实现；虎系（`hy/sxhz/hsqj/bhaoyi`）、凤凰系（`np/bshn/dhly/zqaoyi`）、兔系（`yg/jf/bs/ysaoyi`）、鼠系（`sc/hxfb/zsaoyi`）四条专属技能链均已完成最小闭环实现；成长洗练、P2/联机、任务奖励经验、完整全局存档和真实资源后置；224A已闭合公共行为/普攻/SLD/TXLJ的17项与P1TA，整族仍待B/C |
+| M-043 | 法宝 | 已扒 | 部分复现 | `magic-weapons-index.md`、`BaseMagicWeapon.as`、`export/magicWeapon/`、`SutraInterface.as`、`BaseHero.initMagicWeapon()`、`BaseHero.showSkillFaBao()`、`KeyBoardControl.as`、`AllEquipment.as`、`MyEquipObj.as`、`BackPack.as`、`Ling.as`、`MagicBigBottle.as` | `MagicWeaponSystem.ts`、`FormalMagicWeaponPageSystem.ts`、`FormalMagicWeaponPageView.ts`、projectile/pet/combat systems、V4 与专项测试 | 已复现现有法宝战斗技能族，以及 596 真 `SutraInterface` 等价页：P1 N/正式导航、未装备拒绝、等级/成长/五行/属性、常规灵魂与龙女眼泪、`zsTimer`/神器/`fbqpj` 特殊材料分支、提交/取消、3 个传承法器重置、关闭重算和 V4 round-trip；原版没有 P2 面板快捷键，现代明确不伪造。M-043 仍为“部分复现”只因法宝战斗真素材、联机/活动等外部范围后置，不再代表强化页缺失 |
+| M-044 | 存档 | 已扒 | 部分复现 | `save-slots-index.md`、`save-party-flow-index.md`、`skills-input-index.md`、`pets-index.md`、`levels-index.md`、`level-result-ui-index.md`、`inventory-resource-catalog.md`、`User.getSaveObj()`、`MemoryClass.setStorage()`、`MainGame.levelClear()`、`GameWin.nextClick()` | `SaveSystem.ts`、`PartyConfigurationSystem.ts`、`SaveSlotSystem.ts`、`FormalPartyRuntimeSystem.ts`、`PlayerSoulSystem.ts`、`LevelResultView.ts`、`pre-stage23-save-journey-tests.ts`、`save-schema-tests.ts`、`hero-progression-runtime-tests.ts` | 178 的唯一当前 schema 保持；179 又闭合 `heroId/level/currentExp` 双 owner 的正式关卡恢复/奖励写回、装备派生和坏类型拒绝。M-044 只因未进入当前线明确排除的更广泛原版存档域而保持部分复现 |
+| M-045 | 多人网络 | 暂缓 | 暂缓 | `Config.as` 中 `Client` | 无 | 本地双人优先，网络不进第一批 |
+| M-046 | 支付/活动/礼包 | 暂缓 | 暂缓 | `Config.as`、UI | 无 | 非核心复刻，后续按需判断 |
+| M-047 | 角色普攻特效资源 | 已扒 | 部分复现 | `attack-effects-index.md`、`hero-combat-visuals-index.md`、五角色战斗视觉索引、`Role*.normalHit()`、`Role*.doHit*()`、`BaseBitmapDataPool.as` | 五角色真资源序列、对应 CombatVisualBridge、`HeroNormalAttackSystem.ts` | 旧普攻资源身份/空间证据保留；2026-08-17 用户报告跨角色动作流畅度不一，在 195 对帧数/帧时序/持帧/clock/加载完整性同标准复核前不再宣称五角色普攻动画整体已复现 |
+| M-048 | 战斗可读性与通关校准 | 已扒 | 已复现 | `stage1-combat-calibration.md`、`combat-rules-index.md`、`progression-index.md`、`attack-effects-index.md`、Stage 1 怪物/角色 AS3、恢复语料窄查、用户 2026-07-21/23 试玩反馈 | `Stage1CombatSystem.ts`、`HeroCombatSystem.ts`、`HeroNormalAttackSystem.ts`、Stage 1 三关 bridge、`stage1-combat-tests.ts`、`stage11-browser-audit.mjs` | 三关共享战斗合同保持；1-1 高层触发 Boss 不再要求清空小怪，避免玩家已到顶层仍被旧波次门禁阻塞；原版 W 门继续承担通关提示 |
+| M-049 | 正式战斗 HUD | 已扒 | 部分复现 | `combat-hud-index.md`、五角色战斗视觉索引、`Stage1CombatHudSystem.ts`、`Stage1CombatHudBridge.ts`、恢复 `OtherMat1/bossblood.swf` | Stage 1 三关共享 snapshot/bridge；P1/P2 独立成长与技能状态；Role1..Role5使用character 505 frame1..5头像；Boss即时/0.8s追赶条 | HP/MP/经验/头像/Boss 条证据保留；2026-08-17 用户在正式战斗 UI 中未看到角色技能，旧“五槽已运行闭合”结论降级，由 197..199 重建独立战斗技能 HUD 真值和正式可见联动 |
+| M-050 | 启动与存档槽流程 | 已扒 | 已复现 | `save-slots-index.md`、`save-party-flow-index.md`、`task-settings-175i-party-creation.json`、`GameMenu.as`、`SelectRole.as`、`OtherMat1.swf` 1149/901、`Common1.swf` 69/18 | `PartyConfigurationSystem.ts`、`SaveProfileDraftSystem.ts`、`SaveSlotSystem.ts`、`SaveSlotScene.ts`、`SavePartyCreationTruth/View.ts`、`SaveSystem.ts` | 六槽、当前单 schema、原子建槽、1P/2P 与取消/重载闭合；187 已让 view 直接消费 20 对象/30 状态真值并删除手写坐标/命中源 |
+| M-051 | 天庭地图选关 | 已扒 | 已复现 | `heaven-map-index.md`、`SelectPLace.as`、`MapMenu.as`、`GMain.as`、`MainGame.as`、`GameWin.as`、`GameFail.as`、`OtherMat1.swf` 1343/963/1311/1297/1304/1290、用户 2026-07-23/24 试玩反馈 | `HeavenMapSystem.ts`、`HeavenMapScene.ts`、`FormalPartyRuntimeSystem.ts`、正式结果/退出桥、专项与视觉证据 | 四节点状态、单调进度、活动槽 party 直接进关、往返/重试/重载已完成；现代逐关人数 chooser 已删除且有静态防回流门禁 |
+| M-052 | 完整功能 UI | 已扒 | 部分复现 | `full-function-ui-index.md`、175A..I verified manifests、`evidence/TASK-SETTINGS-175-functional-ui-truth-audit.md`、既有 verified 工坊/装备 manifests | `StageFeatureEntryRouterSystem.ts`、`StageSettingsSystem.ts`、`FormalFeatureUiEntryBridge.ts`、正式功能页 systems/views、`FormalImmortalityPageTruth.ts` | 175A..I/180..188 的单页真值/投影证据保留；2026-08-17 用户正式复验反证装备 hover、宠物 UI 可见性/动画和战斗技能 HUD，故整体交付降级，由 `LINE-PRE-STAGE-2-3-PRESENTATION` 重新闭合 |
+| M-053 | 怪物命中可见反馈与连击 | 已扒 | 已复现 | `BaseMonster.as`、`CureHpQueue.as`、`GameInfo.as`、`Batter.as`、恢复 `OtherMat1.swf` 的 `hurtnum0..9`/`bnum0..9`/`num0..9`/`export.Batter`、`combat-hit-feedback-index.md` | `src/systems/CombatFeedbackSystem.ts`、`src/scenes/CombatFeedbackView.ts`、`src/scenes/CombatFeedbackQaBridge.ts`、`Stage1CombatSystem.ts`、TestScene 共享命中桥、五关正式 Runtime 与结果页 | 211 的 23 状态/53 对象 verified 真值已被直接消费；只有唯一实际 HP decrease 产生普通/暴击数字，Role/宠物/法宝共享 P1/P2 连击与最高值，effect 只显示数字，miss/0/dedup/dead 无假反馈。专项、source trace、结果页与 940×590 双人正式验收通过 |
+| M-054 | 角色/宠物承伤数字 | 已扒 | 已复现 | 215 verified：BaseHero/BasePet/ANumber与恢复OtherMat1的pnum0..9，109源图态/22源行为组/34fixture | IncomingDamageFeedbackSystem、HeroCombatSystem、PetCombatEntitySession、PetBattleOwnershipSystem、共享IncomingDamageFeedbackBridge/View与五关/TestScene | 216完整当前producer、P1/P2、0/致死/保护/盾/转嫁/环境/去重与清理通过；68原版显示对照、真实五关trace、5173入口见216C/handoff。未实现家族/技能按216B精确矩阵排除，治疗/MP/miss不在范围 |
+
+2026-07-24 前置体验补全调整：用户将天庭地图“丹药/商城/设置/任务”、关卡内“设置/技能/背包/法宝/宠物”、已完成关卡全部小怪真动画和五角色战斗 UI/技能动画提升为 Stage 2-3 逆向前置。`M-016/M-052` 现有“可达/已有页面业务”不得作为原版逐状态关闭证据；`M-030/M-034/M-047` 的代表性或占位视觉不得作为全集关闭证据。`M-044/M-050` 的六槽 V6 `localStorage` 已满足“存到本地”的基础要求，不新增重复实现，只由 `VS-063` 在全部新功能完成后做跨重启正式旅程回归。调度见 `LINE-PRE-STAGE-2-3-COMPLETION` 与 `GOAL-037..041`。
+
+2026-08-17 Stage 2-3 前用户复验再次反证：装备 hover 未显示数值，正式路径未看到宠物 UI/真动画，五角色动作流畅度不一，战斗 HUD 未可见显示角色技能。这些反证不删除 170/175/180/183 的目录、单页真值和业务证据，但立即降级 `M-036/M-047/M-049/M-052`、`VS-051/054/062` 的整体关闭措辞；`M-018..M-022` 一律等待 195 的同标准帧时序/持帧/clock/资源完整性审计，不预先认定是解包不全。`M-042` 的行为/双 owner/存档证据保留，但真动画与正式 UI 交付明确未关闭；193 必须先按恢复源资源族分区，再生成逐族证据/实现 task。新调度见 `LINE-PRE-STAGE-2-3-PRESENTATION`。
+
+2026-08-17 `TASK-SETTINGS-191` 宠物 UI 可见性复核：P1/P2 的 character 573 pointer、`feature-ui-pets` bundle、`FeatureUiScene` 顶层和 932 页面在 940×590 正式 Runtime 均可见且零 console，175A/180 单页事实保留；用户反证命中的精确层是独立战斗 HUD。原版 `RoleInfo` 动态添加 `pet1.swf` character 662 `ShowPetInfo`，显示当前宠物头像、等级及 25 帧 HP/MP 条/数值；现代 HUD 只有 `petAvailable` 文字。新增 `task-settings-191.pet-combat-hud` verified 真值，10 个序列化对象/10 状态、可见态 8 对象、`unresolved=[]`。M-016 的入口事实保持；M-042/M-049/M-052 等待 192A 正式冷启动旅程和 192B character 662 投影，不因本证据 task 提升复现状态。
+
+2026-08-17 `TASK-SLICE-192A` 正式旅程门禁：当前 schema 双人冷启动槽经地图覆盖 `TestScene/Stage12Scene/Stage13Scene/Stage21Scene/Stage22Scene`，每个 Runtime 的 P1/P2 宠物入口均回归 932 页、分页/selected、出战/休息、放生确认、关闭重开与重载。`feature-ui-failed` 统一报告 bundle/page-assets/render 阶段、page、owner、origin 和 message，替代静默失败。940×590 非 QA P1/P2、skill hover、返回/重载为零 console；M-016 的正式入口交付闭合，M-042/M-052 仍等待 192B character 662 与后续动画范围。
+
+2026-08-17 `TASK-SLICE-192B` character 662 投影：共享 HUD snapshot 直接读取当前活动存档 P1/P2 `PetRoster`，并在既有 `FormalPetsUpdatedEvent` 上替换同一 roster 引用；没有第二宠物数值/runtime owner。605 shell、610/614 各 25 帧、同源头像和三字段按 `task-settings-191.pet-combat-hud` 投影，P2 镜像与字段反转、满值/半值/0 HP、休息移除和再次出战重建均通过；原版 662 无技能 child，故不添加现代技能层。M-049 的宠物战斗 HUD 子范围已复现，M-042/M-052 与 VS-067 因宠物本体/技能真动画仍保持部分状态并转入 193。
+
+2026-08-21 character 657 真值与宠物类调度纠正：PG-017 的用户运行反证已使上段“同源头像已复现”降级。旧 191 把 42 帧动态头像选择器的联合 bounds 当作具体头像，192B 又用身体 atlas 代替实际帧内 child；605/610/614、条和文本静态范围暂不受此反证波及。用户要求在 193E 前先修真值/UI、再建宠物基类，故新增 `TASK-SETTINGS-201 -> TASK-SLICE-202 -> TASK-ARCH-203`：201 按 35 个中文名 fixture 递归 character 657 目标帧，202 让正式 HUD 直接消费新真值，203 按已冻结设计只建立 `PetCombatRuntime/PetBehavior/Registry/Targeting` P1。M-042/M-049/M-052 与 VS-067 均保持部分复现，完成 203 后才恢复 193E。
+
+2026-08-24 `TASK-SETTINGS-201` character 657 细粒度真值：`task-settings-201.pet-combat-hud-head` 由 35 项 corpus + AS3 中文名映射独立声明 expected，以恢复 `pet1.swf` 的 42 帧 XML 时间线提取 actual，并逐 fixture 用 SVG child/matrix/size 与 PNG alpha/baseline 交叉确认；生成 70 个 P1/P2 可见投影、4 个无出战/休息负状态，`unresolved=[]`。灵猴为 frame 5 / character 619 / `46.75×40`，旧 191 的 `104.8×93.6` 仅是 657 联合画布；191 的动态 head 对象已机器标记由 201 取代，605/610/614 与文本保留。M-035/M-042/M-049/M-052 仍不提升复现状态，等待 202 正式消费。
+
+2026-08-24 `TASK-SLICE-202` 正式消费：`PetCombatHudHeadAssets` 直接导入并断言 201 verified manifest，按目标 frame、终端 child、child matrix、registration 与 visible bounds 生成 35 个投影；33 个唯一 child 由 `pet-combat-hud-heads` 专属 bundle 加载。`Stage1PetCombatHudView` 删除宠物页/身体头像引用、`104.8×93.6` 拉伸和硬编码头像偏移，191 壳体/条/文本与既有 roster owner 保持。关键字段变异、P1/P2、五关旅程、九物种零像素差、全系统/build 与 940×590 双人零 console 通过；M-049 的宠物战斗 HUD 头像子范围重新闭合，M-042/M-052 与 VS-067 仍因公共类和其余动画范围保持部分复现。
+
+2026-08-24 `TASK-ARCH-203` 宠物战斗公共类 P1：新增无 Phaser 依赖的 `PetCombatRuntime` Context、`PetBehavior` Strategy、唯一 `PetBehaviorRegistry` 与纯 `PetCombatTargeting`；Runtime 固定同步出战宠物、既有跟随/warp、存活目标快照、Behavior 动作/持续效果、只读事件/快照和幂等销毁顺序。专项合同覆盖换宠、死亡、重复/缺失注册、目标选择、错误输入与 destroy；`pet P1`=0，`PetSystem.ts` 未新增逻辑。M-032/M-034/M-042 与 VS-067 仍保持原复现状态，因为 P2-P4 消费者迁移和其余七族真动画不在本批范围。
+
+2026-08-25 宠物公共类优先级纠正：用户明确 203 的 P1 骨架不足以作为完整宠物基类，故在任何后续宠物逆向前插入 Split 父任务 204 与连续 204A..F，依次完成九物种真实 Behavior、35 形态 Registry、TestScene P1/P2、正式五关/功能页同步和旧入口清零，以 `pet all=0` 作为完整公共类唯一完成证据。193E 暂回 Planned；193E/G/I/K/M/O/Q 全部强制使用 `$pet-family-reverse` 和 `MO-001` 完成单族逆向。
+
+2026-08-25 `TASK-ARCH-204A` 宠物公共类 P1B：`PetCombatRuntime` 统一推进跟随/warp、存活目标、全 roster 技能 cooldown、单帧 Behavior 动作和 `castSkill` 执行能力口；Monkey/Horse Behavior 按原 TestScene 顺序调用既有 11 个请求函数，默认 Registry 覆盖两族 8 形态，不复制数值、Projectile 或技能算法。`pet P1/P1B=0`，M-032/M-034/M-042 与 VS-067 仍保持部分复现，等待 204B..F 闭合其余 Behavior、消费者和旧入口。
+
+2026-08-25 `TASK-ARCH-206` 设计校正：205 证据已使 204A 的 `pet P1/P1B=0` 降级为旧合同结果。唯一现代设计现要求 ordered-first/1200 sticky 目标、动作选择后仅活动实例 CD、`alive -> dead-playing -> destroy`、完整受击/移动/普攻/动画命中/私有清理钩子；当前新 P1/P1B 均为 1，M-032/M-034/M-042 与 VS-067 状态不提升，等待 204B..G。
+
+2026-08-25 `TASK-ARCH-204B` 公共结构校正已完成：`PetCombatRuntime` 采用 ordered-first/1200 sticky 目标，动作与效果之后只推进活动宠物 CD，并以 `runtimeKey + actionToken` 拒绝旧 damage/animation event；HP0 进入 `dead-playing`，仅匹配 `dead-complete` 释放。Monkey/Horse 8 形态结构钩子使 `pet P1/P1B=0`，但该 gate 不证明正式消费者、自主攻击、动画命中或伤害闭环；M-042 与 VS-067 仍为部分复现。
+
+2026-08-25 用户正式运行反证：现代 `PetCombatRuntime` 尚无 Scene/正式消费者，Monkey/Horse `basicAttack` 只发事件，没有真动画、命中和伤害链。后续改为 `TASK-SETTINGS-207 -> TASK-SLICE-208` 先完整闭合 monkey1..4，再从完整案例沉淀并以第二家族验证 `$pet-family-reverse`；旧 204C..G/193E..R 不再执行。
+
+2026-08-26 `TASK-SETTINGS-207` 补齐 M-032/M-034/M-035/M-042 的猴系原版交叉证据：`task-settings-207.pet-monkey-family` 将 BasePet 更新/索敌/CD、monkey1..4 全技能和伤害公式、BaseBullet 命中、193A 的 626 状态视觉、StageCommon 三套碰撞、owner/load precedence、死亡销毁与 P1/P2 生命周期冻结为 41 项 P1R 同集合同，`unresolved=[]`。现代状态仍为部分复现；`PetCombatRuntime` 无正式消费者、basicAttack 无命中伤害、monkey4 受击 lj 与 jgaoyi 五段链缺失均由 208 关闭。
+
+2026-08-26 `TASK-SLICE-208` 完成 M-032/M-034/M-035/M-042 的首个完整家族运行样本：P1/P2 公共桥各自拥有 `PetCombatRuntime`，monkey1..4 真普通攻击与全部技能按 verified hit frame 进入 Stage1 伤害/attack-id dedup，真动画、受击 lj、jgaoyi 五段链、死亡完成、换宠/休息/重试/返回均同源；`pet P1R=0`。这只提升猴系正式复现，不外推其余家族。
+
+2026-08-26 后续用户反证覆盖上一行的现行完成结论：猴系在形态 `attackRange` 外原地播放攻击效果，不追击且不命中。207 manifest/BasePet 证据仍有效，缺口在现代 Runtime 未按目标距离追击、普攻无范围门，以及专项/P1R 未将字段映射成独立运行语义。M-032/M-034/M-035/M-042 的猴系状态恢复为部分复现，P1R=1；PG-017 V2 和猴系整改完成前不执行 209。
+
+2026-08-27 PG-017 V2 已把 207 的 41 项合同映射为字段→场景→黑盒 trace→assertion，新增四形态 × P1/P2 范围链及 `attackRange`、命中帧、source owner mutation-kill。旧专项仍为绿时，真实 verifier/P1R 已稳定报出 `EARLY_ATTACK/NO_CHASE/NO_IN_RANGE` 并返回 1，证明门禁不再自证；唯一 Ready `TASK-SLICE-208A` 负责玩法整改，机制复现状态仍保持部分复现。
+
+2026-08-25 `BasePet` 逆向前置纠正：用户指出原版宠物公共类应先审计 AS3 属性、继承、生命周期和具体类覆写，再据此裁决现代设计。现有 `pets-index.md` 已记录创建链、基础行为和技能事实，但没有完整继承树、字段/owner、公共方法/覆写矩阵与“原版职责→现代 owner”证据链。新增代码逆向 `TASK-SETTINGS-205` 为唯一 Ready；204B 暂回 Planned，205 后先生成现代宠物系统设计调整/确认 task，不得把 Monkey/Horse 已实现状态外推成原版分类事实。M-042 与 VS-067 状态不提升。
+
+2026-08-25 `TASK-SETTINGS-205` 原版 `BasePet` 专项已闭合：`pet-base-class.md` 以 `[172845]` 可读主类和 `[25034429]` 混淆副本的 35/35 继承/override/function 结构一致性为双源，确认 33 个具体类直继承 `BasePet`、仅 `PetMouse2/3 -> PetMouse1`；冻结 `PetInfo` 数据 owner、`BaseHero` 活动实体 owner、BasePet 字段/活动实例时钟、ordered-first/1200 索敌、技能 1→4、AI 先于 CD 递减、hurt/dead/frame-over/destroy 及 P1/P2/联机回放合同。猴/马 warp、hurt/dead 与 193A/193C verified 真值一致，其余七族视觉细节不外推。现代审计判定 nearest、全 roster CD、HP 归零立即卸载与证据冲突，Behavior 也缺受击/移动/动画命中/私有清理接缝；M-042/VS-067 状态仍不提升，唯一 Ready 切到 `TASK-ARCH-206` 先修订/确认唯一宠物设计和 gate。
+
+2026-08-17 `TASK-SETTINGS-193` 宠物动画 corpus：恢复 `pet1/20120203/20120808/mouse/StageCommon.swf` 精确 SymbolClass 扫描将当前 9 物种、35 实际形态、9 本体族与 38 技能视觉映射全部定位，`unlocated=[]`。重复符号按 `Aloader` 补丁顺序冻结候选 owner，并要求分族证据 task 用 ApplicationDomain/load precedence 反证；现代 `TestScenePetViewBridge` 几何本体、projectile fallback 和字符串 key 均仍是占位或未渲染。193A..193R 已按九物种串行插入 194 前，故 M-035/M-042 与 VS-067 仍保持部分复现，不因 corpus 定位提前提升。
+
+2026-08-18 `TASK-SETTINGS-193A` 猴系逐帧真值：`task-settings-193a.pet-monkey-animation` 以 626 状态、20 显示对象与 626 个 SWF-derived 基准冻结 monkey1..4 本体行/持帧、普攻、xj/lj/lyq/jgaoyi、hurt/dead、左右注册点/alpha 边界、生成矩阵、20/24/30 host clock 和销毁合同，`unresolved=[]`。真实加载时序确认 `PetMonkeyBmd1..3` 与九对象选择 `20120203.swf` 补丁 owner，`Bmd4` 选择 `pet1.swf`；monkey2/3 两段对象、`PetMonkey2Bullet3` 错名和 jgaoyi 本体 hit5 差异已转交 193B。M-034/M-035/M-042 与 VS-067 仍保持部分复现，直到现代正式 Runtime 消费真值。
+
+2026-08-18 `TASK-SLICE-193B` 猴系真动画接入：四本体 atlas 与九个唯一对象序列由 `combat-common` 唯一加载，Stage 1-1 和其余四关共享同一真值消费者；逐行动作 clock/持帧/注册点、lj 双段、xj 复用与 4 秒生命周期、jgaoyi 本体 hit5 均直接派生自 193A。P1/P2 roster、跟随/远距传送、伤害/冷却、AI 和存档 owner 未改。M-034/M-035/M-042 与 VS-067 仍为部分复现，等待其余八族 193C..193R 和 194 校准。
+
+2026-08-18 `TASK-SETTINGS-193C` 马系逐帧真值：`task-settings-193c.pet-horse-animation` 以 716 状态、20 显示对象与 716 个 SWF-derived 基准冻结 horse1..4 本体行/持帧、普攻、sp/bd/bz/tmaoyi、共享冰效、hurt/dead、左右注册点/边界、host clock 和销毁合同，`unresolved=[]`。加载时序确认 1..3 阶本体/普通对象选 `20120203.swf`，4 阶本体/奥义选 `pet1.swf`，共享冰效选 `StageCommon.swf`；奥义根 1 帧下的 8 帧内嵌时间轴已单独冻结。M-034/M-035/M-042 与 VS-067 仍为部分复现，等待 193D 的正式 Runtime 消费。
+
+2026-08-18 `TASK-SLICE-193D` 马系真动画接入：四本体 atlas 与 185 帧普攻/sp/bd/bz/tmaoyi/共享冰效对象由 `combat-common` 唯一加载，Stage 1-1 与其余四关共享同一真值消费者；逐行动作 clock/持帧/注册点、tmaoyi 本体 row8/8 subframes/30 帧爆炸和 60×80 冰效均直接派生自 193C。P1/P2 roster、跟随/远距传送、伤害/冷却、AI 和存档 owner 未改。M-034/M-035/M-042 与 VS-067 仍为部分复现，等待其余七族 193E..193R 和 194 校准。
+
+2026-07-25 地图四服务页检查点：`MapMenu/GMain` 与 restored SWF 交叉确认丹药 990（`OtherMat1`）、商城 721 和任务 85（`backpack1`）、设置 148（`StageCommon`）。商城在该单机版本以玩家灵魂结算；购买成功只刷新运行态和 `MemoryClass.mystorage` 内存快照，必须返回地图手动存档才写文件，不得因旧充值/点券静态文字伪造在线服务；设置字段原版为会话态，不在 `User.getSaveObj`。四页深证据按 `TASK-SETTINGS-066A..D` 继续，详见 `map-service-ui-index.md`，当前不提升 `M-044/M-046/M-052` 状态。
+
+2026-07-25 丹药页深证据：`TASK-SETTINGS-066A` 已闭合 character 990/969/1006、四按钮、五职业选择器、25 格顺序解锁、五类五阶加成、五配方、灵魂/材料/容量拒绝、原版刷新瑕疵、P1/P2 owner 和显式保存边界，详见 `immortality-ui-index.md`。这只清零 `TASK-SLICE-155A` 输入未知，不提前提升 `M-044/M-052` 或 `VS-059`。
+
+2026-07-25 丹药页实现：`TASK-SLICE-155A` 已直接消费上述六段矩阵和统一背包事务，接入 character 990/969/1006、五 owner、25 格、五类五阶服用/炼制、拒绝态、P1/P2 隔离与 V6 标志迁移；专项和 940×590 逐状态证据通过。该结论只闭合丹药切片，`M-044/M-052` 仍为部分复现，`VS-059` 仍待商城/设置/任务三页。
+
+2026-07-25 商城页深证据：`TASK-SETTINGS-066B` 已闭合 character 721/717/624、16 个按钮四状态、49 商品与权威价格、第三大关折扣例外、分页/数量/拒绝态、P1/P2 owner、离线灵魂事务和手动保存边界，详见 `shop-ui-index.md`。其中 `setStorage()` 只重建内存快照，实际文件写入由地图手动 `saveGame()` 完成；这只清零 `TASK-SLICE-155B` 输入未知，不提前提升 `M-044/M-046/M-052` 或 `VS-059`。
+
+2026-07-25 商城页实现：`TASK-SLICE-155B` 已直接消费上述六段矩阵，接入 character 721/717/624、16 组原按钮三态、49 商品真图标与权威顺序/价格；分类、分页、0/99/100 数量、确认/取消、第三大关八折及 `zylhys` 例外、统一背包容量、P1/P2 灵魂 owner 和 V6 重载通过专项与 940×590 逐状态证据。成功后即时保存当前活动槽是现代离线可靠性选择，原 Flash 仍记录为地图手动保存；未新增在线支付或后端事实。该结论只闭合商城切片，`M-044/M-046/M-052` 仍为部分复现，`VS-059` 仍待设置与任务两页。
+
+2026-07-25 设置页深证据：`TASK-SETTINGS-066C` 已闭合 character 148/134/136..147、关闭按钮四态、五行 white/yellow hover 与无独立 pressed、难度/声音/30-24-20 FPS 循环、全屏 overlay 生命周期、会话级全局 owner、原版非存档和默认音量死控件，详见 `settings-ui-index.md`。用户确认的跨应用重启范围只作为现代例外映射到独立全局 localStorage，不改 V6/player schema；这只清零 `TASK-SLICE-155C` 输入未知，不提前提升 `M-035/M-044/M-052` 或 `VS-059`。
+
+2026-07-25 设置页实现：`TASK-SLICE-155C` 已直接消费上述六段矩阵，接入 character 148 原面板、五个原标签/动态值命中区、144 关闭三态、全屏模态阻挡、四项循环与默认音量死控件；独立全局 localStorage codec 只实现用户批准的跨重启现代例外，损坏回默认且不触碰 V6/player schema。专项、全系统与 940×590 normal/hover/值循环/关闭重开/重载双重验证通过；`M-035/M-044/M-052` 仍为部分复现，`VS-059` 仍待任务页。
+
+2026-07-25 任务页深证据：`TASK-SETTINGS-066D` 已闭合 character 85 的双页签、五 tile、详情/进度、四奖励格、领取、分页、关闭与动态已领取图，列清 43 项日常和 4 项活动、生产者、随机奖励、共享 owner、同日恢复/跨日重置和显式保存边界，详见 `task-ui-index.md`。当前两个行为包都构造活动 101..104 却未 `push` 到 `actTask`，因此活动页实际为空；原版还保留空页陈旧详情可领取、尾页陈旧详情、多人 EXP 分发和非均匀随机等瑕疵。影响 `TASK-SLICE-155D` 的事实未知为零，但这不提前提升 `M-044/M-046/M-052` 或 `VS-059`。
+
+2026-07-26 任务页实现：`TASK-SLICE-155D` 已接入 character 85 原生显示列表、43 日常、4 个休眠活动定义、共享进度、正式怪物死亡 producer、非均匀奖励、双方 owner 与当前槽跨日 V6；活动页保持空 `1/1`，P2 经验串号按各自 owner 修正并显式记录为现代差异。专项、全系统、build、资源标注和 940×590 逐状态零 console 通过，`VS-059` 提升为已完成；`M-044/M-046/M-052` 因更广范围仍保持原状态。
+
+M-042 当前补充：`TASK-SETTINGS-031` 已补清玄龟 `turtle1..4` 的 `sld/txlj/sybh/xwaoyi` 专属技能链，事实已足够进入实现。`TASK-SLICE-066` 已完成 `turtle1/sld`：P1 可切换出战 `turtle1`，按已学、MP、目标、距离 `50..200` 和约 6 秒 CD 门禁释放 `PetTurtle1Bullet2`，按 `pet.atk + skillDamageBonus` 接入 `sxkb` 暴击造成伤害，并按本次实际伤害治疗宠物自身。`TASK-SLICE-067` 已完成 `turtle2/txlj`：P1 可切换出战 `turtle2`，按已学、MP、目标和约 20 秒 CD 门禁添加链接状态；链接期间主人受伤时宠物承受 5% 转嫁伤害、主人承受 95% 伤害，主人治疗和宠物治疗按 `1.05` 倍联动，`sld` 自疗可同步给主人最小治疗反馈。`TASK-SLICE-068` 已完成 `turtle3/sybh`：P1 可切换出战 `turtle3`，按已学、MP、目标和约 5.5 秒 CD 门禁释放 `PetTurtle3Bullet3` 范围 projectile，按 `5.4 * pet.atk + skillDamageBonus` 接入 `sxkb` 暴击造成范围伤害。`TASK-SLICE-069` 已完成 `turtle4/xwaoyi`：P1 可切换出战 `turtle4`，按已学、MP `>= 30`、目标和约 18 秒 CD 门禁释放 5 秒玄武奥义，占位记录免蓝 `sld`、刷新 `txlj` 和持续 `sybh` 范围反馈。下一步推荐 `TASK-SLICE-070` 实现 UFO/卡布首段 `ufo1/pms` 魔破杀最小闭环。
+
+M-042 UFO/卡布补充：`TASK-SETTINGS-032` 已补清 `ufo1..3` / `PetKabu1..3` 的 `pms/ss/kmsk` 专属技能链。`TASK-SLICE-070` 已完成 `ufo1/pms` 首段：P1 可切换出战 `ufo1`，已学 `pms`，消耗 20 MP，约 2 秒 CD，生成 `PetKabu1Bullet2` / `hit2` 占位 projectile，并按 `3.6 * pet.atk + skillDamageBonus` 接入 `sxkb` 暴击造成伤害；`ss` 消耗 20 MP，约 4 秒 CD，瞬移到随机目标背后并接普攻，直接技能伤害为 0；`kmsk` 消耗 20 MP，约 5 秒 CD，先上升再生成 `PetKabu3Bullet4` / `hit4`，按 `6 * atk` 派生伤害。下一步 `TASK-SLICE-071` 实现 `ufo2/ss` 瞬闪最小闭环。
+
+M-042 完成度整改补充：`TASK-SLICE-078` 已补齐涅槃持续减伤与结束回血、朱雀奥义灼烧、月光概率入口、疾风攻速/闪避、月神奥义持续治疗、三枚回旋飞镖、白虎/紫鼠分段奥义，并由 `PetSkillPrioritySystem.ts` 统一虎/凤凰/兔/鼠的 `skill1 -> skill4` 调度顺序。`VS-036` 专属技能链恢复已完成；M-042 仍保持“部分复现”，剩余范围是 P2/联机、任务奖励经验、完整存档和真实资源。
+
+M-042 成长洗练补充：`TASK-SETTINGS-034` 已补清 `cwzzxld` 三属性独立随机洗练、`wphtd` 还童至 1 级/一阶/品质 1 并按物种重建资质与基础属性、`nianjhd` 绕过等级门禁的三阶到四阶进化及奥义槽位边界。`nianqld` 只存在 `potential + 100` 动态调用，当前 `PetInfo` 和 26 字段存档均无该字段/方法，故登记为悬空入口，不猜造数值公式；对应现代闭环已由 `TASK-SLICE-079` 完成。
+
+M-042 成长洗练实现补充：`TASK-SLICE-079` 已新增 `PetGrowthSystem.ts`，复现 `cwzzxld` 独立随机链、`wphtd` 全已知物种还童数值、`nianjhd` 形态/技能槽/基础被动重算和空耗边界，并接入背包、面板、运行时重建及独立系统测试；`nianqld` 因原版证据缺失而明确拒绝且不消耗。后续 `TASK-SETTINGS-035` 已补清 P2 宠物所有权、输入、经验、道具、捕捉与存档边界。
+
+M-016 P2 宠物输入补充：`TASK-SETTINGS-035` 已确认原版 P1 `B` 打开宠物面板，P2 小键盘 `-` 打开 P2 宠物面板，小键盘 `*` 才是 P2 心法面板；现代 `TestSceneSetup.ts` 当前把小键盘 `-` 分给 P2 心法，且宠物面板使用方向键选择，会与 P2 移动输入冲突。后续切片必须修正键位，并采用指针 UI 或不抢占战斗键的等价交互。
+
+M-042 P2 所有权补充：`TASK-SETTINGS-035` 已确认 `player1` / `player2` 各自创建 `User` 和 `petsAry`，两位英雄分别通过自己的 `findCurrentPet()` 创建 `BasePet`，双宠可同时存在；P2 面板、背包宠物道具和宣花葫芦捕捉均沿 player/hero owner 路由到 P2。普通怪物经验依据怪物当前攻击目标分配，任务奖励的第二玩家分支却误查 `player1.findCurrentPet()`，属于原版已知 bug，现代任务系统接入时应按玩家修正而非复刻串号。下一步 `TASK-SLICE-080` 只先建立 P2 独立 roster、面板和跟随实体。
+
+M-044 P2 宠物存档补充：原版顶层分别保存 `player1_obj` / `player2_obj`，每个 `User` 各自持有 `petSave`；读取先恢复两个 User，再创建英雄和出战宠物。原版宠物数组写入与读取方向相反，会在每次读取时反转列表，现代实现不复刻该 UI 顺序 bug。当前现代 V1 schema 仍只有 P1；后续 P2 存档应升级版本，V1 迁移为空 P2 roster，并分别保存两位玩家列表和单只出战约束，排除冷却与临时状态。
+
+M-016/M-042 P2 所有权实现补充：`TASK-SLICE-080` 已新增 `PetOwnershipSystem.ts`，建立对象与宠物 ID 隔离的 P1/P2 roster 和唯一 `PetPanelSession.owner`；P1 `B`、P2 小键盘 `-` 打开各自面板，P2 心法键修正为小键盘 `*`，面板使用指针按钮而不占用方向键。`TestSceneP2PetBridge.ts` 已让 P2 宠物独立跟随 P2、远距传送和休息销毁，双宠可同时存在。下一步 `TASK-SLICE-081` 接入 P2 宠物战斗和普通击杀经验归属。
+
+M-032/M-040/M-042 P2 战斗实现补充：`TASK-SLICE-081` 已让 P1/P2 通过同一显式 owner 宠物调度入口运行全部既有自动 Buff、受击触发和主动技能；P2 projectile 使用带 `p2-` 前缀的宠物 ID，冷却、主人属性、承伤转嫁和伤害来源互不串号。Monster30 普攻、projectile、反击与持续伤害死亡按当前 `targetSlot` 一次性领取经验：目标英雄有宠物为 60%/60%，无宠物为 100%/0，并保留宠物目标 100% 的显式接口。下一步 `TASK-SLICE-082` 接入 P2 道具和捕捉所有权。
+
+M-016/M-037/M-042/M-043 P2 道具与捕捉实现补充：`TASK-SLICE-082` 已建立 P1/P2 独立 inventory、法宝 loadout、强化/捕捉灵魂和 UI owner；P2 小键盘 `/` 打开自己的背包，八类宠物道具只查询并修改 P2 roster，P2 小键盘 `7` 通过共享 owner 适配器触发自己的宣花葫芦。捕捉成功/失败/灵魂不足/满栏与 P1 完全隔离。下一步 `TASK-SLICE-083` 完成双玩家宠物存档 V2 与 V1 迁移。
+
+M-042/M-044 双玩家宠物存档补充：`TASK-SLICE-083` 已将现代存档升级为 V2，分别保存并恢复 P1/P2 宠物列表、选择位置和单只出战状态，V1 自动保留 P1 并迁移为空 P2；冷却、临时 Buff 和场景运行时不持久化。至此宠物领域自身的双玩家面板、跟随、战斗、经验、全已逆向技能链、成长道具、捕捉和存档闭环均已完成；M-042 表格仍保留“部分复现”，只表示任务奖励、商城活动、真实资源和网络等外部/全局集成尚未完成，不再阻塞宠物系统交付。下一块大任务已转向五角色完整战斗扩展，当前执行 `TASK-SLICE-084`。
+
+M-035/M-042/M-052 宠物页真值补充：`TASK-SETTINGS-175A` 已从恢复源 `pet1.swf` character 932
+生成 `task-settings-175a.pet-page` verified manifest，闭合 74 对象、16 状态、按钮三态/命中、
+动态列表/头像/8 技能/tooltip/放生确认、P1/P2 与关闭，`unresolved=[]`。这只解除宠物单页实现的
+证据阻塞已解除；`TASK-SLICE-180` 已让 `FormalPetPageView` 直接消费 74 对象/16 状态真值，接入原 932 显示列表、恢复源动态头像/技能、按钮/tooltip/放生确认并删除现代覆盖，owner/存档/逐状态视觉与零 console 回归通过。该结论只闭合宠物单页，M-035/M-042/M-052 因更广范围保持原状态。
+
+M-035/M-052/VS-059 丹药页真值补充：`TASK-SETTINGS-175E` 已从恢复源 `OtherMat1.swf`
+character 990/969/1006 生成 `task-settings-175e.immortality-page` verified manifest，闭合 132 对象、
+26 状态、25 格嵌套显示列表、五职业 selector、服用/炼制按钮、动态已服用图、拒绝/成功、P1/P2
+与返回，`unresolved=[]`。这只解除丹药单页的证据债务；现代直接消费和逐状态差异仍待后续实现，
+M-035/M-052 与 VS-059 状态不提前提升。
+
+M-046/M-052/VS-059 商城页真值补充：`TASK-SETTINGS-175F` 已从恢复源 `backpack1.swf`
+character 721/717/624 生成 `task-settings-175f.shop-page` verified manifest，闭合 132 对象、31 状态、
+27 个根 child、九卡嵌套显示列表、动态商品图标、16 组按钮、分类/分页/数量、确认/取消/拒绝/成功、
+P1/P2 与返回，`unresolved=[]`。`TASK-SLICE-184` 已让 `FormalShopPageTruth/ShopScene` 直接消费
+132 对象/31 状态，删除页面第二套手写坐标并闭合业务、owner、当前存档、940×590 差异与零 console；
+M-046 因更广支付/活动范围保持暂缓，M-052/VS-059 因设置、任务和建档等剩余页面不提前提升。
+
+M-035/M-052/VS-059 设置页真值补充：`TASK-SETTINGS-175G` 已从恢复源 `StageCommon.swf`
+character 148 生成 `task-settings-175g.settings-page` verified manifest，闭合 19 对象、23 状态、
+12 个根 child、134/133 全舞台 overlay、五组 146/145、144 四态、四项全循环、默认音量死控件、
+关闭/重开与原版非存档边界，`unresolved=[]`。`TASK-SLICE-185` 已让
+`FormalSettingsPageTruth/FormalSettingsOverlay` 直接消费 19 对象/23 状态，删除五行坐标、命中、
+字体与关闭锚点的手写视觉真值，并闭合全局 owner、独立跨重启现代例外、940×590 差异与零 console；
+M-035/M-052 与 VS-059 因更广页面范围保持原状态。
+
+M-044/M-046/M-052/VS-059 任务页真值补充：`TASK-SETTINGS-175H` 已从恢复源 `backpack1.swf`
+character 85 生成 `task-settings-175h.task-page` verified manifest，闭合 45 对象、28 状态、21 个根
+child、五个任务行、四个奖励格、三组按钮、动态已领取/0..4 奖励、daily/activity、末页/空活动
+残留、P1/P2 与关闭/重开，`unresolved=[]`。`TASK-SLICE-186` 已让 `FormalTaskPageTruth/TaskScene`
+直接消费 45 对象/28 状态，删除行/奖励/文字/按钮的手写视觉真值，并以 `root-static.svg` 消除整帧
+动态 child 回填；43 定义、0..4 奖励、末页/空活动、P1/P2 经验 owner、即时保存/重载、940×590
+运行与零 console 已关闭。M-044/M-046/M-052 与 VS-059 因丹药及更广任务/活动范围保持原状态。
+
+M-035/M-043/M-052 法宝页真值补充：`TASK-SETTINGS-175B` 已从恢复源 `backpack1.swf`
+character 596 生成 `task-settings-175b.magic-weapon-page` verified manifest，闭合 17 个根 child、
+character 200/34 动态确认、28 对象、21 状态、按钮三态/命中、九字段、灵魂条、升级/拒绝/取消、
+重置、P2 无入口与关闭，`unresolved=[]`。`TASK-SLICE-181` 已让正式 view 直接消费该 manifest，
+删除现代覆盖并通过 owner/存档/940×590 回归；M-043 保持“部分复现”仅因外部战斗资源范围。
+
+M-016/M-035/M-052 功能宿主真值补充：`TASK-SETTINGS-175C` 已从恢复源
+`OtherMat1.swf` character 574/371/444 生成 `task-settings-175c.stage-feature-host` verified
+manifest，闭合 25 对象、42 状态、P1/P2 五按钮四态、非对称门禁、设置/帮助与单页返回，
+`unresolved=[]`。原版无地图态共享 chrome；当前暗层、标题、跨页/workshop/通用关闭已冻结为未批准差异，
+后续由 `TASK-SLICE-182`。M-016 的原入口行为结论保持；M-035/M-052 因实现债务仍不提升。
+
+M-041/M-052 技能页真值补充：`TASK-SETTINGS-175D` 已从恢复源 `OtherMat1.swf`
+character 250/868/417/213、212 与 865 生成 `task-settings-175d.skill-pages` verified manifest，
+闭合 250 对象、32 状态、五角色 selector、七类按钮、角色 selected、十树/50 图标三态、绑定 P1/P2、
+被动动态字段和返回，`unresolved=[]`。`TASK-SLICE-183` 已让正式 view 直接消费该 manifest，
+删除手写视觉真值、现代 owner 文字和第二坐标表，并完成主动/被动/P1-P2 绑定/拖放/返回的
+940×590 与零 console 回归。M-041 的业务与页面闭环已完成；M-052 因更广功能 UI 范围保持原状态。
+
+## 第一批复现门槛
+
+第一批纵向切片开始前，最低门槛如下：
+
+| 切片 | 需要机制 | 当前状态 | 处理 |
+| --- | --- | --- | --- |
+| VS-001 双玩家输入验证 | M-008 基础键位、M-009 方向键归属 | 已扒且已复现 | 已完成 |
+| VS-002 第一个角色动作索引 | M-017 角色列表、M-023 普攻、M-024 组合键、M-025 技能槽/效果 | 角色列表、组合键、普攻和技能分发已扒；推荐 Role2 | 已完成 |
+| VS-003 第一个角色移动切片 | VS-001、VS-002、M-011、M-012、M-013 | 已完成：`HeroMovementSystem.ts` 与 `TestScene.ts` 支持走、跑、双跳和 `ThroughWall` 下穿 | 已完成 |
+| VS-004 五角色普攻与特效切片 | VS-003、M-023、M-047、M-035 | 已复现：163/164已闭合固定world effect与Role5移动projectile，五角色J分类和伤害空间无缺口 | 真视觉、释放点/轨迹、命中与P1/P2专项共同承载结论 |
+| VS-005 第一个怪物受击死亡 | M-030 怪物系统、M-031 第一个怪物 | 已完成：`Monster30` 等价怪物可追踪、受击、死亡并移除 | 已接入 `VS-006` 首批互伤闭环 |
+| VS-006 基础伤害闭环 | VS-004、VS-005、M-032、M-033 | 已完成：`DamageEvent`、命中去重、玩家 HP/受击/死亡、`Monster30 hit1` 对玩家造成 `power = 15` 物理伤害 | 已支撑后续 `VS-008` 的技能 projectile 伤害结算 |
+| VS-007 第一个关卡闭环 | M-014 通关交互、M-027 地图标记、M-028 第一个关卡 | 已完成：`Monster3System.ts` 实现 boss 行为、`LevelSystem.ts` 实现 arena/传送门/通关、`TestScene.ts` 接入 boss 区完整闭环 | 下一步扩展完整纵向爬升（云层、周期刷怪、停点）或转向 TASK-SLICE-010 技能 UI |
+| VS-008 一个技能/子弹 | M-025 角色技能效果、M-034 子弹/技能飞行物、M-015 技能槽输入、M-041 技能学习/绑定 | 已完成首个技能 projectile 扩展：`Role2.sgq -> hit5` 固定特效、`Role2.smb -> hit4_1` 移动弹体和 `hit4_2` 二段占位特效均可用 `DamageEvent` 命中 `Monster30`；正式槽位、MP 门禁和 `smb` 二段重入已接入测试场景 | 下一步 `TASK-SETTINGS-011`：细扒完整技能 UI、学习/拖拽绑定和存档字段，或转向 `VS-007` 关卡闭环前置资源 |
+
+## 更新规则
+
+逆向任务完成后：
+
+- 更新 `逆向状态`。
+- 补充 AS3 证据文件和逆向文档链接。
+- 如果已足够支持实现，把下一步指向对应 `VS-*` 或 `TASK-ARCH-*`。
+
+实现任务完成后：
+
+- 更新 `复现状态`。
+- 补充现代产物文件。
+- 同步更新 `docs/tasks/vertical-slices.md`。
+
+2026-08-27 `TASK-SLICE-208A` 补充：`M-032/M-034/M-035/M-042/M-044` 的猴系范围链已由独立黑盒 verifier 重验。生产 Runtime 直接消费 207 冻结的 `attackRange=40/70/150/150`，范围外追击 sticky target、入围后普通攻击；projectile 保留 target/action token，在 verified hit frame 由正式伤害入口形成 pet-source HP decrease 与 cleanup。四形态 × P1/P2、TestScene/正式五关共享消费者、换宠/休息/返回生命周期由 P1R/家族/旅程回归覆盖；不修改存档 schema、视觉资源或其他家族，故这些机制的全局状态不额外提升。
+
+2026-08-28 `TASK-SETTINGS-209` 补充：`M-032/M-034/M-035/M-042/M-044` 的马系原版事实已由 `task-settings-209.pet-horse-family` 冻结为 43 项同集合同。horse1..4 普攻范围 `40/70/150/150`、双随机追击、全部继承 `sp/bd/bz/tmaoyi`、受击 bd、共享冰效、奥义逐怪 tracking/ice/explosion 组合、body emit tick、BaseBullet collision/dedup/damage、三包 owner 与 P1/P2 生命周期均有字段级 acceptance；193C 的 716 状态/20 对象/716 基准被复核引用，`unresolved=[]`。这只提升马系逆向证据完成度，现代复现仍为部分复现，等待 `TASK-SLICE-210 / pet P1H`。
+
+2026-08-31 `TASK-SLICE-210` 补充：`M-032/M-034/M-035/M-042/M-044` 的马系现代链已直接消费 209 的 43 项合同。horse1..4 × P1/P2 从范围外追击到双随机普攻，全部继承 `sp/bd/bz`、受击 bd、共享冰效及 `tmaoyi` tracking/ice/explosion 组合均生成真实 projectile；verified attack id/source 经 Stage1 共享结算形成实际 HP decrease 与 cleanup。独立字段覆盖、八条范围 trace、range/hit/source mutation-kill、`pet P1H=0`、五关旅程与 940×590 双人正式 Stage 1-2 通过。全局机制仍为部分复现，因为其余七宠物家族及 211/212 伤害数字/连击反馈尚未闭合。
+
+2026-08-31 `TASK-SLICE-210A` 补充：用户反证恢复了原版 `BaseBullet.checkAttack()` 的怪物来源二段目标链——玩家候选命中检查后，只要攻击仍可命中，还会检查该玩家的出战 `BasePet`。现代正式五关共享桥现以宠物 Runtime 坐标、宠物物防、active attack 范围和共享 attack-id registry 生成 typed pet damage，P1/P2 `PetCombatRuntime` 消费后形成 HP decrease 与既有真 hurt/dead 动画输入；范围外、死亡宠物与重复 attack id 均不产生命中。怪物主动 AI 仍以玩家为追击目标，未无证据改为追宠；伤害数字/连击仍由 211/212 闭合。
+
+2026-09-02 `TASK-SETTINGS-211` 补充：`M-032/M-035/M-049/M-053` 的怪物目标命中反馈已由 `task-settings-211.combat-hit-feedback` 冻结。恢复 `OtherMat1.swf` 证明 `hurtnum0..9` 30×30、`bnum0..9` 42×42、20px 伤害位距、character 299/298 Batter 背景和 `num0..9` 五帧 scale/blur pulse；AS3 链证明目标锚点、4×→1×弹出、延迟上浮淡出、队列五项扇出、直接命中连击、effect 不增连击反证、2 起显、40 host tick 相邻快照无增长清零和 `GameWin` 最高值。23 个 940×590 状态基准、Schema 与可重复生成通过，`unresolved=[]`；现代复现仍为部分复现，唯一 Ready `TASK-SLICE-212` 负责实际 HP decrease 到数字/连击/结果页的共享消费。
+
+2026-09-02 `TASK-SLICE-212` 补充：`M-032/M-035/M-049/M-053` 的成功怪物命中已统一产出 `CombatFeedbackEvent`。事件只接受与 clamped `DamageEvent.amount` 一致的真实 HP decrease，并保存稳定 id、source/owner、目标锚点与最终 critical；五关正式 Runtime 和 TestScene 共用原版伤害位图/连击 view，P1/P2 共享 30fps、40-host-tick 连击和结果页最高值，effect 数字不增连击。专项覆盖六项扇出、miss/0/dedup/dead、普通/暴击及 Role/pet/magic/effect；940×590 双人 Stage 1-2 source trace 达 22 连击且 console 为 0。M-053 现已复现，M-032 仍因其余七宠物家族未闭合而保持部分复现。
+
+2026-09-03 `M-054/VS-072` 新增：用户在 5173 正式双人战斗观察到角色/宠物 HP decrease 但没有头顶承伤数字；运行 trace 只含怪物 target。原版 `BaseHero.reduceHp()` 与 `BasePet.reduceHp()` 会在本地 owner/单机路径分别调用 `addHeroHurtMc()` / `addMonHurtMc()`，共同以 `pnum0..9`、20px 位距、`(x-20,y-60)` 锚点交给 `ANumber` 做 4×弹出和上浮淡出；恢复 `OtherMat1.swf` 的 SymbolClass 已确认十个 `pnum`。现代角色/宠物伤害只完成扣血与 hurt/dead，未生成 incoming feedback，故新增 215/216；在 verified 真值完成前只标记“已定位”，不把聊天核查越级写成已扒。
+
+2026-09-03 `TASK-SETTINGS-213` 补充：`M-032/M-034/M-035/M-042/M-044` 的青龙原版事实已由 `task-settings-213.pet-dragon-family` 冻结为 44 项同集合同。dragon1..4 统一 `attackRange=150`、0.8 双随机，四套本体动作/普攻、fs 真分身、sdcc、`1+2+2+2+2=9` 对象 ltwj、qlaoyi 12/24/36/48 tick 分身与 tick48 trigger/免费 sdcc→ltwj 链均有字段级 acceptance；30 MP 对 qlaoyi 只作门禁，原版不扣蓝。pet1/StageCommon 的 11 个显示对象、111 个 940×590 基准、碰撞/命中/治疗、owner 与 P1/P2 生命周期均 verified，`unresolved=[]`。这只提升青龙逆向证据完成度；现代仍为部分复现，等待 `TASK-SLICE-214 / pet P1G`。
+
+如果实现中发现机制没扒清楚：
+
+- 不硬写。
+- 把机制逆向状态退回 `部分已扒` 或 `未扒`。
+- 在 `下一步` 中写明需要新增的 `TASK-SETTINGS-*`。
+
+
+
+2026-09-05 青龙 214 规模预检拆分：`TASK-SLICE-214A`（Ready）准备 213 完整资源，`TASK-SLICE-214B`（Planned）承担全部正式行为与 P1G 验收；M-034/M-035/M-042 与 VS-067 复现状态保持不变，未新增实现或运行通过证据。
+
+2026-09-05 214A 消费预检反证：213 缺四本体完整非攻击动作机器时序，六个 qlaoyi trigger 基准使用 y+40 而 doHit5 实际 root y；原 truth 全套门禁仍为 0。当前接受结论降为 blocked，由唯一 Ready `TASK-SETTINGS-213A` 补证，214A Blocked、214B Planned；未生成现代资源或提高复现状态。详见 `docs/tasks/evidence/TASK-SLICE-214A/truth-hold.json`。
+
+2026-09-05 TASK-SETTINGS-213A 补证完成：同一213真值恢复verified，31本体动作/234逐cell状态与完整倒计时语义，345基准中原105保留、6个trigger根坐标修正。qlaoyi elapsed tick 1/13/25/37及首回调trigger/left-right-left-right替代旧误读。独立源/产物像素检查与15类变异通过；214A恢复唯一Ready，214B保持Planned，现代复现状态不提升。
+
+2026-09-05 TASK-SLICE-214A资源准备完成：153文件/11对象已由PetDragonAnimationAssets直接消费213修复真值，combat-common唯一加载；627host ticks与345状态零像素差、4类视觉变异通过。透明边缘裁切保留原注册点与可见像素，解码约61MiB。214B现为唯一Ready，负责全部正式战斗/P1G；本次不提高青龙战斗或VS-067完整复现状态，不计完整第三家族实施成功。
+
+2026-09-05 214C1公共接缝完成：每slot单顶层Runtime，主/私有实体复用EntitySession，数值/目标/CD/token/来源与清理隔离；父死亡事件路由、enter失败子树回滚、10类实现mutation、P1GS及猴马P1/P1B/P1R/P1H、正式五关/全系统/build通过。唯一Ready改为214C2；未实现青龙Behavior或正式分身伤害治疗，M-034/M-035/M-042与VS-067保持部分复现。交接见 `docs/tasks/evidence/TASK-SLICE-214C1/handoff.md`。
+
+2026-09-05 214C2 第二次 compact：C2 改为 Split，214C3 唯一 Ready（公共地面移动接入），214C4/214C5 Planned（真实战斗链、正式投影与 P1GC）。速度与可选时钟接缝已通过，地面求解器仅独立目标测试，未集成；恢复主包构造赋值链纠正青龙 attackRate 为 0.7。普攻/fs/伤害治疗/正式可见和原 C2/C 全合同继续保留，状态不提升。交接见 `docs/tasks/evidence/TASK-SLICE-214C2/handoff.md`。
+
+2026-09-05 214C3消费预检：现有环境只含平台顶面/hero bounds，缺侧墙、bottom与特殊墙状态；出生与warp、动画完成后同tick恢复也需源条件约束。214C3保持全部合同并设Blocked，同线TASK-SETTINGS-217成为唯一Ready，补齐五关wall空间真值后恢复C3；C4/C5保持Planned。无src/资源变更，不提高M-035/M-042或VS-067复现状态。证据见 docs/tasks/evidence/TASK-SLICE-214C3/preflight.md。
+
+2026-09-05 TASK-SETTINGS-217完成：五关43墙/134递归对象及源SVG基准已形成verified空间真值；完整marker/碰撞顺序、原始local坐标、owner导出profile与未舍入仿射精度分别冻结，binary/SVG/恢复脚本独立核对与7类变异通过。214C3恢复唯一Ready；未改src或现代可见资源，M-035/M-042和VS-067实现状态不提升。交接见 docs/tasks/evidence/TASK-SETTINGS-217/handoff.md。
+
+2026-09-05 TASK-SLICE-214C3完成：公共Session接入217完整地面墙/根坐标，20/24/30fps主子trace、ground/air normal与fs完成、hurt/static、jump/drop、边界和动态正式P1/P2环境转发通过；P1GS保持猴马及10类会话变异回归。214C4成为唯一Ready，父214C2/214C仍Split、214C5仍承担正式可见/P1GC，不提升VS-067或第三家族完整完成状态。见 docs/tasks/evidence/TASK-SLICE-214C3/handoff.md。
+
+2026-09-06 214C4消费预检：原版普通弹要求目标colipse与逐帧绘制交集，213宠物碰撞3/4及visibleBounds不足以覆盖正式怪物1/2/7；214A已有RGBA保留，可直接消费但未证明Flash采样等价。C4设Blocked，同线TASK-SETTINGS-218唯一Ready补3个Sprite/12条映射与独立命中fixture。初步src试改已全部撤回，未提高青龙/VS-067完成度；C5及父C2/C合同保持。证据见 `docs/tasks/evidence/TASK-SLICE-214C4/preflight.md`。
+
+2026-09-06 218补证检查点：三个目标Sprite、12映射、11帧左右矩阵和25个源tag基准已核对，10类参考变异通过；Flash局部BitmapData采样仍未证且验收返回2，真值保持draft。218转Blocked、C4继续Blocked，不提高机制/切片完成度，不激活其他task。下一步取得运行时证据，详见 `docs/tasks/evidence/TASK-SETTINGS-218/handoff.md`。
+
+2026-09-06 218完成：三目标Sprite/12映射/11帧双向、原版自带AIR861项/1604322像素/25基准与中心输入合同已verified，15类源/参考变异通过。218归档，C4唯一Ready；仅解除碰撞输入阻塞，不提高真实战斗或整族完成度。证据见docs/tasks/evidence/TASK-SETTINGS-218/handoff.md。
+
+2026-09-06 C4真实战斗链完成：dragon1正常弹/原版碰撞/缓存伤害与自身治疗、真实fs独立实体及到期/提前死亡闭环；20/24/30fps、P1/P2生产updatePets共享Combat、14类变异、P1GS和build通过。C5唯一Ready承接正式投影/TestScene/全生命周期/P1GC，父C2/C仍Split，不提升家族完整完成状态。交接见 docs/tasks/evidence/TASK-SLICE-214C4/handoff.md。
+
+2026-09-13 TASK-SLICE-214C5完成并同次归档父C2/C：共享presenter消费真实本体/子实体/弹体snapshot，TestScene实际Monster30通过同一Combat端口结算；72个初阶原版状态零像素差、P1GC/P1GS、全系统/build/真值/资源与940×590双人正式、失败重试和返回清理通过。214D唯一Ready，214E仍承担完整44项与P1G，功能线保持Active，VS-067及全家族状态仍为部分复现。交接见 `docs/tasks/evidence/TASK-SLICE-214C5/handoff.md`。
+
+2026-09-13 214D输入预检：四效果76帧视觉资源齐全，218碰撞采样仅覆盖初阶普通弹；四效果逐帧源绘制/alpha映射与HitTest oracle尚缺，不能套用首帧mask或固定68翻转。214D设Blocked、TASK-SETTINGS-219唯一Ready补有界空间/采样，完成后恢复214D；214E/215/216保持Planned。未改src或生产资源，P1GD未实施，整族与VS-067仍为部分复现。证据见 `docs/tasks/evidence/TASK-SLICE-214D/preflight.md`。
+
+2026-09-13 219完成补证：四效果76帧/152方向源显示事实verified，原版6,448案例命中布尔一致，104像素差异按用户明确批准的碰撞近似单列；54方向场/505平面、独立源/Schema核对与8变异通过，原图不变。恢复214D唯一Ready继续二三阶实现；P1GD、214E整家族/P1G与VS-067仍未完成，215/216不抢占。交接见 `docs/tasks/evidence/TASK-SETTINGS-219/handoff.md`。
+
+2026-09-13 TASK-SLICE-214D完成：二三阶复用同一Runtime/Behavior与生产presenter，normal/fs/sdcc/九对象ltwj真实P1/P2伤害、治疗、时序和释放通过；P1GD=0、174状态零像素差/5视觉变异、9实现变异、6448原版碰撞消费（104像素批准近似）。修正213唯一左向九对象组合基准的世界偏移/插入顺序及214A投影。全系统/build及正式/TestScene可见链通过，214E唯一Ready，整家族/P1G与VS-067仍为部分复现。交接见 `docs/tasks/evidence/TASK-SLICE-214D/handoff.md`。
+
+2026-09-14 214E输入预检：PetDragonBullet4的48帧视觉资源完整，但218/219没有该奥义trigger碰撞oracle，219四效果近似许可不外推。214E设Blocked、TASK-SETTINGS-220唯一Ready补单对象输入后恢复E；父214/214B与44合同/P1G保持未完成。未改src或生产资源，功能线保持Active，机制/VS-067复现状态不提升。证据见 `docs/tasks/evidence/TASK-SLICE-214E/preflight.md`。
+
+2026-09-14 TASK-SETTINGS-220完成：奥义trigger五源定义含mask/bitmap，48帧96方向状态与384对象verified；11520原版HitTest例/78373320像素零差异、7采样/10产物变异和480相位编码通过，四权威产物再生成一致。220归档，214E恢复唯一Ready，44合同/P1G与整族仍未完成；未改src/生产资源，不提升VS-067复现状态。见 `docs/tasks/evidence/TASK-SETTINGS-220/handoff.md`。
+
+2026-09-14 TASK-SLICE-214E完成：dragon4继承技能、qlaoyi首回调trigger/四次可选真实分身/免费连锁与12秒/早死治疗闭合；完整44合同、64组家族trace、60组五关P1/P2消费者、345态投影及pet P1G=0，全系统/build和正式Stage1-2/TestScene可见伤害/清理通过。219四效果104像素批准近似保留，220 trigger有限样本零残差；本批补四阶魔花乘数。214E、214B与214同次归档，TASK-SETTINGS-215唯一Ready。猴/马/青龙三族完成，六族及旧入口仍未闭合，功能线保持Active、VS-067仍部分实现。交接见 `docs/tasks/evidence/TASK-SLICE-214E/handoff.md`。
+
+2026-09-14 TASK-SETTINGS-215完成：pnum十字形、109原生渲染态（53显示API态+56行为显示值重放）、34源fixture与22组原数值/producer片段执行闭合；Schema/源像素/再生成及10字段+6行为变异通过。明确致死显示值与HP delta分离、Role3 GXP显示除二、玄龟int截断95+6、盾溢出递归与Pig8/毒/火显式producer例外。未修改src或宣称现代复现，216按修正后的源合同唯一Ready，M-054已扒/未复现，VS-072待实现，当前线仍Active。见 `docs/tasks/evidence/TASK-SETTINGS-215/handoff.md`。

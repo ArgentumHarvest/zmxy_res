@@ -1,0 +1,124 @@
+# `src/` 模块边界约定
+
+本文约束现代 TypeScript/Phaser 代码的模块边界。它补充 `docs/reverse-engineering/modern-architecture.md`，不替代具体实现任务。
+
+## 目录职责
+
+现代代码命名必须遵循 `docs/domain/glossary.md`。如果需要新增核心领域类型、系统、实体或数据模型，先按 `docs/domain/ubiquitous-language-process.md` 更新统一语言。
+
+- `src/main.ts`
+  - 只负责创建 Phaser `Game`，注册场景和全局配置。
+  - 不写玩法逻辑。
+
+- `src/scenes/`
+  - Phaser 场景层。
+  - 负责生命周期、显示对象创建、调试 UI 和系统调度。
+  - 不直接承载复杂战斗规则、伤害结算、存档或角色 AI。
+
+- `src/systems/`
+  - 可测试的游戏系统。
+  - 负责输入、战斗、移动、碰撞、资源调度等相对独立逻辑。
+  - 系统应尽量暴露明确输入/输出，避免直接依赖全局单例。
+
+- `src/core/`
+  - 共享基础配置、常量、轻量上下文和跨系统类型。
+  - 不放具体角色、怪物或关卡内容。
+
+- `src/assets/`
+  - 现代资源 manifest 和资源键。
+  - `PetTurtleAssets`/`PetTurtleCollisionAssets`只解码与查询已交付内容，`PetTurtleProjection`只合成显式快照；不持有时钟/AI/伤害。加载仍归既有bundle/coordinator，Phaser显示及销毁归`PetTurtlePresentationBridge`。
+  - 不直接复制或重生成 `local-resources/regima/legacy-extraction/` 原始提取结果。
+  - 关卡资源物理目录、共享/单关 owner 和防死资源门禁遵循 `stage-asset-ownership.md`；怪物定义与资源 owner 遵循 `monster-asset-ownership.md`。同一物理路径不得由多个 cache key 或 bundle 重复声明。
+
+## `TestScene` / sandbox 增长约束
+
+- `TestScene.ts` 是集成验证场景，不作为最终正式游戏架构承载点。
+- 新增切片如果预计会在 `TestScene.ts` 增加超过约 150 行代码，先判断是否应抽到 `src/scenes/test-scene/` helper 或 `src/systems/`。
+- 同一类职责第二次出现时优先抽 helper：视图创建、调试键、命中桥接、UI 面板桥接、运行时查询、系统调度。
+- 不为“彻底架构化”做大重构；每次只拆一个职责簇，并保持 `npm run build` 通过。
+- `src/scenes/test-scene/` helper 仍属于场景桥接层，可以依赖 Phaser；不要把 Phaser 显示对象传入 `src/systems/`。
+- `src/scenes/test-scene/*Bridge.ts` 是过渡层：负责把 scene 状态、Phaser 显示对象和可测试 system 输入/输出接起来。桥接层可以短期偏厚，但不能新增核心战斗、掉落、宠物、法宝或关卡规则。
+- 当 bridge 文件继续增长时，优先判断哪些逻辑可以下沉到 `src/systems/`，而不是只把 bridge 再机械拆成更多场景文件。
+
+怪物击退由既有实体持有`MonsterKnockbackBinding`，`MonsterKnockbackSystem`只计算237原运动，复用静态墙函数；`MonsterKnockbackBridge`只转换217关卡输入与相机平移。成功命中端口提交早/晚相位，物理owner单次写回，禁止从audit事件重放或另建计时器/注册表。未命中实体仍沿用既有普通运动；完整AI/身体/死亡合同不由236冒充闭合。
+
+## `GameContext` / `EntityManager` 路线
+
+- 保留薄 `GameContext`：它只提供当前集成场景需要的运行时查询，不承载规则、不持有复杂生命周期。
+- 暂不为了架构洁癖强上完整 ECS。只有当怪物、掉落、宠物、投射物、Boss 或场景物件需要统一生成、销毁、查询和调度时，才引入轻量 `EntityManager`。
+- `EntityManager` 的第一版目标应是稳定 ID、生命周期登记、按类型查询和安全移除；不要一次性引入组件系统、事件总线或复杂依赖注入。
+- 在引入 `EntityManager` 前，系统函数仍应保持明确输入/输出，并避免直接读取 Phaser 显示对象。
+
+## 怪物与关卡组织
+
+- 详细设计、面向对象原则和传统模式映射见 `面试/设计模式.md`。
+- 可玩关卡共同运行职责、五关消费者迁移矩阵和静态防回填规则见 `docs/architecture/playable-level-runtime.md`。`PlayableLevelRuntime` 是共同初始化/调度/结果/销毁 owner，`LevelDefinition`、`LevelEncounter` 与窄 `LevelWorldAdapter` 只表达内容差异。
+- 关卡 Layout/Flow 负责地形、出生计划、波次、遭遇门禁和通关条件；不实现怪物索敌、移动、攻击、动画或掉落算法。
+- `LevelLifecycle` 是全部关卡的通用生命周期/结果基类：唯一持有 `playing / failure-pending / failed / cleared`、全员判负、默认出口重叠 + 上键、幂等解锁。`Stage*FlowModel` 只增加单关内容状态；Boss、波次或机关子状态不得混入通用终态。
+- 普通关卡使用默认出口策略；特殊入口、特殊胜利或无门关卡只能注入有证据、可独立测试的窄 `LevelCompletionStrategy`。不得新增同义 `tryCompleteStageXX`、关卡私有失败倒计时或 bridge 内直接解锁提交。
+- `LevelLifecycleBridge` 只把 Phaser 显示对象边界、玩家有效性和上键输入适配成系统输入；通关规则不得回填 scene/gameplay bridge。
+- `LevelResultView` 是全部关卡唯一的结果展示 presenter：只消费生命周期终态、成绩快照和路由回调，统一投影原版 `GameWin` / `GameFail` 及按钮状态。关卡不得新增私有 `Stage*ResultBridge`，也不得用全屏现代 `Rectangle/Text` 回填结果页。
+- `MonsterDefinitionCatalog` 保存跨关卡只读战斗定义，`MonsterAssetCatalog` 保存 monster id 到视觉/几何资源族的映射，`MonsterRuntimeRegistry` 保存单局可变怪物状态；三者不得混为同一个 Registry。
+- `MonsterExperienceSystem` 只维护既有怪物模型上的目标引用与首次死亡经验；`HeroPartyExperienceSystem` 从既有队伍持有英雄/当前宠回调。宠物Session与兼容Runtime在发射时捕获自身对象，不能按命中时active pet反查；存档桥保存真实roster，掉落仍由原奖励owner处理。
+- `HeroPartyRuntime` 是单局活动英雄的唯一运行时 owner：按 `PlayerSlot` 持有移动、战斗、普攻、技能和角色视觉生命周期。关卡只提交平台、移动边界与特殊环境快照，不声明 `PlayerRuntime`，不直接调用角色内部 update/resolve。
+- `HeroPartyRuntime.gather`只持有既有movement的原root投影引用，不另存英雄位置/HP；`HeroSourceMovementSystem`在同一movement更新内适配原host单位并复用静态墙积分。Stage1-2由Registry的后怪物回调调用完整HeroParty一次，Tween先于世界步；Scene暂停/退出由runtime统一管理。其他Scene未采用该端口时保持原更新入口。
+- `Stage1CombatPlayer.petBuffs`与`HeroPetBuffSystem`持有四项主人瞬时效果，复用slot世界host先于宠物推进；不挂PetState、不写存档。兼容场景的currentStats直接引用成员effectiveStats，baseStats只作成长/装备输入；Scene不复制效果算法。
+- 关卡、宠物和英雄当前类设计分别见 `system-designs/level.md`、`system-designs/pet.md`、`system-designs/hero.md`。关卡保持组合式 `PlayableLevelRuntime`，不得新建万能 `BaseLevel`；宠物战斗统一经 `PetCombatRuntime` 注入 `PetBehavior`；英雄队伍聚合单英雄 `HeroRuntime`，五英雄实现只覆盖差异钩子。三份设计在各自验收退出前约束迁移 task，退出后不再触发设计模式专项检查。
+- `PetCombatEntitySession` 与 `PetCombatContext` 是宠物Runtime内部公共步骤/端口实现；Scene和Behavior不直接创建或推进实体会话。私有召唤物只经Behavior窄端口创建/释放，临时数值不进入持久roster；正式桥继续只消费顶层Runtime快照与typed事件。
+- `PetPassiveSession`仅拥有该实体公共回复缓存、六自动增益计数及自身效果；由EntitySession原host驱动。四项主人效果通过`ownerAddPetBuff`进入既有hero owner，Scene不持有公式，保存不包含会话临时字段。
+- `PetReceptionAttributes`组合在持久PetState中；初始化与显式存档读取使用同一字段规则，不拥有伤害结算或效果时钟。成长只归既有逐级事件，不由Scene、读档或普通基础属性refresh重复生产。用户选择A后，`PetReceptionSaveMigration`只由SaveSystem存储边界调用：原raw先备份，缺失/非法项补现代0，来源和字段列表贯穿恢复与成长；纯parse/restore不静默回填或写存储，列表inspect保持只读。
+- `PetAttachedDisplayLifecycle`由Scene持有，以runtimeKey注册实际身体root与附属显示；Game显示阶段只推进显示回调和退休alpha。猴/马adapter退休时立即删除body，附属显示按源淡出；Scene退出强制清空。它不持PetState或战斗实体，不延长数值/伤害/技能寿命；六效果首次信号来自既有PetPassiveSession/HeroPetBuffSystem；PetPassiveDisplayBridge只持显示身份、原生帧与投影，主人独立clip不随数值期限或宠物退休销毁。Dragon/Turtle使用独立附件anchor，不改变身体坐标。PetPassiveImage仅在单图同步渲染期间关闭重复局部取整并恢复camera设置；域外小数位置按已声明的≤0.5px/轴对齐。
+- 猴马私有弹体由Behavior持有的`PetMonkeyHorseProjectileSystem`统一推进；`PetHorseAoyiProjectiles`只投影发射/命中回调，`PetHorseAoyiMotion`只承担源EnemyMove运动。独立延迟通过`PetProjectileCombatPort.delay`访问场景拥有的`PetWorldDelayedCalls`，`PetWorldDelayBridge`仅转接既有Game绝对时间戳，不累计第二份Scene/宠物时钟。换宠不取消源回调，Party销毁与Scene shutdown清空world队列并解除listener；完整原版暂停/世界退出映射仍由226验收。
+- 猴火/马冰附加效果归受击目标的`MonsterPetTargetEffectSystem`持有，`PetTargetEffects`执行原BaseAddEffect局部状态机；命中port只提交源字典payload。怪物世界循环在物理后/AI前按host步推进，包括等待视觉recovery的帧，不挂在宠物Session或被跳过的AI函数内；View只消费可见/冻结状态，不再拥有伤害或效果寿命。
+- `PetNormalAttackDecision` 只由猴/马 Behavior 各自组合，消费Session连续hostTick/fps并执行条件随机选择；不得承接动画时钟、技能CD、目标、伤害或公共Session生命周期。家族释放事件和技能优先级保持局部。
+- `PetReceptionBodyClock`只在兼容hurt/dead边界组合PetAnimationClock，按254条件保留实际进入行/列；共享时钟支持按当前列取keyframe上限和不清key的setColumn。它不替代既有HP/保护owner，不从View计时；`PetReceptionBodyAssets`仅查询原生双方向池输出，运行PNG由verified254基准导出。
+- `PetReceptionBodyOwner`是既有兼容runtime上的接收状态组件，HP仍由PetBattleOwnershipSystem单写；它调度身体、保护与退场，不创建另一份roster或完整技能AI。`PetReceptionCompatibilitySystem`绑定既有经验source并按其对象身份清理投射物；`HeroPartyCompatibilityPets`只持有每个slot的runtime/view引用，并复用TestScene的兼容更新入口。原生hurt/dead显示通过PetReceptionBodyAssets查询，预载归combat-common依赖。
+- `PetAnimationClock`只负责共享倒计时游标；`PetDragonAnimationClock`从verified资源查询构造定义。EntitySession持有和推进时钟、消费typed事件；View消费只读动画snapshot，不能再持另一套战斗时钟。Frame.hostFps由场景传入，公共移动按每实体moveSpeed进行原版单位换算。
+- 怪物差异优先通过 `MonsterBrain`、物理 profile、能力集合、动画集合和奖励 profile 组合，不建立承载全部职责的万能 `BaseMonster`。
+- `MonsterRuntimeRegistry` 只持有稳定 ID 与纯运行状态；Phaser view 映射由关卡无关的实体视图 adapter 持有。关卡遭遇只发 spawn 命令并消费 spawned/defeated/cleared 事件，不声明怪物 runtime 类型或 `Map`，不直接调用怪物内部 update/resolve。
+
+## 逆向与实现边界
+
+- AS3 类名可以写入注释或映射文档，但不要照搬 AS3 类结构。
+- 原版全局状态、时间轴耦合、重复创建对象和手写内存管理只作为反面参考。
+- 新代码保留可观察行为：键位、流程、动作、数值、手感和外观。
+- 复杂规则先在 `docs/reverse-engineering/*.md` 确认，再进入 `src/`。
+
+## 输入系统约束
+
+- 正式输入必须支持 P1/P2 两套玩家输入。
+- 方向键归 P2，不得驱动 P1。
+- 当前 `InputSystem.ts` 仍是技术验证遗留，正式修正由 `TASK-ARCH-001` 完成。
+- 正式流程的活动 `PlayerSlot` 与当前 `HeroId` 必须来自当前存档的 `PartyConfiguration`；Scene payload、URL 参数和页面临时状态只能用于明确的 DEV/QA 路径。
+- 新建存档完成后不得在每次进关时重新选择 1P/2P；地图、关卡、HUD、功能页和重试必须消费同一个存档队伍查询。
+
+## TypeScript 与 Phaser 约定
+
+- 保持 `strict`、`noUnusedLocals`、`noUnusedParameters`。
+- Phaser 生命周期中暂时不用的参数使用 `_` 前缀，例如 `_time`。
+- 如果一个生命周期参数长期不需要，可以省略参数；只有 Phaser 签名或可读性需要时才保留 `_` 参数。
+- 不通过关闭 TypeScript 严格项来规避未使用参数问题。
+
+## 校验
+
+- 修改任务、工作流或模块边界文档后，运行 `npm run check:workflow`。
+- 修改 `src/` 后，优先运行 `npm run build`；如果依赖未安装或无法运行，需要说明原因。
+
+
+## Monster30 身体与独立攻击
+
+240在既有Monster30/Stage1实体上附加`Monster30AttackRuntime`，由系统层拥有身体回调、攻击身份、出生根、检测相位和销毁；`Monster30CollisionSystem`消费241版本化位场，伤害继续由实际hero/pet owner结算。场景只调度并转交pause事件，暂停入口仅选择原MovieClip已进入的显示帧，不推进age/命中/身体。Stage11/13 view只投影runtime，不能再生成Monster30伤害或自走播放时钟。其他类型继续原owner；Role4人偶旧命中合同仍未迁移，不把英雄/宠物范围扩大成全部目标。
+
+## Monster3 有限接收端口
+
+260A的`HeroGatherCoordinateSystem`只保存实际movement引用和一秒坐标Tween状态，复用现有twip函数；不拥有英雄位置副本、HP、物理、输入或Scene时钟。Stage1-2既有world入口执行Tween→怪物→完整英雄步骤；死亡/角色detach不取消引用，暂停冻结、最终退出清理由既有Scene owner接线。原库与真实运动输入边界见`monster2-coordinate-runtime-acceptance.md`。
+
+249A的`MonsterDamageReception`只准备251已证接收结果，不写HP。英雄经`HeroMonsterDamageReception`进入既有`HeroCombatSystem`；宠物经`PetCombatRuntime`/`PetCombatEntitySession`或兼容`PetBattleOwnershipSystem`共享HP结算。动作、保护、实时属性由当前owner读取或显式输入，不建立第二份权威状态。`MonsterAttackReception`仅管理接收ID、间隔和有序检查，不能成为独立world/显示时钟；Monster3实际两owner消费与兼容动作/保护分发留给249B。有限域与真实Session覆盖见`docs/reverse-engineering/monster3-receiver-runtime-acceptance.md`。
+
+249B共享核心已建立`Monster3AttackRuntime`与`Monster3Selection`，但正式两owner尚未接入，当前不表示游戏已迁移。碰撞消费248正式资源，原world twip边界选项经过全部140880case与精确残差验证；`Monster3AttackView`只读投影，不推进时钟。252先解除正式宠物属性/效果输入缺口，再恢复两Scene消费。
+
+## Monster2 身体、两普攻与裸显示
+
+`Monster2CombatWorld`适配既有Stage1CombatEnemy，不复制HP、位置或目标；`Monster2WorldStep`复用目标效果host时钟，旧弹→身体→效果→自然选择。`Monster2AttackRuntime`拥有两独立hit1攻击及source/parent释放；hit2只请求聚拢和裸显示。HP零保留弹体至其末帧或源dead动作完成，显式Registry销毁清弹。Stage12Flow在实际源移除时按boss/存活Monster4条件处理门，不由显示或HP观察者另开门。
+
+`Monster2RawDisplayBridge`通过既有world display时钟独立推进14帧裸MC，普通Scene暂停继续，源死亡不销毁，Scene退出清理。`Monster2AttackView`只投影verified原crop与独立collision位场，不生成伤害或另计时。`HeroPartyMonsterReception`统一Monster2/3当前hero/pet身份，几何由各家提供，HP/保护/属性仍由当前真实owner负责；失效引用必须在读取旧宠物技能前拒绝。

@@ -1,0 +1,201 @@
+# 文档职责地图
+
+本文说明各类文档的边界，避免游戏复现任务和 AI 工作流脚手架混在一起。
+
+## 全局执行调度层
+
+- `docs/tasks/execution-queue.md`
+  - `/goal` 的第一调度入口。
+  - 只维护会抢占游戏工作的活跃治理执行项、优先级和 Ready/Blocked/Planned 状态，合同链接到对应 `PG-*`。
+  - 治理队列无可执行项时才回退游戏功能线与 `task-board.md`；不复制游戏 task 状态，不保存完成历史。
+
+## 游戏复现层
+
+- `TASK_OUTLINE.md`
+  - 项目战略导航。
+  - 维护目标、路线、阶段和任务类型。
+  - 不维护具体任务状态。
+  - 只在正式游戏 task、`/goal`、游戏任务生成/重排或路线判断时读取；轻量请求和脚手架局部讨论默认不读。
+- `docs/tasks/task-board.md`
+  - 未完成游戏任务的轻量状态索引。
+  - 只维护 task id、状态、功能条线、摘要、下一步和独立定义链接；每个 task 必须属于一个功能条线。
+  - 不记录 AI 工作流治理任务。
+  - 状态表是 task 状态来源；“当前推荐”由 `npm run generate:harness` 派生，禁止追加历史事件。
+- `docs/tasks/task-definitions/TASK-*.md`
+  - 单个未完成 task 的完整执行合同。
+  - 维护输入、输出、完成定义、规模预算、拆分触发、验收和禁止范围；执行时只读取当前 task 文件。
+- `docs/tasks/feature-lines.md`
+  - 完整玩家系统的范围、唯一 Active 条线、当前 task、阻塞和关闭证据的权威台账。
+  - 严格单线 `WIP=1`；task/切片完成不能隐式关闭功能线。
+- `docs/tasks/feature-line-coverage/LINE-*.md`
+  - 单条功能线的权威内容全集、覆盖矩阵、缺口和关闭检查。
+  - 为连续 task 生成提供输入，不代替 task-board 的执行状态。
+- `docs/tasks/task-history.md`
+  - 游戏任务历史。
+  - 维护已完成游戏任务、完成定义和执行记录。
+  - 新对话默认不读取；只在追溯历史、修改已完成任务或处理依赖冲突时读取。
+- `docs/tasks/vertical-slices.md`
+  - 纵向切片表。
+  - 维护可玩切片、依赖机制和实现状态。
+- `docs/reverse-engineering/mechanics-index.md`
+  - 总机制表。
+  - 维护游戏机制的逆向状态和复现状态。
+  - 不记录 AI 工作流脚手架状态。
+- `docs/reverse-engineering/*.md`
+  - 逆向笔记。
+  - 按逆向证据协议记录 AS3/共享调用链、SWF 几何、行为合同、证据等级、未知项、原版机器真值 JSON 引用和现代实现建议。
+- `docs/reverse-engineering/plans/*.md`
+  - 只供 `视觉真值逆向` task 显式引用的执行方案。
+  - 方案描述视觉/SWF 真值的可复用拆解方法、输入、输出、验收和拆分边界，但不持有 task 状态；代码逆向不读取本目录，视觉真值逆向也只读当前 task 链接的方案。
+- `docs/reverse-engineering/ground-truth/`
+  - 原版机器真值的版本化目录。
+  - `schema/` 规定可机器校验的通用结构，`manifests/` 保存经溯源、完整性核对和交叉确认的具体原版真值。
+  - 实现和测试直接消费真值或其可重复生成物；逆向笔记只解释来源、未知和转换语义，不维护第二份手抄坐标。
+  - 超过常规 Git 托管限制、且不参与游戏构建或运行的完整 manifest 作为本地可再生产物忽略；仓库保留 Schema、生成/验证工具和溯源文档。运行时需要的数据必须另行投影到正式源码或资源目录。
+- `docs/reverse-engineering/asset-annotation/`
+  - 资源标注工程目录。
+  - 维护 AS3/stableKey 到 EVB 源 SWF、选择性导出物和现代接入状态的分阶段台账，以及人工/Agent 边界、批次记录和拆分策略。
+  - `asset-annotation-and-splitting-plan.md` 仅作为旧链接的兼容入口。
+- `docs/architecture/src-boundaries.md`
+  - 现代代码模块边界。
+  - 维护 `src/` 目录职责、输入系统约束和 TypeScript/Phaser 参数约定。
+- `docs/architecture/system-designs/`
+  - 用户手动触发的具体系统设计目录。
+  - 每个目标系统只记录一套当前设计，包括模式角色到源码的映射、协作顺序、扩展规约、消费者、禁止路径和实现符合性证据。
+- `docs/architecture/stage-asset-ownership.md`
+  - 现代关卡资源目录与运行时 bundle ownership 合同。
+  - 维护具名共享/单关私有目录、光门组件归组、死资源判定和防复发门禁。
+- `docs/architecture/monster-asset-ownership.md`
+  - 现代怪物定义、资源 catalog 与运行时 bundle ownership 合同。
+  - 维护怪物定义/资源/单局状态边界、无关卡编号资源族、五关依赖和防回填门禁。
+- `docs/domain/glossary.md`
+  - 领域统一语言表。
+  - 维护中文概念、推荐代码名、上下文、说明和禁止别名。
+- `docs/domain/ubiquitous-language-process.md`
+  - 统一语言维护流程。
+  - 维护轻量 DDD 的更新规则、命名规则和例外处理。
+
+## 工作流脚手架层
+
+- [docs/workflow/air-runtime-verification.md](air-runtime-verification.md)
+  - AIR工具登记与按需执行合同：本机路径、ADL调用、运行环境溯源、证据边界、批次频率和复用条件。
+  - 不持有游戏task状态，不接入默认门禁；从逆向证据协议按触发条件读取，现阶段使用CLI，无独立MCP服务。
+
+- `tools/check-harness.mjs`、`tools/check-harness.test.mjs`
+  - 独立 harness 门禁及负向用例：检查入口规则引用、当前调度快照、相对文档链接和检查命令组合。
+  - `--write` 只更新看板当前推荐，不改功能线或 task 状态；不读取游戏源码或本地资源。
+  - `check:workflow` 组合 harness 与旧文档校验；`check:workflow:full` 保留资源标注与关卡架构专项，`check:all` 继续包含完整组合。轻量门禁不替代游戏正确性或证据全面性校验。
+
+- `AGENTS.md`
+  - Agent 强规则入口。
+  - 维护任务分级、冷启动阅读分流、正式游戏 task 执行协议和禁止事项。
+  - 客户端已自动注入时视为已读，不再通过 shell 全文读取；未注入时才作为入口文件读取。
+- `CLAUDE.md`
+  - Claude Code 快速入口。
+  - 摘要列出启动校验、核心约束和代码质量门禁。
+- `.claude/agents/`
+  - Claude Code subagent 适配定义目录；跨客户端的通用协作合同以 `agent-protocol.md` 为准。
+  - 维护 `reverse-engineering-researcher`、`modern-implementation-engineer`、`engineering-reviewer` 和 `workflow-steward` 的职责、读取路线、写入边界和输出格式。
+  - 不记录具体游戏任务状态。
+- `docs/workflow/task-generation.md`
+  - 标准游戏任务生成规范。
+  - 说明如何从机制缺口、切片缺口或工程基础缺口生成、拆分和调度任务。
+- `docs/workflow/agent-protocol.md`
+  - Agent 详细执行协议。
+  - 维护正式游戏 task、`/goal` 的 Ready-task 语义、代码任务、Git、对话收束、任务生成和统一语言的细则，避免 `AGENTS.md` 过长。
+- `docs/workflow/code-quality-gates.md`
+  - AI 代码质量门禁。
+  - 规定自动验证、系统测试触发条件、结构性门禁（文件大小上限、代码重复、scene 耦合度）、场景层边界和 Git 工作要求。
+- `docs/workflow/review-protocol.md`
+  - 工程评审协议。
+  - 规定评审适用范围、必读资料、流程、严重程度、输出格式、评分维度和整改落点。
+- `docs/workflow/problem-governance.md`
+  - 问题治理协议。
+  - 规定系统性工程问题的定义、状态机、效果反馈、复盘换案、关闭出清和活跃/归档索引，不堆叠具体问题正文。
+- `docs/workflow/problem-audit.md`
+  - PG 集中审计协议。
+  - 统一任务收尾的活跃 PG 扫描、单点样本记录和归档评估；试验期间由 `MO-002` 观测，不替代单个 PG 的关闭合同与反证历史。
+- `docs/workflow/method-observation.md`
+  - 规定实验性改进方法与 `PG-*` 的边界、基线/指标、真实采样、到期裁决和活跃/归档索引。
+- `docs/workflow/system-design-protocol.md`
+  - 用户手动触发的具体系统设计与设计模式机制。
+  - 规定单方案设计、模式规约、人工重设计和实施交接；Agent 不得自行触发。
+- `docs/workflow/system-design-acceptance-protocol.md`（迁移期重复验收；系统完成后退出，不再自动检查）
+  - 具体系统设计模式的独立验收机制。
+  - 对当前 task 明确关联的未完成设计运行 `check:system-design` 批次硬门禁；以静态结构、可执行行为合同和正式消费者回归的退出码裁决，`all` 为 0 才能完成，退出后停止调用。
+- `tools/check-system-design.mjs`
+  - 关卡、宠物、英雄设计的可执行硬门禁入口。
+  - 按 L/P/H 迁移 gate 检查真实类、方法、依赖、消费者与旧路径，并运行专用合同测试；不进入默认 `check:all`。
+- `docs/workflow/reverse-engineering-protocol.md`
+  - 玩法逆向证据协议。
+  - 规定局部证据、共享运行时、SWF 几何/坐标语义、可观察合同、现代映射和双重验证的六段证据链，以及原版机器真值 JSON 生成、证据分级和关闭用语门禁。
+  - UI/HUD/菜单额外规定嵌套显示列表、动态 child、文字/按钮状态、原版视觉基准、逐状态叠图/差异和现代例外门禁。
+- `docs/workflow/reverse-engineering-task-protocol.md`
+  - 一等逆向任务的建模与读取协议。
+  - 规定 `代码逆向/视觉真值逆向` 子类型及渐进式披露：代码逆向沿用通用证据协议，视觉真值逆向才要求唯一 `逆向方案`；PG 不保存详细执行步骤。
+- `docs/workflow/ground-truth-completeness-validator.md`
+  - PG-017 的真值产物全面性校验器讨论入口。
+  - 只冻结生成逻辑/校验器职责边界和后续必须回答的问题；不保存生成步骤的第二份监督清单，不代表校验器方案已经选定或实施。
+  - 仅在用户明确讨论/实施全面性校验器，或正式治理项明确链接时读取。
+- `docs/workflow/behavior-contract-runtime-verifier.md`
+  - PG-017 V2 的行为合同到运行时语义 verifier 合同。
+  - 规定原版 expected 与现代黑盒 actual 的数据流隔离、合同字段覆盖、正反场景、结构化 trace 和关键字段 mutation-kill；不替代视觉全面性校验器。
+  - 仅在 PG-017 V2、明确链接的行为整改 task 或用户明确讨论该机制时读取。
+- `docs/workflow/problems/PG-*.md`
+  - 独立问题治理记录。
+  - 一个问题一个文档，分别维护问题定义、证据、方案版本、测试、关闭标准、适用触发、反馈/复盘样本和归档信息；归档后保留原路径供定向追溯。
+- `docs/workflow/methods/MO-*.md`
+  - 一个方法一个文档，维护假设、基线、指标、试验样本、副作用、裁决和稳定规则沉淀；不承担游戏 task 状态。
+- `docs/workflow/governance-log.md`
+  - 工作流脚手架维护日志。
+  - 记录任务体系、文档职责、AI 交接协议和代码质量门禁等变化。
+- `docs/workflow/document-map.md`
+  - 本文件。
+  - 维护各文档职责边界。
+
+## 资源和提取层
+
+- `docs/tasks/evidence/`
+  - 本地验证截图、trace、报告和中间产物，默认 Git 忽略；保留现有游戏直接导入的 7 个 JSON 白名单以保证拉取后可构建运行。
+  - 证据引用供本地复验使用；后续新增运行必需数据进入正式源码/资源目录，不得依赖被忽略文件。
+
+- `docs/reverse-engineering/evb-extraction-report.md`
+  - EVB 原始目录恢复、176-byte SWF 还原、哈希清单和 FFDec 验证报告。
+  - RegiMA 恢复目录位于 Git 忽略的 `local-resources/regima/`；现代工程按资源族选择性导出和接入。
+- `local-resources/regima/`
+  - 本机 RegiMA 资源根，整目录由 `.gitignore` 排除。
+  - `source/unpacked/` 保存 EVB 原始文件系统，`local-resources/regima/source/restored-swfs/` 保存可解析的原始命名 SWF，`manifests/` 保存哈希与审计清单，`validation/` 和 `task-outputs/` 保存本地派生产物。
+  - 视觉资源任务优先读取这里；不得把整个目录提交或批量复制到 `public/assets`。
+- `local-resources/regima/legacy-extraction/README_extract.md`
+  - 提取结果说明。
+  - 只读旧提取参考；行为脚本仍可使用，但不能作为视觉源包是否缺失的最终依据。
+- `local-resources/regima/legacy-extraction/resources_by_swf/`
+  - 二次抽取后的逐 SWF 核心资源目录。
+  - AS3、图片、shape、SymbolClass 和声音容器均从对应 `[...].swf/` 子目录读取。
+- `local-resources/regima/legacy-extraction/reports/EXTRACTION_REPORT.md`
+  - `再续天庭1.1.exe` 二次抽取与校验报告。
+  - 记录资源可用性、坏图、声音导出结论和后续资源边界。
+- `docs/reverse-engineering/reference/equipment-spreadsheet.md`
+  - 1.0 装备属性、合成、宝石和掉落工作簿的使用说明。
+  - 规定该工作簿只能作为 1.1 AS3 逆向的辅助索引和交叉校验资料。
+- `docs/reverse-engineering/reference/equipment-spreadsheet/`
+  - 从 1.0 工作簿拆分出的 CSV 小文件。
+  - 供装备、合成、宝石和掉落任务按需读取，避免每次解析完整 xlsx。
+- `docs/reverse-engineering/reference/再续1.0装备属性合成掉落表.xlsx`
+  - 1.0 装备资料工作簿。
+  - 只读参考；现代实现数据必须先经 AS3 校验。
+- `docs/FFDEC_EXTRACTION_GUIDE.md`
+  - FFDec 提取资料维护说明。
+  - 记录现有提取结果的维护边界。
+
+## 项目讲解层
+
+- `面试/README.md`
+  - 面试、答辩和项目讲解材料的统一入口。
+  - 组织 Harness、游戏现代化、项目最大挑战、设计模式、逆向技术和 Coding Agent 反思的推荐讲述顺序；不替代项目状态。
+- `面试/Harness工程.md`、`面试/游戏项目.md`
+  - 分别维护可迁移的 Harness Engineering 讲法与游戏项目讲法。
+- `面试/项目最大挑战.md`
+  - 集中回答“本项目最有挑战性的事情是什么、如何解决”，提供短答、STAR 和具体反例。
+- `面试/设计模式.md`、`面试/逆向技术讲解.md`、`面试/问题总结.md`
+  - 提供架构和逆向两个可深挖专题；事实与完成状态仍以架构合同、逆向证据和任务台账为准。

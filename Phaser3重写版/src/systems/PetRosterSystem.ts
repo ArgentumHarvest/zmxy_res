@@ -1,0 +1,437 @@
+﻿import { CapturablePetDefinitions, PetTuning } from './PetTuning';
+import {
+  createDefaultPetQualities,
+  getPetBaseStats,
+  getPetExperienceToNextLevel,
+} from './PetProgressionSystem';
+import { clearPetRabbitJifeng, createPetSkillState } from './PetSkillStateSystem';
+import { createPetReceptionAttributes } from './PetReceptionAttributes';
+import type { CapturableMonsterId, CapturablePetDefinition, PetRoster, PetState } from './PetTypes';
+function createSeedPet(params: {
+  id: string;
+  species: 'monkey' | 'horse' | 'dragon' | 'turtle' | 'ufo' | 'tigress' | 'phoenix' | 'rabbit' | 'mouse';
+  form: number;
+  displayName: string;
+  isActive: boolean;
+  skills: string[];
+}): PetState {
+  const qualities = createDefaultPetQualities();
+  const stats = getPetBaseStats(params.species, 1, qualities);
+  return {
+    id: params.id,
+    species: params.species,
+    form: params.form,
+    displayName: params.displayName,
+    level: 1,
+    exp: 0,
+    expToNext: getPetExperienceToNextLevel(1),
+    hp: stats.maxHp,
+    maxHp: stats.maxHp,
+    mp: stats.maxMp,
+    maxMp: stats.maxMp,
+    atk: stats.atk,
+    def: stats.def,
+    ...createPetReceptionAttributes(),
+    critBonusRate: 0,
+    skillDamageBonus: 0,
+    moveSpeed: 5,
+    lifetime: 100,
+    quality: 1,
+    ...qualities,
+    perception: 1,
+    technique: 1,
+    warpower: 1,
+    isActive: params.isActive,
+    skills: params.skills,
+    skillState: createPetSkillState(),
+  };
+}
+
+export function createSeedPetRoster(): PetRoster {
+  return {
+    pets: [
+      createSeedPet({
+        id: 'pet-monkey-1',
+        species: 'monkey',
+        form: 1,
+        displayName: '小猴',
+        isActive: true,
+        skills: ['tsml', 'xj'],
+      }),
+      createSeedPet({
+        id: 'pet-monkey-2',
+        species: 'monkey',
+        form: 2,
+        displayName: '小猴 F2',
+        isActive: false,
+        skills: ['tsml', 'lj', 'xj'],
+      }),
+      createSeedPet({
+        id: 'pet-monkey-3',
+        species: 'monkey',
+        form: 3,
+        displayName: '小猴 F3',
+        isActive: false,
+        skills: ['tsml', 'lyq', 'xj', 'lj'],
+      }),
+      createSeedPet({
+        id: 'pet-monkey-4',
+        species: 'monkey',
+        form: 4,
+        displayName: '小猴 F4',
+        isActive: false,
+        skills: ['tsml', 'xj', 'lj', 'lyq', 'jgaoyi'],
+      }),
+      createSeedPet({
+        id: 'pet-horse-1',
+        species: 'horse',
+        form: 1,
+        displayName: '小马',
+        isActive: false,
+        skills: ['tsml', 'sp'],
+      }),
+      createSeedPet({
+        id: 'pet-horse-2',
+        species: 'horse',
+        form: 2,
+        displayName: '小马 F2',
+        isActive: false,
+        skills: ['tsml', 'sp', 'bd'],
+      }),
+      createSeedPet({
+        id: 'pet-horse-3',
+        species: 'horse',
+        form: 3,
+        displayName: '小马 F3',
+        isActive: false,
+        skills: ['tsml', 'sp', 'bd', 'bz'],
+      }),
+      createSeedPet({
+        id: 'pet-horse-4',
+        species: 'horse',
+        form: 4,
+        displayName: '小马 F4',
+        isActive: false,
+        skills: ['tsml', 'sp', 'bd', 'bz', 'tmaoyi'],
+      }),
+      createSeedPet({
+        id: 'pet-dragon-1',
+        species: 'dragon',
+        form: 1,
+        displayName: '小龙',
+        isActive: false,
+        skills: ['tsml', 'fs'],
+      }),
+      createSeedPet({
+        id: 'pet-dragon-2',
+        species: 'dragon',
+        form: 2,
+        displayName: '小龙 F2',
+        isActive: false,
+        skills: ['tsml', 'fs', 'sdcc'],
+      }),
+      createSeedPet({
+        id: 'pet-dragon-3',
+        species: 'dragon',
+        form: 3,
+        displayName: '小龙 F3',
+        isActive: false,
+        skills: ['tsml', 'fs', 'sdcc', 'ltwj'],
+      }),
+      createSeedPet({
+        id: 'pet-dragon-4',
+        species: 'dragon',
+        form: 4,
+        displayName: '小龙 F4',
+        isActive: false,
+        skills: ['tsml', 'fs', 'sdcc', 'ltwj', 'qlaoyi'],
+      }),
+      createSeedPet({
+        id: 'pet-turtle-1',
+        species: 'turtle',
+        form: 1,
+        displayName: '小龟',
+        isActive: false,
+        skills: ['tsml', 'sld'],
+      }),
+      createSeedPet({
+        id: 'pet-turtle-2',
+        species: 'turtle',
+        form: 2,
+        displayName: '小龟 F2',
+        isActive: false,
+        skills: ['tsml', 'sld', 'txlj'],
+      }),
+      createSeedPet({
+        id: 'pet-turtle-3',
+        species: 'turtle',
+        form: 3,
+        displayName: '小龟 F3',
+        isActive: false,
+        skills: ['tsml', 'sld', 'txlj', 'sybh'],
+      }),
+      createSeedPet({
+        id: 'pet-turtle-4',
+        species: 'turtle',
+        form: 4,
+        displayName: '小龟 F4',
+        isActive: false,
+        skills: ['tsml', 'sld', 'txlj', 'sybh', 'xwaoyi'],
+      }),
+      createSeedPet({
+        id: 'pet-ufo-1',
+        species: 'ufo',
+        form: 1,
+        displayName: '小飞',
+        isActive: false,
+        skills: ['tsml', 'pms'],
+      }),
+      createSeedPet({
+        id: 'pet-ufo-2',
+        species: 'ufo',
+        form: 2,
+        displayName: '裂云',
+        isActive: false,
+        skills: ['tsml', 'pms', 'ss'],
+      }),
+      createSeedPet({
+        id: 'pet-ufo-3',
+        species: 'ufo',
+        form: 3,
+        displayName: '冲霄',
+        isActive: false,
+        skills: ['tsml', 'pms', 'ss', 'kmsk'],
+      }),
+      createSeedPet({
+        id: 'pet-tigress-1',
+        species: 'tigress',
+        form: 1,
+        displayName: '小虎',
+        isActive: false,
+        skills: ['tsml', 'hy'],
+      }),
+      createSeedPet({
+        id: 'pet-tigress-2',
+        species: 'tigress',
+        form: 2,
+        displayName: '小虎 F2',
+        isActive: false,
+        skills: ['tsml', 'hy', 'sxhz'],
+      }),
+      createSeedPet({
+        id: 'pet-tigress-3',
+        species: 'tigress',
+        form: 3,
+        displayName: '小虎 F3',
+        isActive: false,
+        skills: ['tsml', 'hy', 'sxhz', 'hsqj'],
+      }),
+      createSeedPet({
+        id: 'pet-tigress-4',
+        species: 'tigress',
+        form: 4,
+        displayName: '小虎 F4',
+        isActive: false,
+        skills: ['tsml', 'hy', 'sxhz', 'hsqj', 'bhaoyi'],
+      }),
+      createSeedPet({ id: 'pet-phoenix-1', species: 'phoenix', form: 1, displayName: '雀蛋', isActive: false, skills: ['tsml', 'np'] }),
+      createSeedPet({ id: 'pet-phoenix-2', species: 'phoenix', form: 2, displayName: '炎皇雀', isActive: false, skills: ['tsml', 'np', 'bshn'] }),
+      createSeedPet({ id: 'pet-phoenix-3', species: 'phoenix', form: 3, displayName: '朱雀将军', isActive: false, skills: ['tsml', 'np', 'bshn', 'dhly'] }),
+      createSeedPet({ id: 'pet-phoenix-4', species: 'phoenix', form: 4, displayName: '朱雀女皇', isActive: false, skills: ['tsml', 'np', 'bshn', 'dhly', 'zqaoyi'] }),
+      createSeedPet({ id: 'pet-rabbit-1', species: 'rabbit', form: 1, displayName: '月兔', isActive: false, skills: ['tsml', 'yg'] }),
+      createSeedPet({ id: 'pet-rabbit-2', species: 'rabbit', form: 2, displayName: '疾风兔', isActive: false, skills: ['tsml', 'yg', 'jf'] }),
+      createSeedPet({ id: 'pet-rabbit-3', species: 'rabbit', form: 3, displayName: '寒冰玉兔', isActive: false, skills: ['tsml', 'yg', 'jf', 'bs'] }),
+      createSeedPet({ id: 'pet-rabbit-4', species: 'rabbit', form: 4, displayName: '冰霜月神', isActive: false, skills: ['tsml', 'yg', 'jf', 'bs', 'ysaoyi'] }),
+      createSeedPet({ id: 'pet-mouse-1', species: 'mouse', form: 1, displayName: '子鼠元帅', isActive: false, skills: ['tsml', 'sc'] }),
+      createSeedPet({ id: 'pet-mouse-2', species: 'mouse', form: 2, displayName: '子鼠 F2', isActive: false, skills: ['tsml', 'sc'] }),
+      createSeedPet({ id: 'pet-mouse-3', species: 'mouse', form: 3, displayName: '子鼠 F3', isActive: false, skills: ['tsml', 'sc'] }),
+      createSeedPet({ id: 'pet-mouse-4', species: 'mouse', form: 4, displayName: '子鼠 F4', isActive: false, skills: ['tsml', 'sc', 'hxfb', 'zsaoyi'] }),
+    ],
+    selectedIndex: 0,
+    message: 'Pet ready',
+  };
+}
+
+
+export function getSelectedPet(roster: PetRoster): PetState | undefined {
+  return roster.pets[roster.selectedIndex];
+}
+
+export function getActivePet(roster: PetRoster): PetState | undefined {
+  return roster.pets.find((pet) => pet.isActive && pet.lifetime > 0);
+}
+
+export function getCurrentPet(roster: PetRoster): PetState | undefined {
+  return roster.pets.find((pet) => pet.isActive);
+}
+
+export function selectPet(roster: PetRoster, direction: 1 | -1): void {
+  if (roster.pets.length === 0) {
+    roster.selectedIndex = 0;
+    roster.message = 'No pets';
+    return;
+  }
+
+  roster.selectedIndex =
+    (roster.selectedIndex + direction + roster.pets.length) % roster.pets.length;
+  roster.message = `Selected ${roster.pets[roster.selectedIndex].displayName}`;
+}
+
+export function setSelectedPetActive(roster: PetRoster): boolean {
+  const selected = getSelectedPet(roster);
+  if (!selected) {
+    roster.message = 'No pet selected';
+    return false;
+  }
+
+  if (selected.hp <= 0) {
+    roster.message = `${selected.displayName} needs rest`;
+    return false;
+  }
+
+  if (selected.lifetime <= 0) {
+    roster.message = `${selected.displayName} has no lifetime`;
+    return false;
+  }
+
+  for (const pet of roster.pets) {
+    if (pet.isActive && pet.id !== selected.id) clearPetRabbitJifeng(pet);
+    pet.isActive = pet.id === selected.id;
+  }
+  roster.message = `${selected.displayName} deployed`;
+  return true;
+}
+
+export function restSelectedPet(roster: PetRoster): boolean {
+  const selected = getSelectedPet(roster);
+  if (!selected) {
+    roster.message = 'No pet selected';
+    return false;
+  }
+
+  clearPetRabbitJifeng(selected);
+  selected.isActive = false;
+  roster.message = `${selected.displayName} resting`;
+  return true;
+}
+
+/** Scene owners may retain the roster after destroying its combat runtime. */
+export function clearRosterPetRabbitJifeng(roster: PetRoster | undefined): void {
+  for (const pet of roster?.pets ?? []) clearPetRabbitJifeng(pet);
+}
+
+export function releaseSelectedPet(roster: PetRoster): PetState | undefined {
+  const selected = getSelectedPet(roster);
+  if (!selected) {
+    roster.message = 'No pet selected';
+    return undefined;
+  }
+
+  clearPetRabbitJifeng(selected);
+  roster.pets.splice(roster.selectedIndex, 1);
+  roster.selectedIndex = Math.max(0, Math.min(roster.selectedIndex, roster.pets.length - 1));
+  roster.message = `${selected.displayName} released`;
+  return selected;
+}
+
+export function toggleSelectedPetActive(roster: PetRoster): boolean {
+  const selected = getSelectedPet(roster);
+  if (!selected) {
+    roster.message = 'No pet selected';
+    return false;
+  }
+
+  return selected.isActive ? restSelectedPet(roster) : setSelectedPetActive(roster);
+}
+
+export function catchNewPet(
+  roster: PetRoster,
+  petName: string,
+  level = 1,
+): PetState | undefined {
+  if (roster.pets.length >= PetTuning.maxSeats) {
+    roster.message = '宠物栏已满！';
+    return undefined;
+  }
+
+  const definition = findCapturablePetDefinitionByPetName(petName);
+  const pet = createPetStateFromDefinition(
+    definition ?? createFallbackPetDefinition(petName),
+    level,
+    roster,
+  );
+  roster.pets.push(pet);
+  roster.selectedIndex = roster.pets.length - 1;
+  roster.message = `捕捉成功：${pet.displayName}`;
+  return pet;
+}
+
+
+function createCapturablePetDefinition(
+  monsterId: CapturableMonsterId,
+  petName: string,
+  displayName: string,
+  species: string,
+  form: number,
+  probability: number,
+): CapturablePetDefinition {
+  return { monsterId, petName, displayName, species, form, probability };
+}
+
+function findCapturablePetDefinitionByPetName(
+  petName: string,
+): CapturablePetDefinition | undefined {
+  return Object.values(CapturablePetDefinitions).find((definition) =>
+    definition.petName === petName
+  );
+}
+
+function createFallbackPetDefinition(petName: string): CapturablePetDefinition {
+  const form = Number.parseInt(petName.match(/\d+$/)?.[0] ?? '1', 10);
+  const species = petName.replace(/\d+$/, '') || petName;
+  return createCapturablePetDefinition('Monster72', petName, petName, species, form, 1);
+}
+
+function createPetStateFromDefinition(
+  definition: CapturablePetDefinition,
+  level: number,
+  roster: PetRoster,
+): PetState {
+  const normalizedLevel = Math.max(1, Math.floor(level));
+  const qualities = createDefaultPetQualities();
+  const stats = getPetBaseStats(definition.species, normalizedLevel, qualities);
+  // Roster length reuses identities after release and collides across players.
+  // getRandomValues also works on the supported HTTP preview origin.
+  const serial = Array.from(crypto.getRandomValues(new Uint32Array(4)),
+    value => value.toString(16).padStart(8, '0')).join('');
+  const ownerPrefix = roster.ownerSlot === 'p2' ? 'p2-' : '';
+
+  return {
+    id: `${ownerPrefix}pet-${definition.petName}-${serial}`,
+    species: definition.species,
+    form: definition.form,
+    displayName: definition.displayName,
+    level: normalizedLevel,
+    exp: 0,
+    expToNext: getPetExperienceToNextLevel(normalizedLevel),
+    hp: stats.maxHp,
+    maxHp: stats.maxHp,
+    mp: stats.maxMp,
+    maxMp: stats.maxMp,
+    atk: stats.atk,
+    def: stats.def,
+    ...createPetReceptionAttributes(),
+    critBonusRate: 0,
+    skillDamageBonus: 0,
+    moveSpeed: 5,
+    lifetime: 100,
+    quality: normalizedLevel === 1 ? 1 : 2,
+    ...qualities,
+    perception: 1,
+    technique: 1,
+    warpower: 1,
+    isActive: false,
+    skills: ['tsml'],
+    skillState: createPetSkillState(),
+  };
+}

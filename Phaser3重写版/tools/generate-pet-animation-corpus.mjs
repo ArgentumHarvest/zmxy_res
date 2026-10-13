@@ -1,0 +1,402 @@
+import { createHash } from 'node:crypto';
+import { existsSync, readFileSync, writeFileSync } from 'node:fs';
+import path from 'node:path';
+import { inflateSync } from 'node:zlib';
+
+const root = process.cwd();
+const check = process.argv.includes('--check');
+const corpusPath = 'docs/reverse-engineering/pet-animation-corpus.json';
+const bodyAnnotationPath = 'docs/reverse-engineering/asset-annotation/annotations/pet-body-animations.csv';
+const skillAnnotationPath = 'docs/reverse-engineering/asset-annotation/annotations/pet-skill-effects.csv';
+const restoredPrefix = 'local-resources/regima/source/restored-swfs/';
+const sourcePackages = [
+  'assets/pet1.swf',
+  'assets/20120203.swf',
+  'assets/20120808.swf',
+  'assets/mouse.swf',
+  'assets/StageCommon.swf',
+];
+
+const speciesSpecs = [
+  { species: 'monkey', forms: [1, 2, 3, 4], bodies: ['PetMonkeyBmd1', 'PetMonkeyBmd2', 'PetMonkeyBmd3', 'PetMonkeyBmd4'], evidenceTask: 'TASK-SETTINGS-193A', implementationTask: 'TASK-SLICE-193B' },
+  { species: 'horse', forms: [1, 2, 3, 4], bodies: ['PetHorseBmd1', 'PetHorseBmd2', 'PetHorseBmd3', 'PetHorseBmd4'], evidenceTask: 'TASK-SETTINGS-193C', implementationTask: 'TASK-SLICE-193D' },
+  { species: 'ufo', forms: [1, 2, 3], bodies: ['PetKabuBmd1', 'PetKabuBmd2', 'PetKabuBmd3'], evidenceTask: 'TASK-SETTINGS-193E', implementationTask: 'TASK-SLICE-193F' },
+  { species: 'tigress', forms: [1, 2, 3, 4], bodies: ['PetTigerBmd1', 'PetTigerBmd2', 'PetTigerBmd3', 'PetTigerBmd4'], evidenceTask: 'TASK-SETTINGS-193G', implementationTask: 'TASK-SLICE-193H' },
+  { species: 'turtle', forms: [1, 2, 3, 4], bodies: ['PetTurtleBmd1', 'PetTurtleBmd2', 'PetTurtleBmd3', 'PetTurtleBmd4'], evidenceTask: 'TASK-SETTINGS-193I', implementationTask: 'TASK-SLICE-193J' },
+  { species: 'phoenix', forms: [1, 2, 3, 4], bodies: ['PetPhoenixBmd1', 'PetPhoenixBmd2', 'PetPhoenixBmd3', 'PetPhoenixBmd4'], evidenceTask: 'TASK-SETTINGS-193K', implementationTask: 'TASK-SLICE-193L' },
+  { species: 'dragon', forms: [1, 2, 3, 4], bodies: ['PetDragonBmd1', 'PetDragonBmd2', 'PetDragonBmd3', 'PetDragonBmd4'], evidenceTask: 'TASK-SETTINGS-213', implementationTask: 'TASK-SLICE-214' },
+  { species: 'rabbit', forms: [1, 2, 3, 4], bodies: ['PetPetRabbitBmd1', 'PetPetRabbitBmd2', 'PetPetRabbitBmd3', 'PetPetRabbitBmd4'], evidenceTask: 'TASK-SETTINGS-193O', implementationTask: 'TASK-SLICE-193P' },
+  { species: 'mouse', forms: [1, 2, 3, 4], bodies: ['PetMouseBmd1', 'PetMouseBmd1', 'PetMouseBmd1', 'PetMouseBmd2'], evidenceTask: 'TASK-SETTINGS-193Q', implementationTask: 'TASK-SLICE-193R', note: 'PetMouse2/3 inherit PetMouse1 without a new body atlas; PetMouse4 alone switches to PetMouseBmd2.' },
+];
+
+const skillSpecs = [
+  ['pet-skill.monkey1.xj', 'monkey', 'PetMonkey1Bullet2', 'monkey1 xj projectile'],
+  ['pet-skill.monkey2.lj', 'monkey', 'PetMonkey2Bullet2_1;PetMonkey2Bullet2_2', 'monkey2 lj two-stage effect'],
+  ['pet-skill.monkey2.xj', 'monkey', 'PetMonkey1Bullet2', 'monkey2 xj reuses monkey1 projectile'],
+  ['pet-skill.monkey3.lyq', 'monkey', 'PetMonkey3Bullet2', 'monkey3 lyq projectile'],
+  ['pet-skill.monkey3.xj', 'monkey', 'PetMonkey1Bullet2', 'monkey3 xj reuses monkey1 projectile'],
+  ['pet-skill.monkey3.lj', 'monkey', 'PetMonkey3Bullet3_1;PetMonkey3Bullet3_2', 'monkey3 lj prelude and damage stage'],
+  ['pet-skill.monkey4.jgaoyi', 'monkey', 'PetMonkeyBmd4', 'monkey4 jgaoyi body hit5 action'],
+  ['pet-skill.horse1.sp', 'horse', 'PetHorse1Bullet2;PetHorse3Bullet3', 'horse1/2 sp reuses PetHorse1Bullet2; horse3/4 sp switches to PetHorse3Bullet3'],
+  ['pet-skill.horse2.bd', 'horse', 'PetHorse2Bullet2;PetHorse3Bullet2', 'horse2 bd uses PetHorse2Bullet2; horse3/4 bd switches to PetHorse3Bullet2'],
+  ['pet-skill.horse3.bz', 'horse', 'PetHorse3Bullet4', 'horse3 bz projectile'],
+  ['pet-skill.horse4.tmaoyi', 'horse', 'PetHorse4Bullet5', 'horse4 ultimate falling/tracking stage'],
+  ['pet-skill.horse4.tmaoyi.explode', 'horse', 'PetHorse4Bullet5Explode', 'horse4 ultimate explosion stage'],
+  ['pet-skill.dragon1.fs', 'dragon', 'PetDragonBmd1', 'dragon1 translucent body clone'],
+  ['pet-skill.dragon2.sdcc', 'dragon', 'PetDragon2Bullet2', 'dragon2 sdcc projectile'],
+  ['pet-skill.dragon3.ltwj', 'dragon', 'PetDragon3Bullet3', 'dragon3 ltwj projectile'],
+  ['pet-skill.dragon4.qlaoyi', 'dragon', 'PetDragonBullet4', 'dragon4 ultimate trigger object'],
+  ['pet-skill.turtle1.sld', 'turtle', 'PetTurtle1Bullet2', 'turtle1 sld projectile'],
+  ['pet-skill.turtle2.txlj', 'turtle', 'PetTurtle2Buff', 'turtle2 owner/pet link effect'],
+  ['pet-skill.turtle3.sybh', 'turtle', 'PetTurtle3Bullet3', 'turtle3 sybh area object'],
+  ['pet-skill.turtle4.xwaoyi', 'turtle', 'PetTurtleBmd4;PetTurtle3Bullet3', 'turtle4 body hit5 plus reused area object'],
+  ['pet-skill.ufo1.pms', 'ufo', 'PetKabu1Bullet2', 'ufo1 pms projectile'],
+  ['pet-skill.ufo2.ss', 'ufo', 'PetKabuBmd2', 'ufo2 teleport and body normal-attack continuation'],
+  ['pet-skill.ufo3.kmsk', 'ufo', 'PetKabu3Bullet4', 'ufo3 kmsk area object'],
+  ['pet-skill.tigress.hy', 'tigress', 'PetTiger1Bullet2', 'tigress hy projectile'],
+  ['pet-skill.tigress.sxhz', 'tigress', 'PetTiger2Bullet3_1;PetTiger2Bullet3_2', 'tigress sxhz two-stage object'],
+  ['pet-skill.tigress.hsqj', 'tigress', 'PetTiger3Bullet4_1;PetTiger3Bullet4_2', 'tigress hsqj prelude and damage stage'],
+  ['pet-skill.tigress.bhaoyi', 'tigress', 'PetTigerBmd4;PetTiger1Bullet2;PetTiger2Bullet3_1;PetTiger2Bullet3_2;PetTiger3Bullet4_1;PetTiger3Bullet4_2', 'tigress body teleport/combo and reused skills'],
+  ['pet-skill.phoenix.np', 'phoenix', 'PetPhoenixBmd1;PetPhoenixBmd2;PetPhoenixBmd3;PetPhoenixBmd4;PetPhoenix1Bullet2_1;PetPhoenix1Bullet2_2', 'phoenix transformation and rebirth feedback'],
+  ['pet-skill.phoenix.bshn', 'phoenix', 'PetPhoenix2Bullet3', 'phoenix bshn projectile'],
+  ['pet-skill.phoenix.dhly', 'phoenix', 'PetPhoenix3Bullet4', 'phoenix dhly area object'],
+  ['pet-skill.phoenix.zqaoyi', 'phoenix', 'PetPhoenixBmd4;PetPhoenix4Bullet3_2;PetPhoenix4Bullet5;PetPhoenix4Bullet6', 'phoenix ultimate body and combo objects'],
+  ['pet-skill.rabbit.yg', 'rabbit', 'Monster130Bullet2', 'rabbit moonlight proc object'],
+  ['pet-skill.rabbit.jf', 'rabbit', 'PetPetRabbitBulletBuff;PetPetRabbitJFBuff', 'rabbit attack/dodge buff feedback'],
+  ['pet-skill.rabbit.bs', 'rabbit', 'PetPetRabbitBullet4', 'rabbit ice projectile'],
+  ['pet-skill.rabbit.ysaoyi', 'rabbit', 'PetPetRabbitBmd4;petRabbit4AoyiBuff', 'rabbit ultimate body and moon field'],
+  ['pet-skill.mouse.sc', 'mouse', 'PetMouse1Bullet1;PetMouse1Bullet2', 'mouse rush and bite objects'],
+  ['pet-skill.mouse.hxfb', 'mouse', 'PetMouse1Bullet3', 'mouse returning-dart object'],
+  ['pet-skill.mouse.zsaoyi', 'mouse', 'PetMouseBmd2;PetMouse1Bullet1;PetMouse1Bullet2;PetMouse1Bullet3', 'mouse ultimate body and reused combo objects'],
+];
+
+const monkeyTruth = {
+  truthId: 'task-settings-193a.pet-monkey-animation',
+  evidencePath: 'docs/reverse-engineering/evidence/TASK-SETTINGS-193A-pet-monkey-animation.md',
+  implementationTask: 'TASK-SLICE-193B',
+  familyTruthId: 'task-settings-207.pet-monkey-family',
+  familyEvidencePath: 'docs/reverse-engineering/evidence/TASK-SETTINGS-207-pet-monkey-family.md',
+  familyImplementationTask: 'TASK-SLICE-208',
+  visualSummary: '626 states / 20 objects / unresolved=[]',
+};
+
+const horseTruth = {
+  truthId: 'task-settings-193c.pet-horse-animation',
+  evidencePath: 'docs/reverse-engineering/evidence/TASK-SETTINGS-193C-pet-horse-animation.md',
+  implementationTask: 'TASK-SLICE-193D',
+  familyTruthId: 'task-settings-209.pet-horse-family',
+  familyEvidencePath: 'docs/reverse-engineering/evidence/TASK-SETTINGS-209-pet-horse-family.md',
+  familyImplementationTask: 'TASK-SLICE-210',
+  visualSummary: '716 states / 20 objects / unresolved=[]',
+};
+
+const dragonTruth = {
+  truthId: 'task-settings-213.pet-dragon-family',
+  evidencePath: 'docs/reverse-engineering/evidence/TASK-SETTINGS-213-pet-dragon-family.md',
+  implementationTask: 'TASK-SLICE-214',
+  familyTruthId: 'task-settings-213.pet-dragon-family',
+  familyEvidencePath: 'docs/reverse-engineering/evidence/TASK-SETTINGS-213-pet-dragon-family.md',
+  familyImplementationTask: 'TASK-SLICE-214',
+  visualSummary: '345 complete-state baselines / 11 objects / unresolved=[]',
+};
+
+const familyTruth = new Map([
+  ['monkey', monkeyTruth],
+  ['horse', horseTruth],
+  ['dragon', dragonTruth],
+]);
+
+const monkeySkillAnnotations = new Map([
+  ['pet-skill.monkey1.xj', ['monkey1 xj 16-frame looping projectile', 'TASK-SETTINGS-193A verified patch owner registration emit matrix and four-second lifecycle; pair implementation is TASK-SLICE-193B.']],
+  ['pet-skill.monkey2.lj', ['monkey2 lj two-stage 4+5 frame effect', 'TASK-SETTINGS-193A requires both prelude and damage objects; pair implementation is TASK-SLICE-193B.']],
+  ['pet-skill.monkey2.xj', ['monkey2 xj reuses monkey1 16-frame projectile', 'TASK-SETTINGS-193A disproves the modern PetMonkey2Bullet3 source name; pair implementation must reuse PetMonkey1Bullet2.']],
+  ['pet-skill.monkey3.lyq', ['monkey3 and monkey4 lyq 25-frame projectile', 'TASK-SETTINGS-193A verified patch owner registration emit matrix and last-frame destruction.']],
+  ['pet-skill.monkey3.xj', ['monkey3 and monkey4 xj reuse monkey1 projectile', 'TASK-SETTINGS-193A verifies shared visual owner with form-specific emit offsets.']],
+  ['pet-skill.monkey3.lj', ['monkey3 and monkey4 lj prelude plus damage stage', 'TASK-SETTINGS-193A requires disabled behind-pet prelude and visible damage stage; modern single-stage projection is incomplete.']],
+  ['pet-skill.monkey4.jgaoyi', ['monkey4 jgaoyi body hit5 row8', 'TASK-SETTINGS-193A confirms no independent projectile visual; TASK-SLICE-193B must consume the body action.']],
+]);
+
+const monkeyNormalAnnotations = [
+  ['pet-skill.monkey1.normal', 'PetMonkey1Bullet1', true, 'monkey1 verified normal hit1 effect at frame-count 10', 'TASK-SETTINGS-207 freezes the normal attack emit and collision contract; TASK-SLICE-208 consumes the 193A terminal effect frames in the shared formal runtime.'],
+  ['pet-skill.monkey2.normal', 'PetMonkey2Bullet1', true, 'monkey2 verified normal hit1 effect at frame-count 8', 'TASK-SETTINGS-207 freezes the normal attack emit and ObjectBaseSprite4 collision contract; TASK-SLICE-208 consumes the 193A terminal effect frames in the shared formal runtime.'],
+  ['pet-skill.monkey3.normal', 'PetMonkey3Bullet1', true, 'monkey3 verified normal hit1 effect at frame-count 8', 'TASK-SETTINGS-207 freezes the normal attack emit and ObjectBaseSprite collision contract; TASK-SLICE-208 consumes the 193A terminal effect frames in the shared formal runtime.'],
+  ['pet-skill.monkey4.normal', 'PetMonkey3Bullet1', false, 'monkey4 verified normal hit1 reuse at frame-count 8', 'TASK-SETTINGS-207 freezes the form4 reuse and damage owner; TASK-SLICE-208 consumes the 193A monkey4-normal placement with the shared terminal effect frames.'],
+];
+
+const horseSkillAnnotations = new Map([
+  ['pet-skill.horse1.sp', ['horse1/2 sp 8-frame PetHorse1Bullet2 and horse3/4 sp 8-frame PetHorse3Bullet3', 'TASK-SETTINGS-193C verified both patch objects, form-specific emit matrices, horse1-only following behavior, last-frame lifecycle and the horse1 hit2 ice effect.']],
+  ['pet-skill.horse2.bd', ['horse2 45-frame PetHorse2Bullet2 and horse3/4 15-frame PetHorse3Bullet2 plus shared ice effect', 'TASK-SETTINGS-193C verified both form owners, following behavior, emit matrices and frameClips*2 ice pause.']],
+  ['pet-skill.horse3.bz', ['horse3/4 bz 31-frame projectile', 'TASK-SETTINGS-193C verified patch owner, emit matrix and last-frame lifecycle.']],
+  ['pet-skill.horse4.tmaoyi', ['horse4 tmaoyi 8-frame nested falling loop', 'TASK-SETTINGS-193C verified per-monster spawn, optional homing, 2000-distance and frameClips*10 lifetime.']],
+  ['pet-skill.horse4.tmaoyi.explode', ['horse4 tmaoyi 30-frame explosion', 'TASK-SETTINGS-193C verified impact spawn, bz gate, optional one-second bd delay and last-frame lifecycle.']],
+]);
+
+const dragonSkillAnnotations = new Map([
+  ['pet-skill.dragon1.fs', ['dragon1 translucent body clone', 'TASK-SETTINGS-213 verified clone appearance and lifecycle; TASK-SLICE-214E consumes this truth through the shared Runtime and production presenter; pet P1G=0.']],
+  ['pet-skill.dragon2.sdcc', ['dragon2 sdcc projectile', 'TASK-SETTINGS-213 verified projectile frames and hit/heal lifecycle; TASK-SLICE-214E consumes this truth through the shared Runtime and production presenter; pet P1G=0.']],
+  ['pet-skill.dragon3.ltwj', ['dragon3 ltwj projectile', 'TASK-SETTINGS-213 verified the five-wave nine-object sequence and hit/heal lifecycle; TASK-SLICE-214E consumes this truth through the shared Runtime and production presenter; pet P1G=0.']],
+  ['pet-skill.dragon4.qlaoyi', ['dragon4 ultimate trigger object', 'TASK-SETTINGS-213 verified the four-tick clone/trigger/skill chain and gate-only MP rule; TASK-SLICE-214E consumes this truth through the shared Runtime and production presenter; pet P1G=0.']],
+]);
+
+const packagePriority = new Map([
+  ['assets/20120808.swf', 0],
+  ['assets/20120203.swf', 1],
+  ['assets/StageCommon.swf', 2],
+  ['assets/mouse.swf', 3],
+  ['assets/pet1.swf', 4],
+]);
+
+const packageRecords = sourcePackages.map((sourcePackage) => {
+  const sourcePath = `${restoredPrefix}${sourcePackage}`;
+  const absolute = path.join(root, sourcePath);
+  if (!existsSync(absolute)) throw new Error(`Missing restored source package: ${sourcePath}`);
+  const symbols = readSymbolClassTag(absolute);
+  return { sourcePackage, sourcePath, sha256: sha256(absolute), symbols };
+});
+
+const symbolIndex = new Map();
+for (const source of packageRecords) {
+  for (const symbol of source.symbols) {
+    const candidates = symbolIndex.get(symbol.symbol) ?? [];
+    candidates.push({ sourcePackage: source.sourcePackage, sourcePath: source.sourcePath, characterId: symbol.characterId, sha256: source.sha256 });
+    symbolIndex.set(symbol.symbol, candidates);
+  }
+}
+
+function resolveSymbol(name) {
+  const candidates = [...(symbolIndex.get(name) ?? [])].sort((a, b) =>
+    (packagePriority.get(a.sourcePackage) ?? 99) - (packagePriority.get(b.sourcePackage) ?? 99)
+      || a.characterId - b.characterId,
+  );
+  return {
+    symbol: name,
+    status: candidates.length > 0 ? 'located' : 'unlocated',
+    selectedOwner: candidates[0] ?? null,
+    candidates,
+    ownerRule: candidates.length > 1
+      ? 'Prefer the later Aloader patch package over the pet1 base package; the family evidence task must verify ApplicationDomain/load precedence before deriving frames.'
+      : 'Only exact restored SymbolClass candidate in the audited package set.',
+  };
+}
+
+function resolveFamilySymbol(name, speciesName) {
+  const resolved = resolveSymbol(name);
+  const truth = familyTruth.get(speciesName);
+  if (truth && resolved.candidates.length > 1) {
+    return {
+      ...resolved,
+      ownerRule: `Verified by ${truth.truthId}: Aloader startup packages load before stage AssetsLoader adds pet1.swf to the same ApplicationDomain; selected owner is authoritative for ${truth.implementationTask}.`,
+    };
+  }
+  return resolved;
+}
+
+const species = speciesSpecs.map((spec) => {
+  const skills = skillSpecs.filter((entry) => entry[1] === spec.species).map(([stableKey, , names, usage]) => ({
+    stableKey,
+    usage,
+    symbols: names.split(';').map((name) => resolveFamilySymbol(name, spec.species)),
+    modernStatus: spec.species === 'dragon' ? 'restored-runtime' : 'placeholder-or-unrendered',
+  }));
+  const forms = spec.forms.map((form, index) => ({ form, bodySymbol: spec.bodies[index], body: resolveFamilySymbol(spec.bodies[index], spec.species) }));
+  return {
+    species: spec.species,
+    forms,
+    requiredBodyActionClasses: ['wait/follow', 'walk/warp', 'normal-attack', 'species-skill-actions', 'hurt', 'death-or-zero-hp lifecycle'],
+    exactBodyActionRows: familyTruth.has(spec.species)
+      ? `verified by ${familyTruth.get(spec.species).truthId}; ${familyTruth.get(spec.species).visualSummary}; ${familyTruth.get(spec.species).evidencePath}`
+      : 'unresolved-by-design; owned by the generated evidence task and must be serialized as verified machine truth before implementation',
+    skills,
+    modernBody: spec.species === 'horse'
+      ? {
+          status: 'restored-runtime',
+          locator: 'src/scenes/FormalPetHorseBodyBridge.ts + src/scenes/test-scene/TestSceneViews.ts:createPetView',
+        }
+      : spec.species === 'dragon'
+        ? { status: 'restored-runtime', locator: 'src/scenes/PetDragonPresentationBridge.ts + src/systems/pet-behaviors/Dragon4PetBehavior.ts' }
+        : { status: 'placeholder', locator: 'src/scenes/test-scene/TestScenePetViewBridge.ts:createPetView geometric body/ear/label projection' },
+    evidenceTask: spec.evidenceTask,
+    implementationTask: spec.implementationTask,
+    familyTruthId: familyTruth.get(spec.species)?.familyTruthId ?? null,
+    familyEvidencePath: familyTruth.get(spec.species)?.familyEvidencePath ?? null,
+    familyImplementationTask: familyTruth.get(spec.species)?.familyImplementationTask ?? null,
+    ...(spec.species === 'dragon' ? {
+      familyAcceptanceStatus: 'verified',
+      familyAcceptanceHold: 'docs/tasks/evidence/TASK-SLICE-214A/truth-hold.json',
+      familyAssetModule: 'src/assets/PetDragonAnimationAssets.ts',
+      familyAssetEvidence: 'docs/tasks/evidence/TASK-SLICE-214A/handoff.md',
+      familyRuntimeEvidence: 'docs/tasks/evidence/TASK-SLICE-214E/handoff.md',
+    } : {}),
+    note: spec.species === 'horse'
+      ? 'TASK-SLICE-210 binds restored horse body/effects to PetCombatSnapshot/actionToken/projectile and shared formal/TestScene damage runtime; pet P1H=0.'
+      : spec.species === 'dragon'
+        ? 'TASK-SETTINGS-213 verifies dragon1..4 body/effect owners, 345 complete-state baselines, normal attacks, clones, nine-object ltwj, qlaoyi composition, owner and lifecycle; TASK-SLICE-214E closes the 44-contract family through the shared Runtime, real projectiles and P1/P2 formal/TestScene consumers; pet P1G=0.'
+        : spec.note ?? null,
+  };
+});
+
+const missing = species.flatMap((item) => [
+  ...item.forms.filter((form) => form.body.status === 'unlocated').map((form) => `${item.species}:body:${form.bodySymbol}`),
+  ...item.skills.flatMap((skill) => skill.symbols.filter((symbol) => symbol.status === 'unlocated').map((symbol) => `${item.species}:${skill.stableKey}:${symbol.symbol}`)),
+]);
+if (missing.length > 0) throw new Error(`Unlocated expected pet symbols:\n${missing.join('\n')}`);
+
+const corpus = {
+  schemaVersion: 1,
+  corpusId: 'task-settings-193.pet-animation-corpus',
+  status: 'partitioned-not-visually-verified',
+  scope: 'Nine currently supported modern pet species, their actual forms, body atlas SymbolClasses, skill objects, restored source owners, and placeholder/unrendered modern mappings.',
+  exclusions: ['No frame derivation', 'No atlas generation', 'No src integration', 'No claim that any species visual is closed'],
+  sourcePackages: packageRecords.map(({ symbols, ...source }) => ({ ...source, matchingSymbolCount: symbols.filter((item) => /^Pet|^Monster130Bullet2$|^petRabbit4AoyiBuff$/.test(item.symbol)).length })),
+  sourcePrecedenceEvidence: {
+    locator: 'local-resources/regima/task-outputs/task-settings-189-equipment-tooltip/restored-main-script/scripts/loader/Aloader.as: constructor urls and sequential next()',
+    rule: '20120203.swf loads before 20120808.swf and StageCommon.swf; duplicate candidates are frozen to the later listed patch for child-task investigation, while pet1/mouse-only symbols keep their sole owner.',
+    counterEvidence: 'TASK-SETTINGS-193A resolved monkey collisions to 20120203.swf. TASK-SETTINGS-193C resolved horse1..3 bodies and ordinary effects to 20120203.swf, horse4/tmaoyi to pet1.swf, and shared PetHorseIceEffect to startup-loaded StageCommon.swf. Other families must still reopen their selected owner if family evidence contradicts the frozen precedence.',
+  },
+  species,
+  completeness: { expectedSpecies: 9, extractedSpecies: species.length, unlocated: missing, noUnpartitionedFamily: species.every((item) => item.evidenceTask && item.implementationTask) },
+};
+
+const corpusText = `${JSON.stringify(corpus, null, 2)}\n`;
+const header = ['stableKey', 'as3Name', 'sourceKind', 'sourcePath', 'sourcePackage', 'symbolId', 'scope', 'usage', 'status', 'confidence', 'nextAction', 'note'];
+
+const bodyRows = species.map((item) => {
+  const unique = [...new Map(item.forms.map((form) => [form.bodySymbol, form.body])).values()];
+  const monkeyIntegrated = item.species === 'monkey';
+  const horseIntegrated = item.species === 'horse';
+  const dragonVerified = item.species === 'dragon';
+  return row([
+    `pet-animation.${item.species}.body-family`,
+    unique.map((entry) => entry.symbol).join(';'),
+    'restored-swf',
+    unique.flatMap((entry) => entry.candidates.map((candidate) => candidate.sourcePath)).filter(uniqueValue).join(';'),
+    unique.map((entry) => entry.selectedOwner.sourcePackage).filter(uniqueValue).join(';'),
+    unique.map((entry) => entry.selectedOwner.characterId).join(';'),
+    'effect',
+    monkeyIntegrated ? 'monkey actual-form body atlases with verified action rows and owner precedence' : horseIntegrated ? 'horse actual-form body atlases with verified action rows and owner precedence' : dragonVerified ? 'dragon actual-form body atlases; TASK-SETTINGS-213 verified complete family states' : `${item.species} actual-form body atlases; exact action rows remain for ${item.evidenceTask}`,
+    monkeyIntegrated || horseIntegrated || dragonVerified ? 'ready' : 'export-ready',
+    'confirmed',
+    monkeyIntegrated || horseIntegrated || dragonVerified ? 'none' : 'export-selectively',
+    monkeyIntegrated
+      ? 'TASK-SLICE-193B directly consumes TASK-SETTINGS-193A truth for host-tick holds, registration, visible bounds and patch owner in P1/P2 combat runtime.'
+      : horseIntegrated
+        ? 'TASK-SLICE-193D directly consumes TASK-SETTINGS-193C truth for host-tick holds, registration, visible bounds and patch/base owner in P1/P2 combat runtime.'
+      : dragonVerified
+        ? 'TASK-SETTINGS-213 verified action rows, registration points, frame timing, load precedence and 345 baselines; TASK-SLICE-214E consumes these in the shared formal/TestScene presenter, pet P1G=0.'
+        : `Source owner partitioned by TASK-SETTINGS-193; derive nothing before ${item.evidenceTask} verifies action rows, registration points, frame timing and load precedence.`,
+  ]);
+});
+
+const normalRows = monkeyNormalAnnotations.map(([stableKey, names, selectedOnly, usage, note]) => {
+  const resolved = names.split(';').map(resolveSymbol);
+  return row([
+    stableKey,
+    names,
+    'restored-swf',
+    resolved.flatMap((entry) => selectedOnly ? [entry.selectedOwner.sourcePath] : entry.candidates.map((candidate) => candidate.sourcePath)).filter(uniqueValue).join(';'),
+    resolved.map((entry) => entry.selectedOwner.sourcePackage).filter(uniqueValue).join(';'),
+    resolved.map((entry) => entry.selectedOwner.characterId).join(';'),
+    'effect',
+    usage,
+    'ready',
+    'confirmed',
+    'none',
+    note,
+  ]);
+});
+
+const skillRows = [...normalRows, ...skillSpecs.map(([stableKey, speciesName, names, usage]) => {
+  const resolved = names.split(';').map(resolveSymbol);
+  const monkeyIntegrated = monkeySkillAnnotations.get(stableKey);
+  const horseIntegrated = horseSkillAnnotations.get(stableKey);
+  const dragonVerified = dragonSkillAnnotations.get(stableKey);
+  const ready = monkeyIntegrated ?? horseIntegrated ?? dragonVerified;
+  return row([
+    stableKey,
+    names,
+    'restored-swf',
+    resolved.flatMap((entry) => entry.candidates.map((candidate) => candidate.sourcePath)).filter(uniqueValue).join(';'),
+    resolved.map((entry) => entry.selectedOwner.sourcePackage).filter(uniqueValue).join(';'),
+    resolved.map((entry) => entry.selectedOwner.characterId).join(';'),
+    'effect',
+    ready?.[0] ?? usage,
+    monkeyIntegrated || horseIntegrated || dragonVerified ? 'ready' : 'export-ready',
+    'confirmed',
+    monkeyIntegrated || horseIntegrated || dragonVerified ? 'none' : 'export-selectively',
+    monkeyIntegrated
+      ? `${monkeyIntegrated[1]} TASK-SLICE-193B now consumes this verified visual in the shared monkey runtime.`
+      : horseIntegrated
+        ? `${horseIntegrated[1]} TASK-SLICE-193D now consumes this verified visual in the shared horse runtime; gameplay gates remain with the existing pet/projectile owner.`
+        : dragonVerified
+          ? dragonVerified[1]
+          : `${speciesName} family is partitioned to ${speciesSpecs.find((item) => item.species === speciesName).evidenceTask}; modern visibility remains placeholder or absent until its paired implementation task.`,
+  ]);
+})];
+
+const bodyCsv = `${header.join(',')}\n${bodyRows.join('\n')}\n`;
+const skillCsv = `${header.join(',')}\n${skillRows.join('\n')}\n`;
+
+emit(corpusPath, corpusText);
+emit(bodyAnnotationPath, bodyCsv);
+emit(skillAnnotationPath, skillCsv);
+console.log(`Pet animation corpus ${check ? 'check' : 'generation'} passed: 9 species, ${species.reduce((sum, item) => sum + item.forms.length, 0)} forms, ${skillSpecs.length} skill mappings, 0 unlocated symbols.`);
+
+function emit(relativePath, content) {
+  const absolute = path.join(root, relativePath);
+  if (check) {
+    if (!existsSync(absolute) || readFileSync(absolute, 'utf8') !== content) throw new Error(`Generated file is stale: ${relativePath}`);
+  } else {
+    writeFileSync(absolute, content);
+  }
+}
+
+function row(values) {
+  return values.map((value) => csv(value)).join(',');
+}
+
+function csv(value) {
+  const text = String(value ?? '');
+  return /[",\r\n]/.test(text) ? `"${text.replaceAll('"', '""')}"` : text;
+}
+
+function uniqueValue(value, index, values) {
+  return values.indexOf(value) === index;
+}
+
+function sha256(filePath) {
+  return createHash('sha256').update(readFileSync(filePath)).digest('hex').toUpperCase();
+}
+
+function readSymbolClassTag(filePath) {
+  const raw = readFileSync(filePath);
+  const signature = raw.subarray(0, 3).toString('ascii');
+  if (signature === 'ZWS') return [];
+  const body = signature === 'CWS' ? inflateSync(raw.subarray(8)) : raw.subarray(8);
+  const swf = signature === 'CWS' ? Buffer.concat([Buffer.from('FWS'), raw.subarray(3, 8), body]) : raw;
+  if (swf.subarray(0, 3).toString('ascii') !== 'FWS') return [];
+  const rectBits = 5 + (swf[8] >> 3) * 4;
+  let offset = 8 + Math.ceil(rectBits / 8) + 4;
+  const symbols = [];
+  while (offset + 2 <= swf.length) {
+    const tagHeader = swf.readUInt16LE(offset); offset += 2;
+    const tagCode = tagHeader >> 6;
+    let tagLength = tagHeader & 0x3f;
+    if (tagLength === 0x3f) { if (offset + 4 > swf.length) break; tagLength = swf.readUInt32LE(offset); offset += 4; }
+    const end = offset + tagLength;
+    if (end > swf.length) break;
+    if (tagCode === 76 && tagLength >= 2) {
+      let cursor = offset;
+      const count = swf.readUInt16LE(cursor); cursor += 2;
+      for (let index = 0; index < count && cursor + 2 <= end; index += 1) {
+        const characterId = swf.readUInt16LE(cursor); cursor += 2;
+        const zero = swf.indexOf(0, cursor);
+        if (zero < 0 || zero > end) break;
+        symbols.push({ characterId, symbol: swf.subarray(cursor, zero).toString('utf8') });
+        cursor = zero + 1;
+      }
+    }
+    offset = end;
+    if (tagCode === 0) break;
+  }
+  return symbols;
+}

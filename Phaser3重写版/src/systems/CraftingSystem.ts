@@ -1,0 +1,669 @@
+import {
+  getEquipmentInstanceStats,
+  type EquipmentDefinition,
+  type EquipmentInstance,
+  type EquipmentStats,
+} from './EquipmentSystem';
+import {
+  addEquipmentDefinition,
+  addStackByFillName,
+  getInventoryCategoryForDefinition,
+  InventoryCategories,
+  type InventoryCategory,
+  type InventoryEntry,
+  type InventoryItemStack,
+  type InventoryStore,
+} from './InventorySystem';
+import type { PlayerSlot } from './InputSystem';
+import {
+  DirectStaticCraftingRecipes,
+  MingDingHuaYanCraftingRecipes,
+  PermanentFashionCraftingRecipes,
+  SunSutraCraftingRecipes,
+  SutraCraftingRecipes,
+} from './CraftingRecipeRegistry';
+import { createCraftingItemDefinitionRegistry } from './CraftingItemDefinitionRegistry';
+
+export type CraftingProductionBehavior =
+  | 'legacy_static'
+  | 'direct_static'
+  | 'direct_fashion_permanent'
+  | 'get_sutra_value'
+  | 'get_sun_sutra_value'
+  | 'get_mingding_huayan';
+
+export type CraftingRecipe = {
+  materialFillNames: readonly [string, string, string];
+  productFillName: string;
+  productName: string;
+  soulCost: number;
+  productionBehavior: CraftingProductionBehavior;
+};
+
+export type CraftingPreview = {
+  recipe?: CraftingRecipe;
+  materialQuantity: number;
+  canCraft: boolean;
+  message: string;
+};
+
+export type CraftingResult = {
+  ok: boolean;
+  message: string;
+  soulBefore: number;
+  soulAfter: number;
+  recipe?: CraftingRecipe;
+  product?: InventoryEntry;
+};
+
+export type StagedCraftingMaterial = {
+  entry: InventoryEntry;
+  sourceCategory: InventoryCategory;
+};
+
+export type CraftingSession = {
+  ownerSlot: PlayerSlot;
+  slots: [StagedCraftingMaterial?, StagedCraftingMaterial?, StagedCraftingMaterial?];
+  message: string;
+  lastProduct?: InventoryEntry;
+};
+
+export type CraftingSessionResult = {
+  ok: boolean;
+  message: string;
+};
+
+const DefaultSeedCraftingRecipe: CraftingRecipe = {
+  materialFillNames: ['tlzsp', 'tlzsp', 'tlzsp'],
+  productFillName: 'wptlz',
+  productName: '土灵珠',
+  soulCost: 1_000,
+  productionBehavior: 'legacy_static',
+};
+
+// VS-042's original earth-pearl compatibility entry remains available alongside
+// the authoritative direct-static and inherited-attribute registries.
+export const SeedCraftingRecipes: readonly CraftingRecipe[] = [
+  DefaultSeedCraftingRecipe,
+  ...DirectStaticCraftingRecipes,
+  ...PermanentFashionCraftingRecipes,
+  ...SutraCraftingRecipes,
+  ...SunSutraCraftingRecipes,
+  ...MingDingHuaYanCraftingRecipes,
+];
+
+export function createCraftingSession(ownerSlot: PlayerSlot): CraftingSession {
+  return { ownerSlot, slots: [], message: '选择背包材料，按 X 放入合成槽' };
+}
+
+export function stageCraftingMaterial(
+  session: CraftingSession,
+  store: InventoryStore,
+  entry: InventoryEntry | undefined,
+): CraftingSessionResult {
+  if (!entry) return sessionFailure(session, '请选择背包材料');
+  if (entry.definition.fillName.includes('jns')) {
+    return sessionFailure(session, '技能书不能作为合成材料');
+  }
+  const stagedCount = session.slots.filter((slot) => Boolean(slot)).length;
+  if (stagedCount >= 3) return sessionFailure(session, '合成槽已满');
+  if (entry.kind === 'equipment' && session.slots.some((slot) => slot?.entry === entry)) {
+    return sessionFailure(session, '同一装备实例不能重复放入');
+  }
+  const location = findInventoryEntry(store, entry);
+  if (!location) return sessionFailure(session, '材料不在当前玩家背包中');
+
+  let stagedEntry: InventoryEntry;
+  if (entry.kind === 'equipment') {
+    store.categories[location.category].splice(location.index, 1);
+    stagedEntry = entry;
+  } else {
+    stagedEntry = takeOneStackUnit(store, location.category, location.index, entry);
+  }
+  const emptyIndex = session.slots.findIndex((slot) => !slot);
+  session.slots[emptyIndex >= 0 ? emptyIndex : session.slots.length] = {
+    entry: stagedEntry,
+    sourceCategory: location.category,
+  };
+  session.lastProduct = undefined;
+  session.message = `已放入 ${entry.definition.name} (${stagedCount + 1}/3)`;
+  return { ok: true, message: session.message };
+}
+
+export function removeStagedCraftingMaterial(
+  session: CraftingSession,
+  store: InventoryStore,
+  slotIndex = findLastOccupiedCraftingSlot(session),
+): CraftingSessionResult {
+  const staged = session.slots[slotIndex];
+  if (!staged) return sessionFailure(session, '该合成槽为空');
+  returnStagedMaterial(store, staged);
+  session.slots[slotIndex] = undefined;
+  while (session.slots.length > 0 && !session.slots[session.slots.length - 1]) session.slots.pop();
+  session.lastProduct = undefined;
+  session.message = `已退回 ${staged.entry.definition.name}`;
+  return { ok: true, message: session.message };
+}
+
+export function closeCraftingSession(
+  session: CraftingSession,
+  store: InventoryStore,
+): CraftingSessionResult {
+  for (const staged of session.slots) {
+    if (staged) returnStagedMaterial(store, staged);
+  }
+  const returned = session.slots.filter((slot) => Boolean(slot)).length;
+  session.slots.length = 0;
+  session.lastProduct = undefined;
+  session.message = returned > 0 ? `已退回 ${returned} 个暂存材料` : '合成面板已关闭';
+  return { ok: true, message: session.message };
+}
+
+export function previewCraftingSession(
+  session: CraftingSession,
+  soul: number,
+  recipes: readonly CraftingRecipe[] = SeedCraftingRecipes,
+): CraftingPreview {
+  const materialFillNames = [0, 1, 2].map(
+    (index) => session.slots[index]?.entry.definition.fillName ?? '',
+  );
+  const materialQuantity = session.slots.filter((slot) => Boolean(slot)).length;
+  if (materialQuantity < 3) {
+    return {
+      materialQuantity,
+      canCraft: false,
+      message: `材料槽 ${materialQuantity}/3`,
+    };
+  }
+  const recipe = matchCraftingRecipe(materialFillNames, recipes);
+  if (!recipe) {
+    return { materialQuantity: 3, canCraft: false, message: '没有匹配的合成配方' };
+  }
+  if (soul < recipe.soulCost) {
+    return {
+      recipe, materialQuantity: 3, canCraft: false,
+      message: `灵魂不足 ${soul}/${recipe.soulCost}`,
+    };
+  }
+  return { recipe, materialQuantity: 3, canCraft: true, message: `可合成 ${recipe.productName}` };
+}
+
+export function createCraftingPreviewEquipmentInstance(
+  session: CraftingSession,
+  registry: Readonly<Record<string, EquipmentDefinition>>,
+  recipes: readonly CraftingRecipe[] = SeedCraftingRecipes,
+): EquipmentInstance | undefined {
+  const materialFillNames = session.slots.map((slot) => slot?.entry.definition.fillName ?? '');
+  const recipe = matchCraftingRecipe(materialFillNames, recipes);
+  if (!recipe) return undefined;
+  const product = registry[recipe.productFillName];
+  const productCategory = product ? getInventoryCategoryForDefinition(product) : undefined;
+  if (!product || (productCategory !== 'equipment' && productCategory !== 'fashion')) return undefined;
+  const statsMaterials = [0, 1, 2].map((index) =>
+    session.slots[index] ? asCraftingStatsMaterial(session.slots[index]!.entry, index) : undefined
+  );
+  if (statsMaterials.some((material) => !material)) return undefined;
+  const baseStatsOverride = isInheritedEquipmentBehavior(recipe.productionBehavior)
+    ? createInheritedProductStatsOverride(
+      product,
+      statsMaterials as EquipmentInstance[],
+      recipe.productionBehavior,
+    )
+    : undefined;
+  return {
+    kind: 'equipment',
+    instanceId: `crafting-preview-${session.ownerSlot}-${product.fillName}`,
+    definition: product,
+    quantity: 1,
+    ...(baseStatsOverride ? { baseStatsOverride } : {}),
+  };
+}
+
+function findLastOccupiedCraftingSlot(session: CraftingSession): number {
+  for (let index = session.slots.length - 1; index >= 0; index -= 1) {
+    if (session.slots[index]) return index;
+  }
+  return -1;
+}
+
+export function craftStagedSession(params: {
+  session: CraftingSession;
+  store: InventoryStore;
+  registry: Record<string, EquipmentDefinition>;
+  soul: number;
+  recipes?: readonly CraftingRecipe[];
+}): CraftingResult {
+  const materialFillNames = params.session.slots.map(
+    (slot) => slot?.entry.definition.fillName ?? '',
+  );
+  if (materialFillNames.length !== 3) {
+    return failure('需要三个暂存材料', params.soul);
+  }
+  for (const staged of params.session.slots) {
+    if (staged) restoreStagedForCraft(params.store, staged);
+  }
+  const result = craft({
+    store: params.store,
+    registry: params.registry,
+    soul: params.soul,
+    materialFillNames,
+    recipes: params.recipes,
+  });
+  if (result.ok) {
+    params.session.slots.length = 0;
+    params.session.lastProduct = result.product;
+  } else {
+    params.session.lastProduct = undefined;
+    for (const staged of params.session.slots) {
+      if (staged) withdrawRestoredMaterial(params.store, staged);
+    }
+  }
+  params.session.message = result.message;
+  return result;
+}
+
+export function createSeedCraftingItemDefinitions(
+  existing: Readonly<Record<string, EquipmentDefinition>> = {},
+): Record<string, EquipmentDefinition> {
+  return createCraftingItemDefinitionRegistry(existing);
+}
+
+export function matchCraftingRecipe(
+  materialFillNames: readonly string[],
+  recipes: readonly CraftingRecipe[] = SeedCraftingRecipes,
+): CraftingRecipe | undefined {
+  if (materialFillNames.length !== 3) return undefined;
+  const sortedMaterials = [...materialFillNames].sort();
+  return recipes.find((recipe) =>
+    [...recipe.materialFillNames].sort().every((name, index) => name === sortedMaterials[index])
+  );
+}
+
+export function previewCrafting(
+  store: InventoryStore,
+  soul: number,
+  recipe: CraftingRecipe = DefaultSeedCraftingRecipe,
+): CraftingPreview {
+  const requirements = buildRequirements(recipe.materialFillNames);
+  const totalRequired = recipe.materialFillNames.length;
+  let totalAvailable = 0;
+  for (const [fillName, required] of requirements) {
+    const available = getMaterialQuantity(store, fillName);
+    totalAvailable += Math.min(available, required);
+    if (available < required) {
+      return {
+        recipe,
+        materialQuantity: totalAvailable,
+        canCraft: false,
+        message: `材料不足 ${fillName} ${available}/${required}`,
+      };
+    }
+  }
+  if (soul < recipe.soulCost) {
+    return { recipe, materialQuantity: totalRequired, canCraft: false, message: `灵魂不足 ${soul}/${recipe.soulCost}` };
+  }
+  return { recipe, materialQuantity: totalRequired, canCraft: true, message: `可合成 ${recipe.productName}` };
+}
+
+export function craft(params: {
+  store: InventoryStore;
+  registry: Record<string, EquipmentDefinition>;
+  soul: number;
+  materialFillNames: readonly string[];
+  recipes?: readonly CraftingRecipe[];
+}): CraftingResult {
+  const soulBefore = params.soul;
+  const recipe = matchCraftingRecipe(params.materialFillNames, params.recipes);
+  if (!recipe) return failure('没有匹配的合成配方', soulBefore);
+
+  const product = params.registry[recipe.productFillName];
+  if (!product) return failure('合成产物配置缺失', soulBefore, recipe);
+  const requirements = buildRequirements(recipe.materialFillNames);
+  const inheritsEquipmentStats = isInheritedEquipmentBehavior(recipe.productionBehavior);
+  const selectedMaterials = findCraftingMaterials(params.store, recipe.materialFillNames);
+  if (!selectedMaterials) {
+    return failure(inheritsEquipmentStats ? '合成材料装备实例不足' : '合成材料实例不足', soulBefore, recipe);
+  }
+  for (const [fillName, quantity] of requirements) {
+    if (getMaterialQuantity(params.store, fillName) < quantity) {
+      return failure(`${fillName} 数量不足`, soulBefore, recipe);
+    }
+  }
+  if (params.soul < recipe.soulCost) return failure('灵魂值不够', soulBefore, recipe);
+  if (!canAddProductAfterConsumption(
+    params.store,
+    product,
+    requirements,
+    selectedMaterials.consumedEntries,
+  )) {
+    return failure('背包空间不足', soulBefore, recipe);
+  }
+
+  for (const material of selectedMaterials.consumedEntries) {
+    if (material.kind === 'equipment') removeEquipmentInstance(params.store, material);
+    else removeStackQuantity(params.store, material.definition.fillName, 1);
+  }
+  const productCategory = getInventoryCategoryForDefinition(product);
+  const productUsesInstance = productCategory === 'equipment' || productCategory === 'fashion';
+  const added = productUsesInstance
+    ? addEquipmentDefinition(params.store, product)
+    : addStackByFillName(params.store, params.registry, recipe.productFillName, 1);
+  if (!added) throw new Error('Crafting preflight allowed a product that could not be added');
+  if (inheritsEquipmentStats && productUsesInstance && added.kind === 'equipment') {
+    added.baseStatsOverride = createInheritedProductStatsOverride(
+      product,
+      selectedMaterials.statsMaterials,
+      recipe.productionBehavior,
+    );
+  }
+  return {
+    ok: true,
+    message: `合成成功：${recipe.productName}`,
+    soulBefore,
+    soulAfter: soulBefore - recipe.soulCost,
+    recipe,
+    product: added,
+  };
+}
+
+export function inheritSutraStats(
+  materials: readonly EquipmentInstance[],
+): Pick<EquipmentDefinition['stats'], 'maxHp' | 'maxMp' | 'power' | 'defense'> {
+  return {
+    maxHp: Math.trunc(materials.reduce((sum, item) => sum + getEquipmentInstanceStats(item).maxHp, 0) / 3),
+    maxMp: Math.trunc(materials.reduce((sum, item) => sum + getEquipmentInstanceStats(item).maxMp, 0) / 3),
+    power: Math.trunc(materials.reduce((sum, item) => sum + getEquipmentInstanceStats(item).power, 0) / 3),
+    defense: Math.trunc(materials.reduce((sum, item) => sum + getEquipmentInstanceStats(item).defense, 0) / 3),
+  };
+}
+
+type SpecialInheritedStats = Pick<
+  EquipmentDefinition['stats'],
+  | 'maxHp' | 'maxMp' | 'power' | 'defense'
+  | 'critPercent' | 'missPercent' | 'hpRegen' | 'mpRegen'
+  | 'lifeStealPercent' | 'magicDefensePercent'
+>;
+
+export function inheritSunSutraStats(
+  materials: readonly EquipmentInstance[],
+  productFillName: string,
+): SpecialInheritedStats {
+  const positiveSum = (read: (stats: EquipmentDefinition['stats']) => number): number =>
+    materials.reduce((sum, item) => {
+      const value = read(getEquipmentInstanceStats(item));
+      return value > 0 ? sum + value : sum;
+    }, 0);
+  const positiveFractionSum = (read: (stats: EquipmentDefinition['stats']) => number): number =>
+    positiveSum(read) / 100;
+  let lifeStealPercent = Math.trunc(positiveSum((stats) => stats.lifeStealPercent) / 1.5);
+  if (productFillName === 'dzjj') lifeStealPercent = 0;
+  if (productFillName === 'hy') lifeStealPercent = 18;
+  return {
+    maxHp: Math.trunc(positiveSum((stats) => stats.maxHp) / 1.5),
+    maxMp: Math.trunc(positiveSum((stats) => stats.maxMp) / 1.5),
+    power: Math.trunc(positiveSum((stats) => stats.power) / 1.5),
+    defense: Math.trunc(positiveSum((stats) => stats.defense) / 1.5),
+    critPercent: as3FractionToPercentPoints(roundTo2(positiveFractionSum((stats) => stats.critPercent) / 1.5)),
+    missPercent: as3FractionToPercentPoints(Math.min(
+      roundTo2(positiveFractionSum((stats) => stats.missPercent) / 1.5), 0.15,
+    )),
+    hpRegen: Math.trunc(positiveSum((stats) => stats.hpRegen) / 1.5),
+    mpRegen: Math.trunc(positiveSum((stats) => stats.mpRegen) / 1.5),
+    lifeStealPercent,
+    magicDefensePercent: as3FractionToPercentPoints(Math.min(
+      roundTo2(positiveFractionSum((stats) => stats.magicDefensePercent) / 1.5), 0.24,
+    )),
+  };
+}
+
+export function inheritMingDingHuaYanStats(
+  materials: readonly EquipmentInstance[],
+): SpecialInheritedStats {
+  const positiveScaledIntegerSum = (
+    read: (stats: EquipmentDefinition['stats']) => number,
+  ): number => materials.reduce((sum, item) => {
+    const value = read(getEquipmentInstanceStats(item));
+    return value > 0 ? sum + Math.trunc(value * 1.5) : sum;
+  }, 0);
+  const positiveScaledFractionSum = (
+    read: (stats: EquipmentDefinition['stats']) => number,
+  ): number => materials.reduce((sum, item) => {
+    const value = read(getEquipmentInstanceStats(item));
+    return value > 0 ? sum + (value / 100) * 1.5 : sum;
+  }, 0);
+  return {
+    maxHp: positiveScaledIntegerSum((stats) => stats.maxHp),
+    maxMp: positiveScaledIntegerSum((stats) => stats.maxMp),
+    power: positiveScaledIntegerSum((stats) => stats.power),
+    defense: positiveScaledIntegerSum((stats) => stats.defense),
+    critPercent: as3FractionToPercentPoints(roundTo2(
+      positiveScaledFractionSum((stats) => stats.critPercent),
+    )),
+    missPercent: as3FractionToPercentPoints(Math.min(
+      roundTo2(positiveScaledFractionSum((stats) => stats.missPercent)), 0.18,
+    )),
+    hpRegen: positiveScaledIntegerSum((stats) => stats.hpRegen),
+    mpRegen: positiveScaledIntegerSum((stats) => stats.mpRegen),
+    lifeStealPercent: positiveScaledIntegerSum((stats) => stats.lifeStealPercent),
+    magicDefensePercent: as3FractionToPercentPoints(Math.min(
+      roundTo2(positiveScaledFractionSum((stats) => stats.magicDefensePercent)), 0.24,
+    )),
+  };
+}
+
+function failure(message: string, soul: number, recipe?: CraftingRecipe): CraftingResult {
+  return { ok: false, message, soulBefore: soul, soulAfter: soul, recipe };
+}
+
+function sessionFailure(session: CraftingSession, message: string): CraftingSessionResult {
+  session.message = message;
+  return { ok: false, message };
+}
+
+function findInventoryEntry(
+  store: InventoryStore,
+  entry: InventoryEntry,
+): { category: InventoryCategory; index: number } | undefined {
+  for (const category of InventoryCategories) {
+    const index = store.categories[category].indexOf(entry);
+    if (index >= 0) return { category, index };
+  }
+  return undefined;
+}
+
+function takeOneStackUnit(
+  store: InventoryStore,
+  category: InventoryCategory,
+  index: number,
+  stack: InventoryItemStack,
+): InventoryItemStack {
+  stack.quantity -= 1;
+  if (stack.quantity === 0) store.categories[category].splice(index, 1);
+  return {
+    kind: 'stack',
+    stackId: `staged-${stack.stackId}`,
+    definition: stack.definition,
+    quantity: 1,
+  };
+}
+
+function returnStagedMaterial(store: InventoryStore, staged: StagedCraftingMaterial): void {
+  if (staged.entry.kind === 'equipment') {
+    if (!store.categories[staged.sourceCategory].includes(staged.entry)) {
+      store.categories[staged.sourceCategory].push(staged.entry);
+    }
+    return;
+  }
+  restoreStackUnit(store, staged.sourceCategory, staged.entry);
+}
+
+function restoreStagedForCraft(store: InventoryStore, staged: StagedCraftingMaterial): void {
+  if (staged.entry.kind === 'equipment') {
+    store.categories[staged.sourceCategory].unshift(staged.entry);
+    return;
+  }
+  restoreStackUnit(store, staged.sourceCategory, staged.entry);
+}
+
+function restoreStackUnit(
+  store: InventoryStore,
+  category: InventoryCategory,
+  staged: InventoryItemStack,
+): void {
+  const existing = store.categories[category].find(
+    (entry): entry is InventoryItemStack =>
+      entry.kind === 'stack' && entry.definition.fillName === staged.definition.fillName,
+  );
+  if (existing) existing.quantity += 1;
+  else store.categories[category].push({ ...staged, stackId: `stack-${staged.definition.fillName}` });
+}
+
+function withdrawRestoredMaterial(store: InventoryStore, staged: StagedCraftingMaterial): void {
+  if (staged.entry.kind === 'equipment') {
+    const index = store.categories[staged.sourceCategory].indexOf(staged.entry);
+    if (index >= 0) store.categories[staged.sourceCategory].splice(index, 1);
+    return;
+  }
+  const entries = store.categories[staged.sourceCategory];
+  const index = entries.findIndex((entry): entry is InventoryItemStack =>
+    entry.kind === 'stack' && entry.definition.fillName === staged.entry.definition.fillName
+  );
+  const stack = entries[index];
+  if (!stack || stack.kind !== 'stack') throw new Error('Restored crafting stack is missing');
+  stack.quantity -= 1;
+  if (stack.quantity === 0) entries.splice(index, 1);
+}
+
+function getMaterialQuantity(store: InventoryStore, fillName: string): number {
+  let quantity = 0;
+  for (const category of InventoryCategories) {
+    for (const entry of store.categories[category]) {
+      if (entry.definition.fillName !== fillName) continue;
+      quantity += entry.kind === 'stack' ? entry.quantity : 1;
+    }
+  }
+  return quantity;
+}
+
+function removeStackQuantity(store: InventoryStore, fillName: string, quantity: number): void {
+  for (const category of InventoryCategories) {
+    const index = store.categories[category].findIndex((entry) =>
+      entry.kind === 'stack' && entry.definition.fillName === fillName
+    );
+    if (index < 0) continue;
+    const stack = store.categories[category][index];
+    if (stack.kind !== 'stack') return;
+    stack.quantity -= quantity;
+    if (stack.quantity === 0) store.categories[category].splice(index, 1);
+    return;
+  }
+}
+
+type CraftingMaterialsSelection = {
+  statsMaterials: EquipmentInstance[];
+  consumedEntries: InventoryEntry[];
+};
+
+function findCraftingMaterials(
+  store: InventoryStore,
+  materialFillNames: readonly string[],
+): CraftingMaterialsSelection | undefined {
+  const statsMaterials: EquipmentInstance[] = [];
+  const consumedEntries: InventoryEntry[] = [];
+  const stackUseCount = new Map<InventoryItemStack, number>();
+  for (const [index, fillName] of materialFillNames.entries()) {
+    const found = InventoryCategories.flatMap((category) => store.categories[category]).find((entry) => {
+      if (entry.definition.fillName !== fillName) return false;
+      if (entry.kind === 'equipment') return !consumedEntries.includes(entry);
+      const category = getInventoryCategoryForDefinition(entry.definition);
+      if (category !== 'items' && category !== 'skillBooks') return false;
+      return (stackUseCount.get(entry) ?? 0) < entry.quantity;
+    });
+    if (!found) return undefined;
+    consumedEntries.push(found);
+    if (found.kind === 'equipment') {
+      statsMaterials.push(found);
+    } else {
+      stackUseCount.set(found, (stackUseCount.get(found) ?? 0) + 1);
+      statsMaterials.push(asCraftingStatsMaterial(found, index));
+    }
+  }
+  return { statsMaterials, consumedEntries };
+}
+
+function asCraftingStatsMaterial(entry: InventoryEntry, index: number): EquipmentInstance {
+  if (entry.kind === 'equipment') return entry;
+  return {
+    kind: 'equipment',
+    instanceId: `crafting-stack-${entry.definition.fillName}-${index}`,
+    definition: entry.definition,
+    quantity: 1,
+  };
+}
+
+function removeEquipmentInstance(store: InventoryStore, material: EquipmentInstance): void {
+  for (const category of InventoryCategories) {
+    const index = store.categories[category].indexOf(material);
+    if (index >= 0) {
+      store.categories[category].splice(index, 1);
+      return;
+    }
+  }
+}
+
+function createInheritedProductStatsOverride(
+  product: EquipmentDefinition,
+  materials: readonly EquipmentInstance[],
+  behavior: CraftingProductionBehavior,
+): Partial<EquipmentStats> | undefined {
+  if (product.type === 'zbtx') return undefined;
+  const inheritedStats = behavior === 'get_sun_sutra_value'
+    ? inheritSunSutraStats(materials, product.fillName)
+    : behavior === 'get_mingding_huayan'
+      ? inheritMingDingHuaYanStats(materials)
+      : inheritSutraStats(materials);
+  return { ...product.stats, ...inheritedStats };
+}
+
+function isInheritedEquipmentBehavior(behavior: CraftingProductionBehavior): boolean {
+  return behavior === 'get_sutra_value' ||
+    behavior === 'get_sun_sutra_value' ||
+    behavior === 'get_mingding_huayan';
+}
+
+function roundTo2(value: number): number {
+  return Number(value.toFixed(2));
+}
+
+function as3FractionToPercentPoints(value: number): number {
+  return value * 100;
+}
+
+function canAddProductAfterConsumption(
+  store: InventoryStore,
+  product: EquipmentDefinition,
+  requirements: ReadonlyMap<string, number>,
+  consumedEntries: readonly InventoryEntry[] | undefined,
+): boolean {
+  const category = getInventoryCategoryForDefinition(product);
+  const entries = store.categories[category];
+  if (entries.some((entry) => entry.kind === 'stack' && entry.definition.fillName === product.fillName)) {
+    return true;
+  }
+  const removedStacks = entries.filter((entry) =>
+    entry.kind === 'stack' &&
+    (requirements.get(entry.definition.fillName) ?? 0) === entry.quantity
+  ).length;
+  const removedEquipment = new Set(
+    consumedEntries?.filter((entry) => entry.kind === 'equipment' && entries.includes(entry)) ?? [],
+  ).size;
+  return entries.length - removedStacks - removedEquipment < store.capacityPerCategory;
+}
+
+function buildRequirements(names: readonly string[]): Map<string, number> {
+  const requirements = new Map<string, number>();
+  for (const fillName of names) {
+    requirements.set(fillName, (requirements.get(fillName) ?? 0) + 1);
+  }
+  return requirements;
+}

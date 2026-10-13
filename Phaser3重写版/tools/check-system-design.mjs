@@ -1,0 +1,795 @@
+import { execFileSync } from 'node:child_process';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
+import path from 'node:path';
+import { petSessionConsumerViolations } from './pet-session-consumer-guard.mjs';
+
+const root = process.cwd();
+const petSession = 'src/systems/PetCombatEntitySession.ts';
+const petContext = 'src/systems/PetCombatContext.ts';
+
+function absolute(relativePath) {
+  return path.join(root, relativePath);
+}
+
+function read(relativePath, errors) {
+  if (!existsSync(absolute(relativePath))) {
+    errors.push(`missing required file: ${relativePath}`);
+    return '';
+  }
+  return readFileSync(absolute(relativePath), 'utf8');
+}
+
+function requireFiles(relativePaths, errors) {
+  for (const relativePath of relativePaths) {
+    if (!existsSync(absolute(relativePath))) errors.push(`missing required file: ${relativePath}`);
+  }
+}
+
+function requireMatches(relativePath, patterns, errors) {
+  const source = read(relativePath, errors);
+  for (const [label, pattern] of patterns) {
+    if (!pattern.test(source)) errors.push(`${relativePath} missing ${label}`);
+  }
+}
+
+function forbidMatches(relativePath, patterns, errors) {
+  const source = read(relativePath, errors);
+  for (const [label, pattern] of patterns) {
+    if (pattern.test(source)) errors.push(`${relativePath} retains forbidden ${label}`);
+  }
+}
+
+function walk(relativeDirectory) {
+  const directory = absolute(relativeDirectory);
+  if (!existsSync(directory)) return [];
+  return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
+    const relativePath = path.posix.join(relativeDirectory.replaceAll('\\', '/'), entry.name);
+    return entry.isDirectory() ? walk(relativePath) : [relativePath];
+  });
+}
+
+function forbidAcross(relativePaths, patterns, errors) {
+  for (const relativePath of relativePaths) forbidMatches(relativePath, patterns, errors);
+}
+
+function requireTest(testName, tests, errors) {
+  const relativePath = `tools/${testName}.ts`;
+  if (!existsSync(absolute(relativePath))) {
+    errors.push(`missing executable contract test: ${relativePath}`);
+    return;
+  }
+  tests.add(testName);
+}
+
+const levelConsumers = [
+  'src/scenes/test-scene/TestSceneStage11RuntimeAdapter.ts',
+  'src/scenes/Stage12Scene.ts',
+  'src/scenes/Stage13Scene.ts',
+  'src/scenes/Stage21Scene.ts',
+  'src/scenes/Stage22Scene.ts',
+];
+
+const levelFlows = [
+  'src/systems/Stage11FlowSystem.ts',
+  'src/systems/Stage12FlowSystem.ts',
+  'src/systems/Stage13FlowSystem.ts',
+  'src/systems/Stage21FlowSystem.ts',
+  'src/systems/Stage22FlowSystem.ts',
+];
+
+const petTestConsumers = [
+  'src/scenes/test-scene/TestScenePetMagicBridge.ts',
+  'src/scenes/test-scene/TestSceneAdvancedPetSkillBridge.ts',
+  'src/scenes/test-scene/TestSceneP2PetBridge.ts',
+];
+
+const formalHeroConsumers = [
+  'src/scenes/stage12/Stage12GameplayBridge.ts',
+  'src/scenes/stage13/Stage13GameplayBridge.ts',
+  'src/scenes/stage21/Stage21GameplayBridge.ts',
+  'src/scenes/stage22/Stage22GameplayBridge.ts',
+  'src/scenes/test-scene/TestSceneHeroPartyRuntimeBridge.ts',
+];
+
+const contracts = {
+  level: {
+    L1(errors, tests) {
+      const runtime = 'src/scenes/PlayableLevelRuntime.ts';
+      requireMatches(runtime, [
+        ['exported PlayableLevelRuntime class', /export\s+class\s+PlayableLevelRuntime\b/u],
+        ['static create entry', /static\s+create\s*\(/u],
+        ['create method', /\bcreate\s*\(/u],
+        ['update method', /\bupdate\s*\(/u],
+        ['destroy method', /\bdestroy\s*\(/u],
+      ], errors);
+      forbidMatches(runtime, [
+        ['legacy createPlayableLevelRuntime function', /export\s+function\s+createPlayableLevelRuntime\b/u],
+      ], errors);
+      for (const consumer of levelConsumers) {
+        requireMatches(consumer, [['PlayableLevelRuntime.create call', /PlayableLevelRuntime\.create\s*\(/u]], errors);
+        forbidMatches(consumer, [['legacy createPlayableLevelRuntime call', /createPlayableLevelRuntime\s*\(/u]], errors);
+      }
+      requireTest('playable-level-class-design-tests', tests, errors);
+    },
+    L2(errors, tests) {
+      for (const flow of levelFlows) {
+        requireMatches(flow, [['LevelLifecycle inheritance', /extends\s+LevelLifecycle\b/u]], errors);
+      }
+      forbidAcross(
+        [...walk('src/scenes'), ...walk('src/systems')].filter((file) => file.endsWith('.ts')),
+        [['universal BaseLevel class', /class\s+BaseLevel(?:Scene)?\b/u]],
+        errors,
+      );
+      forbidAcross(levelConsumers, [
+        ['direct result presenter', /showLevelResult\s*\(/u],
+        ['direct unlock write', /advanceLevelUnlockProgress\s*\(/u],
+      ], errors);
+      requireTest('playable-level-class-design-tests', tests, errors);
+      requireTest('level-lifecycle-tests', tests, errors);
+      requireTest('level-result-tests', tests, errors);
+    },
+  },
+  pet: {
+    P1T(errors, tests) {
+      contracts.pet.P1TB(errors, tests);
+      forbidAcross(petTestConsumers, [['legacy turtle skill calls', /requestPetTurtle\d\w*Skill/u]], errors);
+      requireMatches('src/scenes/test-scene/TestSceneStage11RuntimeAdapter.ts', [
+        ['fresh encounter before runtime creation', /resetTestSceneEncounter\(scene, scene.scale.height\)/u],
+      ], errors);
+      for (const name of ['pet-turtle-lifecycle-tests', 'pet-turtle-family-acceptance-tests']) requireTest(name, tests, errors);
+    },
+    P1TB(errors, tests) {
+      contracts.pet.P1TA(errors, tests);
+      requireMatches('src/scenes/test-scene/TestSceneHeroPartyRuntimeBridge.ts', [
+        ['actual sandbox pet incoming route', /runtime\.resolvePetEnemyAttack\(enemy,\s*timeMs\)/u],
+        ['sandbox source enemy adapter', /adaptTestScenePetEnemies\(\[monster\]/u],
+      ], errors);
+      forbidAcross(['src/systems/pet-behaviors/TurtlePetBehavior.ts'], [
+        ['parallel wall-clock callbacks', /\b(?:setTimeout|setInterval)\s*\(/u],
+        ['unfinished turtle skill branch', /deferred:\s*true/u],
+      ], errors);
+      for (const name of ['pet-turtle-skill-runtime-tests', 'pet-turtle-skill-acceptance-tests',
+        'pet-ground-movement-tests', 'pet-ground-session-tests']) requireTest(name, tests, errors);
+    },
+    P1TA(errors, tests) {
+      contracts.pet.P1TA1(errors, tests);
+      requireFiles(['src/systems/PetTurtleLinkSystem.ts', 'tools/pet-turtle-link-tests.ts'], errors);
+      requireMatches('src/scenes/HeroPartyRuntimeBridge.ts', [
+        ['actual hero owner combat model', /ownerCombat:\s*member\.combat\.combat/u],
+      ], errors);
+      requireMatches('src/systems/HeroCombatSystem.ts', [
+        ['shared shield-after link settlement', /redirectTurtleLinkDamage\(hero, amount, event, timeMs\)/u],
+      ], errors);
+      for (const name of ['pet-turtle-link-tests', 'pet-turtle-link-acceptance-tests']) requireTest(name, tests, errors);
+    },
+    P1TA1(errors, tests) {
+      contracts.pet.P1TA0(errors, tests);
+      requireFiles(['src/systems/pet-behaviors/TurtlePetBehavior.ts',
+        'src/systems/PetTurtleProjectileSystem.ts', 'src/scenes/PetTurtleCombatBridge.ts'], errors);
+      requireMatches('src/systems/pet-behaviors/createDefaultPetBehaviorRegistry.ts', [
+        ['turtle registry factory', /new TurtlePetBehavior\(/u],
+      ], errors);
+      requireMatches('src/scenes/HeroPartyRuntimeBridge.ts', [
+        ['shared turtle bridge', /createPetTurtleCombatBridge\(scene\)/u],
+        ['same runtime registry', /new PetCombatRuntime\(petTurtle.registry\)/u],
+      ], errors);
+      forbidAcross(['src/systems/pet-behaviors/TurtlePetBehavior.ts',
+        'src/systems/PetTurtleProjectileSystem.ts', 'src/scenes/PetTurtleCombatBridge.ts'], [
+        ['second session or clock owner', /new\s+(?:PetCombatRuntime|PetCombatEntitySession|PetAnimationClock)\s*\(/u],
+        ['local evidence runtime dependency', /from\s+['"][^'"]*(?:evidence|local-resources)/u],
+      ], errors);
+      for (const name of ['pet-turtle-combat-clock-tests', 'pet-turtle-world-collision-tests',
+        'pet-turtle-runtime-tests', 'pet-turtle-caller-order-tests', 'pet-turtle-combat-acceptance-tests',
+        'pet-combat-runtime-design-tests', 'pet-combat-session-tests', 'pet-animation-session-tests',
+        'pet-dragon23-runtime-tests', 'pet-dragon4-runtime-tests',
+        'pet-monkey-family-runtime-tests', 'pet-monkey-behavior-contract-runtime-tests',
+        'pet-monkey-animation-runtime-tests', 'pet-horse-family-runtime-tests',
+        'pet-horse-behavior-contract-runtime-tests', 'pet-horse-animation-runtime-tests',
+        'formal-pet-tests', 'formal-pet-journey-tests']) requireTest(name, tests, errors);
+    },
+    P1TA0(errors, tests) {
+      requireFiles(['src/assets/PetTurtleAssets.ts', 'src/assets/PetTurtleProjection.ts',
+        'src/assets/PetTurtleCollisionAssets.ts', 'src/scenes/PetTurtleAssetBridge.ts',
+        'src/scenes/PetTurtlePresentationBridge.ts'], errors);
+      requireMatches('src/scenes/SceneAssetBundleBridge.ts', [
+        ['awaited turtle resource preparation', /prepareTurtleAssets\(scene,\s*\(\)\s*=>\s*settled\)/u],
+        ['failed transaction cleanup', /discardIncompleteTurtleAssets\(scene\)/u],
+      ], errors);
+      forbidAcross(['src/assets/PetTurtleAssets.ts', 'src/assets/PetTurtleProjection.ts',
+        'src/assets/PetTurtleCollisionAssets.ts'], [
+        ['local evidence runtime dependency', /from\s+['"][^'"]*(?:evidence|local-resources)/u],
+        ['second combat owner', /new\s+(?:PetCombatRuntime|PetCombatEntitySession|PetAnimationClock)\s*\(/u],
+      ], errors);
+      requireTest('pet-turtle-oracle-tests', tests, errors);
+      requireTest('pet-turtle-resource-tests', tests, errors);
+      requireTest('asset-bundle-tests', tests, errors);
+      requireTest('pet-turtle-acceptance-tests', tests, errors);
+    },
+    P1(errors, tests) {
+      const required = [
+        'src/systems/PetCombatRuntime.ts',
+        'src/systems/PetBehavior.ts',
+        'src/systems/PetBehaviorRegistry.ts',
+        'src/systems/PetCombatTargeting.ts',
+      ];
+      requireFiles(required, errors);
+      requireMatches(required[0], [['exported PetCombatRuntime class', /export\s+class\s+PetCombatRuntime\b/u]], errors);
+      requireMatches(petSession, [
+        ['alive/dead-playing session phase', /['"]dead-playing['"]/u],
+        ['animation completion input', /animation(?:Event|Events|Finished)/u],
+        ['active-pet-only skill clock', /tickActivePetSkillState\s*\(/u],
+        ['action selection before skill clock tick', /selectAction\s*\([\s\S]*tickActivePetSkillState\s*\(/u],
+      ], errors);
+      forbidMatches(required[0], [
+        ['nearest target selection', /nearestTarget\s*\(/u],
+        ['whole-roster skill clock', /updatePetSkillState\s*\(\s*frame\.roster/u],
+        ['HP-zero active-session rejection', /pet\.isActive\s*&&[\s\S]{0,100}pet\.hp\s*>\s*0/u],
+      ], errors);
+      forbidAcross([petSession, petContext], [
+        ['nearest target selection', /nearestTarget\s*\(/u],
+        ['whole-roster skill clock', /updatePetSkillState\s*\(/u],
+      ], errors);
+      requireMatches(required[0], [['shared entity session owner', /new PetCombatEntitySession\s*\(/u]], errors);
+      requireMatches(required[1], [
+        ['PetBehavior contract', /export\s+(?:type|interface)\s+PetBehavior\b/u],
+        ['movement permission hook', /canMove\s*\(/u],
+        ['basic attack fallback hook', /basicAttack\s*\(/u],
+        ['damage reaction hook', /onDamaged\s*\(/u],
+        ['animation event hook', /onAnimationEvent\s*\(/u],
+      ], errors);
+      requireMatches(required[2], [['exported PetBehaviorRegistry class', /export\s+class\s+PetBehaviorRegistry\b/u]], errors);
+      requireMatches(required[3], [['ordered-first target selection', /orderedFirstTarget\s*\(/u]], errors);
+      forbidMatches(required[3], [['nearest target API', /nearestTarget\s*\(/u]], errors);
+      requireMatches('src/systems/PetTuning.ts', [['original search range', /searchRange\s*:\s*1200\b/u]], errors);
+      forbidAcross([...required, petSession, petContext], [['Phaser dependency', /from\s+['"]phaser['"]|Phaser\./u]], errors);
+      requireTest('pet-combat-runtime-design-tests', tests, errors);
+    },
+    P1B(errors, tests) {
+      const runtime = 'src/systems/PetCombatRuntime.ts';
+      const monkey = 'src/systems/pet-behaviors/MonkeyPetBehavior.ts';
+      const horse = 'src/systems/pet-behaviors/HorsePetBehavior.ts';
+      const registry = 'src/systems/pet-behaviors/createDefaultPetBehaviorRegistry.ts';
+      requireFiles([runtime, monkey, horse, registry], errors);
+      requireMatches(petSession, [
+        ['active-pet-only skill clock', /tickActivePetSkillState\s*\(/u],
+      ], errors);
+      requireMatches(petContext, [
+        ['skill execution port', /castSkill\s*:/u],
+      ], errors);
+      for (const [file, label] of [[monkey, 'MonkeyPetBehavior'], [horse, 'HorsePetBehavior']]) {
+        requireMatches(file, [
+          [`${label} strategy`, new RegExp(`export\\s+class\\s+${label}\\b`, 'u')],
+          ['movement permission hook', /canMove\s*\(/u],
+          ['basic attack fallback hook', /basicAttack\s*\(/u],
+          ['damage reaction hook', /onDamaged\s*\(/u],
+          ['animation event hook', /onAnimationEvent\s*\(/u],
+        ], errors);
+      }
+      requireMatches(registry, [
+        ['default registry factory', /export\s+function\s+createDefaultPetBehaviorRegistry\b/u],
+        ['monkey registrations', /monkeyForms\.map/u],
+        ['horse registrations', /horseForms\.map/u],
+      ], errors);
+      forbidAcross([runtime, monkey, horse, registry], [['Phaser dependency', /from\s+['"]phaser['"]|Phaser\./u]], errors);
+      requireTest('pet-combat-runtime-design-tests', tests, errors);
+    },
+    P1R(errors, tests) {
+      const runtime = 'src/systems/PetCombatRuntime.ts';
+      const monkey = 'src/systems/pet-behaviors/MonkeyPetBehavior.ts';
+      const combat = 'src/systems/PetMonkeyCombatSystem.ts';
+      const formal = 'src/scenes/HeroPartyRuntimeBridge.ts';
+      const body = 'src/scenes/FormalPetMonkeyBodyBridge.ts';
+      const testScene = 'src/scenes/test-scene/TestSceneHeroPartyRuntimeBridge.ts';
+      requireFiles([runtime, monkey, combat, formal, body, testScene], errors);
+      requireMatches(petContext, [
+        ['true monkey basic attack port', /requestPetMonkeyBasicAttack\s*\(/u],
+      ], errors);
+      requireMatches(petSession, [
+        ['animation completion input', /animationEvents/u],
+      ], errors);
+      requireMatches(monkey, [
+        ['original ground definition', /groundMovement\(\)[\s\S]*getPetMonkeyHorseGroundDefinition\('monkey', this\.form\)/u],
+        ['shared incoming counter decision', /new PetNormalAttackDecision\(\)[\s\S]*normalAttack\.counter\(context\)/u],
+        ['form4 inherited action priority', /case\s+4:[\s\S]*monkey3-lyq[\s\S]*monkey3-xj[\s\S]*monkey3-lj[\s\S]*monkey4-jgaoyi/u],
+        ['form4 hurt release', /this\.form\s*===\s*4[\s\S]*monkey3Lj\.releaseReady\s*=\s*true/u],
+      ], errors);
+      requireMatches(combat, [
+        ['verified collision dimensions', /31\.05[\s\S]*35[\s\S]*49\.95/u],
+        ['attack-id deduplicated formal damage', /getProjectileAttackId[\s\S]*resolveStage1PetHit/u],
+        ['P1/P2 damage ownership port', /ownerSlotForPet/u],
+      ], errors);
+      requireMatches(formal, [
+        ['dual public pet runtimes', /p1:\s*new PetCombatRuntime\(petTurtle\.registry\)[\s\S]*p2:\s*new PetCombatRuntime\(petTurtle\.registry\)/u],
+        ['formal monkey hit resolution', /resolveFormalPetMonkeyProjectileHits\s*\(/u],
+        ['formal animation feedback queue', /pendingPetAnimationEvents/u],
+      ], errors);
+      requireMatches(testScene, [['shared TestScene updatePets entry', /runtime\.updatePets\s*\(/u]], errors);
+      forbidMatches(body, [['legacy PetRuntimeSystem dependency', /PetRuntimeSystem/u]], errors);
+      requireTest('pet-combat-runtime-design-tests', tests, errors);
+      requireTest('pet-monkey-family-runtime-tests', tests, errors);
+      requireTest('pet-monkey-horse-party-lifecycle-tests', tests, errors);
+      requireTest('pet-monkey-horse-hurt-release-tests', tests, errors);
+      requireTest('pet-monkey-horse-incoming-tests', tests, errors);
+      requireTest('pet-monkey-horse-ground-motion-tests', tests, errors);
+      requireTest('pet-monkey-horse-ground-definition-tests', tests, errors);
+      requireTest('pet-monkey-horse-dead-step-tests', tests, errors);
+      requireTest('pet-monkey-horse-ground-runtime-tests', tests, errors);
+      requireTest('pet-monkey-aoyi-ground-tests', tests, errors);
+      requireTest('pet-monkey-aoyi-combat-tests', tests, errors);
+      requireTest('pet-target-fire-assets-tests', tests, errors);
+      requireTest('pet-target-fire-display-tests', tests, errors);
+      requireTest('pet-target-attachment-tests', tests, errors);
+      requireTest('pet-monkey-source-gate-tests', tests, errors);
+      requireTest('pet-monkey-body-emission-tests', tests, errors);
+      requireTest('pet-monkey-aoyi-mutation-tests', tests, errors);
+      requireTest('pet-monkey-horse-collision-field-tests', tests, errors);
+      requireTest('pet-monkey-horse-asset-tests', tests, errors);
+      requireTest('pet-monkey-horse-normal-runtime-tests', tests, errors);
+      requireTest('pet-monkey-horse-damage-tests', tests, errors);
+      requireTest('pet-monkey-skill-projectile-tests', tests, errors);
+      requireTest('pet-target-fire-tests', tests, errors);
+      requireTest('pet-target-world-tests', tests, errors);
+      requireTest('pet-target-test-scene-tests', tests, errors);
+      requireTest('game-startup-frame-rate-tests', tests, errors);
+      requireTest('pet-monkey-effect-follow-tests', tests, errors);
+      requireTest('pet-monkey-world-pause-tests', tests, errors);
+      requireTest('pet-monkey-pause-display-tests', tests, errors);
+      requireTest('pet-monkey-pause-mutation-tests', tests, errors);
+      requireTest('pet-monkey-skill-mutation-tests', tests, errors);
+      requireTest('pet-monkey-horse-normal-mutation-tests', tests, errors);
+      requireTest('pet-source-phase-tests', tests, errors);
+      requireTest('pet-monkey-horse-body-clock-tests', tests, errors);
+      requireTest('pet-monkey-horse-target-order-tests', tests, errors);
+      requireTest('pet-monkey-horse-formal-target-tests', tests, errors);
+      requireTest('pet-normal-attack-decision-tests', tests, errors);
+      requireTest('pet-monkey-behavior-contract-runtime-tests', tests, errors);
+      requireTest('pet-monkey-animation-runtime-tests', tests, errors);
+      requireTest('formal-pet-tests', tests, errors);
+      requireTest('formal-pet-journey-tests', tests, errors);
+    },
+    P1H(errors, tests) {
+      requireTest('pet-monkey-horse-formal-target-tests', tests, errors);
+      requireTest('pet-monkey-horse-party-lifecycle-tests', tests, errors);
+      requireTest('pet-monkey-horse-hurt-release-tests', tests, errors);
+      requireTest('pet-monkey-horse-incoming-tests', tests, errors);
+      requireTest('pet-monkey-horse-ground-motion-tests', tests, errors);
+      requireTest('pet-monkey-horse-ground-definition-tests', tests, errors);
+      requireTest('pet-monkey-horse-dead-step-tests', tests, errors);
+      requireTest('game-startup-frame-rate-tests', tests, errors);
+      requireTest('pet-monkey-horse-ground-runtime-tests', tests, errors);
+      requireTest('pet-horse-aoyi-birth-tests', tests, errors);
+      requireTest('pet-horse-aoyi-prelude-tests', tests, errors);
+      requireTest('pet-horse-aoyi-prelude-follow-tests', tests, errors);
+      requireTest('pet-horse-aoyi-world-pause-tests', tests, errors);
+      requireTest('pet-horse-world-pause-tests', tests, errors);
+      requireTest('pet-horse-aoyi-world-motion-tests', tests, errors);
+      requireTest('pet-horse-paused-birth-display-tests', tests, errors);
+      requireTest('pet-horse-retired-parent-tests', tests, errors);
+      requireTest('pet-horse-sp-display-tests', tests, errors);
+      requireTest('pet-horse-falling-display-tests', tests, errors);
+      requireTest('pet-horse-aoyi-motion-tests', tests, errors);
+      requireTest('pet-horse-aoyi-runtime-tests', tests, errors);
+      requireTest('pet-horse-aoyi-multi-combat-tests', tests, errors);
+      requireTest('pet-target-ice-tests', tests, errors);
+      requireTest('pet-target-ice-display-tests', tests, errors);
+      requireTest('pet-target-ice-body-tests', tests, errors);
+      requireTest('pet-target-ice-body-mutation-tests', tests, errors);
+      requireTest('pet-horse-aoyi-callback-tests', tests, errors);
+      requireTest('pet-horse-aoyi-mutation-tests', tests, errors);
+      requireTest('pet-world-delayed-calls-tests', tests, errors);
+      requireTest('pet-horse-skill-projectile-tests', tests, errors);
+      requireTest('pet-horse-effect-follow-tests', tests, errors);
+      requireTest('pet-horse-skill-mutation-tests', tests, errors);
+      requireTest('pet-monkey-horse-normal-runtime-tests', tests, errors);
+      requireTest('pet-monkey-horse-damage-tests', tests, errors);
+      requireTest('pet-monkey-horse-normal-mutation-tests', tests, errors);
+      requireTest('pet-monkey-horse-collision-field-tests', tests, errors);
+      requireTest('pet-monkey-horse-asset-tests', tests, errors);
+      requireTest('pet-horse-body-emission-tests', tests, errors);
+      requireTest('pet-source-phase-tests', tests, errors);
+      requireTest('pet-monkey-horse-body-clock-tests', tests, errors);
+      requireTest('pet-monkey-horse-target-order-tests', tests, errors);
+      requireTest('pet-normal-attack-decision-tests', tests, errors);
+      const runtime = 'src/systems/PetCombatRuntime.ts';
+      const horse = 'src/systems/pet-behaviors/HorsePetBehavior.ts';
+      const combat = 'src/systems/PetHorseCombatSystem.ts';
+      const formal = 'src/scenes/HeroPartyRuntimeBridge.ts';
+      const body = 'src/scenes/FormalPetHorseBodyBridge.ts';
+      const testScene = 'src/scenes/test-scene/TestSceneHeroPartyRuntimeBridge.ts';
+      requireFiles([runtime, horse, combat, formal, body, testScene], errors);
+      requireMatches(petContext, [
+        ['true horse basic attack port', /requestPetHorseBasicAttack\s*\(/u],
+      ], errors);
+      requireMatches(petSession, [
+        ['dual runtime animation completion input', /animationEvents/u],
+      ], errors);
+      requireMatches(horse, [
+        ['original ground definition', /groundMovement\(\)[\s\S]*getPetMonkeyHorseGroundDefinition\('horse', this\.form\)/u],
+        ['form attack range port', /getPetHorseAttackRange\s*\(/u],
+        ['shared incoming counter decision', /new PetNormalAttackDecision\(\)[\s\S]*normalAttack\.counter\(context\)/u],
+        ['inherited bd priority', /this\.form\s*>=\s*2[\s\S]*horse2Bd\.releaseReady/u],
+        ['inherited sp priority', /skills\.includes\(['"]sp['"]\)/u],
+        ['inherited bz priority', /this\.form\s*>=\s*3[\s\S]*skills\.includes\(['"]bz['"]\)/u],
+        ['horse4 tmaoyi priority', /horse4-tmaoyi/u],
+      ], errors);
+      requireMatches(combat, [
+        ['verified family truth input', /task-settings-209-pet-horse-family\.json/u],
+        ['field-derived emit timing', /emitTiming\.holdTick/u],
+        ['attack-id deduplicated formal damage', /getProjectileAttackId[\s\S]*resolveStage1PetHit/u],
+        ['P1/P2 damage ownership port', /ownerSlotForPet/u],
+        ['horse ice result', /petHorseIceRemainingMs/u],
+        ['tmaoyi tracking', /trackingTargetId\s*=\s*hasSp/u],
+        ['tmaoyi delayed explosion', /explosionDelayMs/u],
+      ], errors);
+      requireMatches(formal, [
+        ['dual public pet runtimes', /p1:\s*new PetCombatRuntime\(petTurtle\.registry\)[\s\S]*p2:\s*new PetCombatRuntime\(petTurtle\.registry\)/u],
+        ['formal horse hit resolution', /resolveFormalPetHorseProjectileHits\s*\(/u],
+        ['formal animation feedback queue', /pendingPetAnimationEvents/u],
+      ], errors);
+      requireMatches(testScene, [['shared TestScene updatePets entry', /runtime\.updatePets\s*\(/u]], errors);
+      requireMatches(body, [['PetCombatSnapshot presentation input', /PetCombatSnapshot/u]], errors);
+      forbidMatches(body, [['legacy PetRuntimeSystem dependency', /PetRuntimeSystem/u]], errors);
+      requireTest('pet-combat-runtime-design-tests', tests, errors);
+      requireTest('pet-horse-family-runtime-tests', tests, errors);
+      requireTest('pet-horse-behavior-contract-runtime-tests', tests, errors);
+      requireTest('pet-horse-animation-runtime-tests', tests, errors);
+      requireTest('formal-pet-tests', tests, errors);
+      requireTest('formal-pet-journey-tests', tests, errors);
+    },
+    P1GS(errors, tests) {
+      for (const gate of ['P1', 'P1B', 'P1R', 'P1H']) contracts.pet[gate](errors, tests);
+      const runtime = 'src/systems/PetCombatRuntime.ts';
+      requireMatches(runtime, [
+        ['private entity collection', /Map<string, PetCombatEntitySession>/u],
+        ['shared step for active entity', /stepEntity\(this\.active, frame\)/u],
+        ['shared step for children', /stepEntity\(child, frame, eventsOnly\)/u],
+        ['single entity update implementation', /entity\.update\(frame, eventsOnly\)/u],
+      ], errors);
+      forbidMatches(runtime, [['recursive top-level runtime', /new PetCombatRuntime\s*\(/u]], errors);
+      requireMatches(petSession, [
+        ['private cleanup before child release', /behavior\.destroy\(reason\)[\s\S]*ports\.releaseChildren\(reason\)/u],
+        ['shared ordered target selection', /orderedFirstTarget\s*\(/u],
+      ], errors);
+      for (const file of [...walk('src/systems/pet-behaviors'), ...walk('src/scenes')].filter((file) => file.endsWith('.ts'))) {
+        errors.push(...petSessionConsumerViolations(file, read(file, errors)));
+      }
+      requireTest('pet-combat-session-tests', tests, errors);
+      requireTest('pet-combat-session-mutation-tests', tests, errors);
+      requireTest('hero-pet-buff-tests', tests, errors);
+      requireTest('pet-passive-tests', tests, errors);
+      requireTest('pet-passive-runtime-tests', tests, errors);
+      requireTest('pet-passive-consumer-tests', tests, errors);
+      requireTest('pet-passive-mutation-tests', tests, errors);
+      requireTest('pet-attached-display-tests', tests, errors);
+      requireTest('pet-passive-display-assets-tests', tests, errors);
+      requireTest('pet-attached-mutation-tests', tests, errors);
+      requireTest('hero-pet-buff-mutation-tests', tests, errors);
+      requireMatches('src/scenes/test-scene/TestSceneHeroPartyRuntimeBridge.ts', [
+        ['live party current attributes', /get currentStats\(\)\s*\{\s*return member\.combat\.effectiveStats/u],
+      ], errors);
+      requireMatches('src/scenes/HeroPartyRuntimeBridge.ts', [
+        ['shared owner phase supplied by party', /ownerStep:\s*\(\)\s*=>\s*passiveDisplay\.ownerStep\(member/u],
+      ], errors);
+      requireMatches('src/scenes/HeroPartyPassiveDisplayBridge.ts', [
+        ['same numerical owner after bullet step', /display\.stepHero[\s\S]*member\.combat\.stepPetBuffs\(signal\s*=>\s*display\.hero/u],
+      ], errors);
+    },
+    P1GC(errors, tests) {
+      contracts.pet.P1GS(errors, tests);
+      requireMatches('src/scenes/HeroPartyRuntimeBridge.ts', [
+        ['shared dragon presenter', /petDragonPresentation\.update\(Object\.values\(petCombatSnapshots\), frame\.projectiles\.projectiles\)/u],
+        ['dragon presenter disposal', /petDragonPresentation\.destroy\(\)/u],
+      ], errors);
+      requireMatches('src/scenes/test-scene/TestSceneHeroPartyRuntimeBridge.ts', [
+        ['actual sandbox enemy adapter', /combatEnemies: adaptTestScenePetEnemies\(scene\.getMonster30s\(\)/u],
+      ], errors);
+      forbidMatches('src/scenes/PetDragonPresentationBridge.ts', [
+        ['view-owned battle clock', /elapsedMs|Date\.now|scene\.time|new PetCombatRuntime/u],
+      ], errors);
+      for (const test of ['pet-dragon1-runtime-tests', 'pet-dragon1-mutation-tests',
+        'pet-dragon1-presentation-tests', 'pet-dragon1-consumer-tests',
+        'pet-ground-session-tests', 'pet-dragon1-clock-tests', 'combat-feedback-tests',
+        'formal-game-loop-journey-tests']) requireTest(test, tests, errors);
+    },
+    P1GD(errors, tests) {
+      contracts.pet.P1GC(errors, tests);
+      requireMatches('src/systems/pet-behaviors/createDefaultPetBehaviorRegistry.ts', [
+        ['second form registration', /form: 2, create: \(\) => new Dragon1PetBehavior\(2\)/u],
+        ['third form registration', /form: 3, create: \(\) => new Dragon1PetBehavior\(3\)/u],
+      ], errors);
+      forbidMatches('src/systems/PetDragon23ProjectileSystem.ts', [
+        ['second runtime or scene clock', /new PetCombatRuntime|setTimeout|scene\.time|Date\.now/u],
+      ], errors);
+      requireMatches('src/scenes/test-scene/TestScenePetMagicBridge.ts', [
+        ['later forms bypass old battle path', /sharedPet\.form <= [34]/u],
+      ], errors);
+      for (const test of ['pet-dragon23-collision-tests', 'pet-dragon23-runtime-tests',
+        'pet-dragon23-mutation-tests', 'pet-dragon23-consumer-tests', 'pet-dragon23-presentation-tests']) {
+        requireTest(test, tests, errors);
+      }
+    },
+    P1G(errors, tests) {
+      contracts.pet.P1GD(errors, tests);
+      requireMatches('src/systems/pet-behaviors/createDefaultPetBehaviorRegistry.ts', [
+        ['fourth dragon registration', /form: 4, create: \(\) => new Dragon4PetBehavior\(\)/u],
+      ], errors);
+      requireMatches('src/scenes/test-scene/TestScenePetMagicBridge.ts', [
+        ['all dragon forms bypass old battle path', /sharedPet\.form <= 4/u],
+      ], errors);
+      requireMatches('src/systems/PetDragonEffectCollisionSystem.ts', [
+        ['separate trigger contract', /TASK-SETTINGS-220\/collision-contract\.json/u],
+      ], errors);
+      forbidMatches('src/systems/pet-behaviors/Dragon4PetBehavior.ts', [
+        ['private runtime or scene clock', /new PetCombatRuntime|new PetCombatEntitySession|setTimeout|scene\.time|Date\.now/u],
+      ], errors);
+      for (const test of ['pet-dragon4-runtime-tests', 'pet-dragon4-collision-tests', 'pet-dragon4-mutation-tests',
+        'pet-dragon4-presentation-tests', 'pet-dragon-family-behavior-tests', 'pet-dragon-family-consumer-tests',
+        'formal-pet-tests', 'formal-pet-journey-tests', 'pet-dragon-family-audit-tests']) requireTest(test, tests, errors);
+    },
+    P1C(errors, tests) {
+      const behaviors = ['Dragon', 'Turtle', 'Ufo'].map((name) => (
+        `src/systems/pet-behaviors/${name}PetBehavior.ts`
+      ));
+      requireFiles(behaviors, errors);
+      behaviors.forEach((file) => requireMatches(file, [
+        ['movement permission hook', /canMove\s*\(/u],
+        ['basic attack fallback hook', /basicAttack\s*\(/u],
+        ['damage reaction hook', /onDamaged\s*\(/u],
+        ['animation event hook', /onAnimationEvent\s*\(/u],
+      ], errors));
+      requireMatches('src/systems/pet-behaviors/createDefaultPetBehaviorRegistry.ts', [
+        ['dragon registrations', /dragonForms\.map/u],
+        ['turtle registrations', /turtleForms\.map/u],
+        ['ufo registrations', /ufoForms\.map/u],
+      ], errors);
+      requireTest('pet-combat-runtime-design-tests', tests, errors);
+    },
+    P1D(errors, tests) {
+      const behaviors = ['Tiger', 'Phoenix', 'Rabbit', 'Mouse'].map((name) => (
+        `src/systems/pet-behaviors/${name}PetBehavior.ts`
+      ));
+      requireFiles(behaviors, errors);
+      behaviors.forEach((file) => requireMatches(file, [
+        ['movement permission hook', /canMove\s*\(/u],
+        ['basic attack fallback hook', /basicAttack\s*\(/u],
+        ['damage reaction hook', /onDamaged\s*\(/u],
+        ['animation event hook', /onAnimationEvent\s*\(/u],
+      ], errors));
+      requireMatches('src/systems/pet-behaviors/createDefaultPetBehaviorRegistry.ts', [
+        ['35-form registry declaration', /EXPECTED_PET_BEHAVIOR_KEYS|expectedPetBehaviorKeys/u],
+        ['tiger registrations', /tigerForms\.map/u],
+        ['phoenix registrations', /phoenixForms\.map/u],
+        ['rabbit registrations', /rabbitForms\.map/u],
+        ['mouse registrations', /mouseForms\.map/u],
+      ], errors);
+      requireTest('pet-combat-runtime-design-tests', tests, errors);
+    },
+    P2(errors, tests) {
+      for (const consumer of petTestConsumers) {
+        requireMatches(consumer, [['PetCombatRuntime entry', /PetCombatRuntime\b/u]], errors);
+        forbidMatches(consumer, [
+          ['direct concrete pet skill request', /requestPet[A-Z][A-Za-z0-9]*Skill\b/u],
+          ['species/form dispatch', /(?:species|form)\s*(?:===|switch\s*\()/u],
+        ], errors);
+      }
+      requireTest('pet-combat-runtime-design-tests', tests, errors);
+    },
+    P3(errors, tests) {
+      requireMatches(
+        'src/scenes/HeroPartyRuntimeBridge.ts',
+        [['formal PetCombatRuntime integration', /PetCombatRuntime\b/u]],
+        errors,
+      );
+      forbidAcross([
+        'src/scenes/FormalPetMonkeyBodyBridge.ts',
+        'src/scenes/FormalPetHorseBodyBridge.ts',
+      ], [['legacy PetRuntimeSystem dependency', /PetRuntimeSystem/u]], errors);
+      requireTest('pet-combat-runtime-design-tests', tests, errors);
+      requireTest('formal-pet-tests', tests, errors);
+      requireTest('formal-pet-journey-tests', tests, errors);
+    },
+    P4(errors, tests) {
+      forbidAcross(
+        walk('src/scenes').filter((file) => file.endsWith('.ts')),
+        [['Scene direct concrete pet skill request', /requestPet[A-Z][A-Za-z0-9]*Skill\b/u]],
+        errors,
+      );
+      forbidMatches(
+        'src/systems/PetSystem.ts',
+        [['barrel concrete pet skill export', /export[^\n]*requestPet[A-Z][A-Za-z0-9]*Skill/u]],
+        errors,
+      );
+      if (existsSync(absolute('src/systems/PetRuntimeSystem.ts'))) {
+        errors.push('legacy runtime file must be removed after migration: src/systems/PetRuntimeSystem.ts');
+      }
+      requireTest('pet-combat-runtime-design-tests', tests, errors);
+    },
+  },
+  hero: {
+    H1(errors, tests) {
+      const base = 'src/systems/hero-runtime/HeroRuntime.ts';
+      const factory = 'src/systems/hero-runtime/HeroRuntimeFactory.ts';
+      const concrete = [1, 2, 3, 4, 5].map((id) => `src/systems/hero-runtime/Hero${id}Runtime.ts`);
+      requireFiles([base, factory, ...concrete], errors);
+      requireMatches(base, [['exported abstract HeroRuntime class', /export\s+abstract\s+class\s+HeroRuntime\b/u]], errors);
+      requireMatches(factory, [['exported HeroRuntimeFactory class', /export\s+class\s+HeroRuntimeFactory\b/u]], errors);
+      concrete.forEach((file, index) => requireMatches(
+        file,
+        [[`Hero${index + 1}Runtime inheritance`, new RegExp(`export\\s+class\\s+Hero${index + 1}Runtime\\s+extends\\s+HeroRuntime\\b`, 'u')]],
+        errors,
+      ));
+      forbidAcross([base, factory, ...concrete], [['Phaser dependency', /from\s+['"]phaser['"]|Phaser\./u]], errors);
+      requireTest('hero-runtime-design-tests', tests, errors);
+    },
+    H2(errors, tests) {
+      const party = 'src/systems/HeroPartyRuntimeSystem.ts';
+      requireMatches(party, [
+        ['HeroRuntimeFactory dependency', /HeroRuntimeFactory\b/u],
+        ['HeroRuntime dependency', /HeroRuntime\b/u],
+      ], errors);
+      forbidMatches(party, [
+        ['Hero1 concrete skill dependency', /Role1ShadowFormalRuntimeSystem|updateFormalRole1ShadowRuntime/u],
+        ['Hero5 concrete attack dependency', /Role5NormalAttackProjectileSystem|Role5LoongSword/u],
+      ], errors);
+      requireTest('hero-runtime-design-tests', tests, errors);
+    },
+    H3(errors, tests) {
+      requireMatches(
+        'src/systems/HeroPartyRuntimeSystem.ts',
+        [['HeroRuntime member collection', /(?:members\s*:\s*(?:Array<)?HeroRuntime|HeroRuntime\[\])/u]],
+        errors,
+      );
+      forbidAcross(formalHeroConsumers, [
+        ['formal consumer concrete hero-system dependency', /from\s+['"][^'"]*Role[1-5][^'"]*System['"]/u],
+      ], errors);
+      requireTest('hero-runtime-design-tests', tests, errors);
+      requireTest('hero-party-runtime-tests', tests, errors);
+    },
+    H4(errors, tests) {
+      const pipeline = 'src/scenes/test-scene/TestSceneHeroSkillPipeline.ts';
+      if (existsSync(absolute(pipeline))) {
+        forbidMatches(pipeline, [
+          ['five-way role skill pipeline', /updateRole[1-5]SkillBridge\b/u],
+        ], errors);
+      }
+      forbidAcross(
+        walk('src/scenes').filter((file) => file.endsWith('.ts')),
+        [['Scene concrete role skill update', /updateRole[1-5]SkillBridge\b/u]],
+        errors,
+      );
+      forbidMatches('src/systems/HeroSkillSystem.ts', [['roleRuntimes compatibility bundle', /\broleRuntimes\b/u]], errors);
+      if (existsSync(absolute('src/systems/HeroSkillRuntimeAccessors.ts'))) {
+        errors.push('legacy accessor file must be removed after migration: src/systems/HeroSkillRuntimeAccessors.ts');
+      }
+      requireTest('hero-runtime-design-tests', tests, errors);
+      requireTest('hero-party-runtime-tests', tests, errors);
+    },
+  },
+};
+
+// One invocation may request several gates sharing dependencies. Keep all assertions,
+// but visit each gate once per result set; no results survive this process.
+function deduplicateGates(gates) {
+  const visits = new WeakMap();
+  for (const [name, check] of Object.entries(gates)) {
+    gates[name] = (errors, tests) => {
+      if (!visits.has(errors)) visits.set(errors, new Set());
+      const visited = visits.get(errors);
+      if (visited.has(name)) return;
+      visited.add(name);
+      check(errors, tests);
+    };
+  }
+}
+for (const gates of Object.values(contracts)) deduplicateGates(gates);
+
+// Explicit opt-in for development, never an acceptance result. Unknown/new tests
+// stay enabled; only these known full-corpus/generator/browser/mutation jobs defer.
+const turtleFullAcceptanceTests = new Set([
+  'pet-turtle-oracle-tests', 'pet-turtle-resource-tests', 'pet-turtle-acceptance-tests',
+  'pet-turtle-combat-acceptance-tests', 'pet-turtle-link-acceptance-tests',
+  'pet-turtle-skill-acceptance-tests',
+]);
+function selectTests(tests, iteration) {
+  return [...tests].filter(name => !iteration || !turtleFullAcceptanceTests.has(name));
+}
+
+function selfTest() {
+  const errors = [];
+  const source = 'export class Sample { static create() {} }';
+  if (!/export\s+class\s+Sample/u.test(source)) errors.push('positive pattern did not match');
+  if (/export\s+function\s+Sample/u.test(source)) errors.push('negative pattern produced a false positive');
+  const duplicate = new Set(['one', 'one', 'two']);
+  if (duplicate.size !== 2) errors.push('test de-duplication failed');
+  let visits = 0;
+  const sample = {
+    leaf(result, tests) { visits++; result.push('retained failure'); tests.add('leaf-test'); },
+    parent(result, tests) { sample.leaf(result, tests); tests.add('parent-test'); },
+  };
+  deduplicateGates(sample);
+  const result = [];
+  const tests = new Set();
+  sample.parent(result, tests);
+  sample.leaf(result, tests);
+  sample.parent(result, tests);
+  if (visits !== 1 || result.length !== 1 || tests.size !== 2) errors.push('shared gate lost coverage or ran twice');
+  sample.parent([], new Set());
+  if (visits !== 2) errors.push('gate results leaked between invocations');
+  const full = new Set([...turtleFullAcceptanceTests, 'pet-turtle-runtime-tests',
+    'pet-turtle-world-collision-tests', 'new-unknown-test']);
+  if (selectTests(full, false).length !== full.size) errors.push('full acceptance lost tests');
+  const partial = selectTests(full, true);
+  if (partial.join(',') !== 'pet-turtle-runtime-tests,pet-turtle-world-collision-tests,new-unknown-test') {
+    errors.push('iteration must retain behavior, collision and unknown tests');
+  }
+  if (errors.length > 0) {
+    console.error('System design gate self-test failed:');
+    errors.forEach((error) => console.error(`  - ${error}`));
+    process.exit(1);
+  }
+  console.log('System design gate self-test passed.');
+}
+
+const [system, ...gateArguments] = process.argv.slice(2);
+const iteration = gateArguments.includes('--iteration');
+const gateNames = gateArguments.filter(name => name !== '--iteration');
+const requestedGates = gateNames.length ? [...new Set(gateNames)] : ['all'];
+const requestedGate = requestedGates.join(',');
+
+if (system === '--self-test') {
+  selfTest();
+  process.exit(0);
+}
+
+if (!system || !contracts[system]) {
+  console.error('Usage: node tools/check-system-design.mjs <level|pet|hero> <gate...|all>');
+  process.exit(2);
+}
+
+if (iteration && (system !== 'pet' || requestedGates.includes('all'))) {
+  console.error('--iteration requires explicit pet gates; it cannot run or satisfy all.');
+  process.exit(2);
+}
+
+const availableGates = Object.keys(contracts[system]);
+const selectedGates = requestedGates.includes('all') ? availableGates : requestedGates;
+if (requestedGates.includes('all') && requestedGates.length > 1) {
+  console.error('all must be used alone.');
+  process.exit(2);
+}
+if (selectedGates.some((gate) => !contracts[system][gate])) {
+  console.error(`Unknown ${system} gate: ${requestedGate}. Available: ${availableGates.join(', ')}, all`);
+  process.exit(2);
+}
+
+const errors = [];
+const tests = new Set();
+for (const gate of selectedGates) contracts[system][gate](errors, tests);
+
+const uniqueErrors = [...new Set(errors)];
+if (uniqueErrors.length > 0) {
+  console.error(`System design check failed for ${system}/${requestedGate}:`);
+  for (const error of uniqueErrors) console.error(`  - ${error}`);
+  process.exit(1);
+}
+
+const runnableTests = selectTests(tests, iteration);
+if (iteration) {
+  const deferred = [...tests].filter(name => !runnableTests.includes(name));
+  console.log(`DEVELOPMENT ONLY: ${runnableTests.length} test groups; ${deferred.length} deferred: ${deferred.join(', ')}. Not acceptance.`);
+}
+if (runnableTests.length > 0) {
+  try {
+    execFileSync(process.execPath, ['tools/run-system-tests.mjs', ...runnableTests], {
+      cwd: root,
+      stdio: 'inherit',
+    });
+  } catch {
+    console.error(`System design behavior tests failed for ${system}/${requestedGate}.`);
+    process.exit(1);
+  }
+}
+
+console.log(iteration
+  ? `Development iteration passed for ${system}/${requestedGate}; FULL ACCEPTANCE NOT RUN. Do not mark a task complete.`
+  : `System design check passed for ${system}/${requestedGate}: ${selectedGates.join(', ')}.`);

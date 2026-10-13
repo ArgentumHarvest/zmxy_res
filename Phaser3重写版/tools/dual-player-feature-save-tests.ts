@@ -1,0 +1,119 @@
+import assert from 'node:assert/strict';
+import { createEmptyEquipmentLoadout, createSeedEquipmentRegistry } from '../src/systems/EquipmentSystem';
+import { createHeroSkillModel } from '../src/systems/HeroSkillSystem';
+import { addEquipmentByFillName, addStackByFillName, createInventoryStore } from '../src/systems/InventorySystem';
+import { createPlayerPetRosters } from '../src/systems/PetOwnershipSystem';
+import { createHeroProgression } from '../src/systems/ProgressionSystem';
+import { createGameSave, GameSaveVersion, parseGameSave, restoreGameState } from '../src/systems/SaveSystem';
+import { createSkillLearningState } from '../src/systems/SkillUISystem';
+
+const registry = createSeedEquipmentRegistry();
+
+function testRoundTripKeepsBothFeatureOwners(): void {
+  const rosters = createPlayerPetRosters();
+  const p1Inventory = createInventoryStore(125, 'p1-eq');
+  const p2Inventory = createInventoryStore(125, 'p2-eq');
+  addStackByFillName(p1Inventory, registry, 'sms1', 7);
+  const p2Equipment = addEquipmentByFillName(p2Inventory, registry, 'ptdcz');
+  assert.ok(p2Equipment);
+
+  const p1Loadout = createEmptyEquipmentLoadout();
+  const p2Loadout = createEmptyEquipmentLoadout();
+  p2Loadout.weapon = p2Equipment;
+  p2Inventory.categories.equipment = p2Inventory.categories.equipment.filter(
+    (entry) => entry !== p2Equipment,
+  );
+
+  const p1Skills = createHeroSkillModel().loadout;
+  const p2Skills = createHeroSkillModel().loadout;
+  p1Skills.slots[0] = { skillName: 'slz', level: 2 };
+  p2Skills.slots[0] = { skillName: 'sgq', level: 4 };
+  const p1Learning = createSkillLearningState(8);
+  const p2Learning = createSkillLearningState(12);
+  p2Learning.trees[0].treeLevel = 1;
+  p2Learning.trees[0].learnedSkills.push({ skillName: 'sgq', level: 4 });
+  rosters.p1.pets[0].level = 3;
+  rosters.p2.pets[0].level = 9;
+
+  const save = createGameSave({
+    progression: createHeroProgression(1, 8, 20),
+    soulCount: 123,
+    skillLoadout: p1Skills,
+    skillLearning: p1Learning,
+    inventoryStore: p1Inventory,
+    equipmentLoadout: p1Loadout,
+    petRoster: rosters.p1,
+    player2Progression: createHeroProgression(2, 12, 30),
+    player2SoulCount: 456,
+    player2SkillLoadout: p2Skills,
+    player2SkillLearning: p2Learning,
+    player2InventoryStore: p2Inventory,
+    player2EquipmentLoadout: p2Loadout,
+    player2PetRoster: rosters.p2,
+  });
+  const restored = restoreGameState(parseGameSave(JSON.stringify(save))!, registry);
+
+  assert.equal(save.version, GameSaveVersion);
+  assert.equal(restored.player1.progression.level, 8);
+  assert.equal(restored.player2.progression.heroId, 2);
+  assert.equal(restored.player2.progression.level, 12);
+  assert.deepEqual(restored.player2.skillLoadout.slots[0], { skillName: 'sgq', level: 4 });
+  assert.equal(restored.player2.soulCount, 456);
+  assert.equal(restored.player1.inventoryStore.categories.items[0]?.quantity, 7);
+  assert.equal(restored.player2.equipmentLoadout.weapon?.definition.fillName, 'ptdcz');
+  assert.equal(restored.player1.petRoster.pets[0].level, 3);
+  assert.equal(restored.player2.petRoster.pets[0].level, 9);
+  assert.notStrictEqual(restored.player1, restored.player2);
+}
+
+function testOldFeatureShapesAreRejected(): void {
+  const current = createGameSave({
+    progression: createHeroProgression(3, 17, 42),
+    soulCount: 99,
+    skillLoadout: createHeroSkillModel().loadout,
+    skillLearning: createSkillLearningState(17),
+    equipmentLoadout: createEmptyEquipmentLoadout(),
+    petRoster: createPlayerPetRosters().p1,
+    player2PetRoster: createPlayerPetRosters().p2,
+  });
+  for (const version of [1, 2, 3] as const) {
+    const legacy: any = {
+      version,
+      savedAt: current.savedAt,
+      player1: {
+        ...current.player1,
+        skillLearning: { ...current.player1.skillLearning, soulCount: current.player1.soulCount },
+      },
+      player2: { pets: current.player2.pets, selectedPetIndex: current.player2.selectedPetIndex },
+      levelUnlockProgress: { unlockedStage: 1, unlockedLevel: 3 },
+    };
+    delete legacy.player1.soulCount;
+    delete legacy.player1.inventory;
+    if (version === 1) delete legacy.player2;
+    if (version < 3) delete legacy.levelUnlockProgress;
+    assert.equal(parseGameSave(JSON.stringify(legacy)), undefined);
+  }
+}
+
+function testUnknownInventoryDefinitionsAndDamagedSubdomainsAreRejected(): void {
+  const save = createGameSave({
+    progression: createHeroProgression(1),
+    skillLoadout: createHeroSkillModel().loadout,
+    skillLearning: createSkillLearningState(),
+    equipmentLoadout: createEmptyEquipmentLoadout(),
+    petRoster: createPlayerPetRosters().p1,
+  });
+  save.player1.inventory.categories.items.push({
+    kind: 'stack', fillName: 'unknown-definition', stackId: 'bad', quantity: 10,
+  });
+  assert.equal(parseGameSave(JSON.stringify(save)), undefined);
+
+  save.player1.inventory.categories.items = [];
+  (save.player2 as any).inventory = { damaged: true };
+  assert.equal(parseGameSave(JSON.stringify(save)), undefined);
+}
+
+testRoundTripKeepsBothFeatureOwners();
+testOldFeatureShapesAreRejected();
+testUnknownInventoryDefinitionsAndDamagedSubdomainsAreRejected();
+console.log('Current-schema dual-player feature save and old-shape rejection tests passed.');
